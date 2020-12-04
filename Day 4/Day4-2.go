@@ -20,209 +20,94 @@ func main() {
     }
 
 	text := string(content)
-	lines := strings.Split(text, "\n\n")
-	for i := 0; i < len(lines); i++ {
+	passports := strings.Split(text, "\n\n")
+	for i := 0; i < len(passports); i++ {
 		valid := true
-		data := strings.Fields(lines[i])
-		fullfields := strings.Fields(lines[i])
+		data := strings.Fields(passports[i])
+		fields := strings.Fields(passports[i])
+		
 		for j := 0; j < len(data); j++ {
 			data[j] = string(data[j][0:3])
 		}
+
 		if len(data) == 8 {
-			// valid++
 			for j := 0; j < len(data); j++ {
-				if string(fullfields[j][0:3]) == "byr" {
-					i, err := strconv.Atoi(string(fullfields[j][4:]))
-					if err != nil {
-						fmt.Println(err)
-						os.Exit(2)
-					}
-					if i < 1920 || i > 2002 {
+				switch fields[j][0:3]{
+				case "byr":
+					if !validateByr(fields[j][4:]) {
 						valid = false
 					}
-					
-				}
-
-				if string(fullfields[j][0:3]) == "iyr" {
-					i, err := strconv.Atoi(string(fullfields[j][4:]))
-					if err != nil {
-						fmt.Println(err)
-						os.Exit(2)
-					}
-					if i < 2010 || i > 2020 {
+				case "iyr":
+					if !validateIyr(fields[j][4:]) {
 						valid = false
 					}
-					
-				}
-
-				if string(fullfields[j][0:3]) == "eyr" {
-					i, err := strconv.Atoi(string(fullfields[j][4:]))
-					if err != nil {
-						fmt.Println(err)
-						os.Exit(2)
-					}
-					if i < 2020 || i > 2030 {
+				case "eyr":
+					if !validateEyr(fields[j][4:]) {
 						valid = false
 					}
-					
-				}
-
-				if string(fullfields[j][0:3]) == "hgt" {
-					last2  := string(fullfields[j][len(fullfields[j])-2:])
-					middle := string(fullfields[j][4:len(fullfields[j])-2])
-					if last2 == "cm" {
-						i, err := strconv.Atoi(middle)
-						if err != nil {
-							fmt.Println(err)
-							os.Exit(2)
-						}
-						
-						if i < 150 || i > 193 {
-							valid = false
-						}
-					} else if last2 == "in" {
-						i, err := strconv.Atoi(middle)
-						if err != nil {
-							fmt.Println(err)
-							os.Exit(2)
-						}
-						if i < 59 || i > 76 {
-							valid = false
-						}
-					} else {
+				case "hgt":
+					if !validateHgt(fields[j][4:]) {
 						valid = false
-					}			
-				}
-
-				if string(fullfields[j][0:3]) == "hcl" {
-					r, _ := regexp.Compile("#[0-9a-f]{6}")
-					if !r.MatchString(string(fullfields[j][4:])) {
+					}
+				case "hcl":
+					if !validateHcl(fields[j][4:]) {
+						valid = false
+					}
+				case "ecl":
+					if !validateEcl(fields[j][4:]) {
+						valid = false
+					}
+				case "pid":
+					if !validatePid(fields[j][4:]) {
 						valid = false
 					}
 				}
-
-				if string(fullfields[j][0:3]) == "ecl" {
-					if string(fullfields[j][4:]) != "amb" && string(fullfields[j][4:]) != "blu" && string(fullfields[j][4:]) != "brn" && string(fullfields[j][4:]) != "gry" && string(fullfields[j][4:]) != "grn" && string(fullfields[j][4:]) != "hzl" && string(fullfields[j][4:]) != "oth"  {
-						valid = false
-					}
-				}
-
-				if string(fullfields[j][0:3]) == "pid" {
-					r, _ := regexp.Compile("[0-9]{9}")
-					if !r.MatchString(string(fullfields[j][4:])) {
-						valid = false
-					}
-
-				}
-
 			}
 			if valid {
 				validCount++
-				fmt.Println("VALID")
-			} else {
-				fmt.Println("INVALID")
 			}
 		} else if len(data) == 7 {
 			if !Contains(data, "cid") {
 				for j := 0; j < len(data); j++ {
-					if string(fullfields[j][0:3]) == "byr" {
-						i, err := strconv.Atoi(string(fullfields[j][4:]))
-						if err != nil {
-							fmt.Println(err)
-							os.Exit(2)
-						}
-						if i < 1920 || i > 2002 {
+					switch fields[j][0:3]{
+					case "byr":
+						if !validateByr(fields[j][4:]) {
 							valid = false
 						}
-						
-					}
-	
-					if string(fullfields[j][0:3]) == "iyr" {
-						i, err := strconv.Atoi(string(fullfields[j][4:]))
-						if err != nil {
-							fmt.Println(err)
-							os.Exit(2)
-						}
-						if i < 2010 || i > 2020 {
+					case "iyr":
+						if !validateIyr(fields[j][4:]) {
 							valid = false
 						}
-						
-					}
-	
-					if string(fullfields[j][0:3]) == "eyr" {
-
-						i, err := strconv.Atoi(string(fullfields[j][4:len(fullfields[j])]))
-						if err != nil {
+					case "eyr":
+						if !validateEyr(fields[j][4:]) {
 							valid = false
 						}
-						if i < 2020 || i > 2030 {
+					case "hgt":
+						if !validateHgt(fields[j][4:]) {
 							valid = false
 						}
-						
-					}
-	
-					if string(fullfields[j][0:3]) == "hgt" {
-						last2  := string(fullfields[j][len(fullfields[j])-2:])
-						middle := string(fullfields[j][4:len(fullfields[j])-2])
-						if last2 == "cm" {
-							i, err := strconv.Atoi(middle)
-							if err != nil {
-								fmt.Println(err)
-								os.Exit(2)
-							}
-							if i < 150 || i > 193 {
-								valid = false
-							}
-						} else if last2 == "in" {
-							i, err := strconv.Atoi(middle)
-							if err != nil {
-								fmt.Println(err)
-								os.Exit(2)
-							}
-							if i < 59 || i > 76 {
-								valid = false
-							}
-						} else {
-							valid = false
-						}			
-					}
-	
-					if string(fullfields[j][0:3]) == "hcl" {
-						r, _ := regexp.Compile("#[0-9a-f]{6}")
-						if !r.MatchString(string(fullfields[j][4:])) {
+					case "hcl":
+						if !validateHcl(fields[j][4:]) {
 							valid = false
 						}
-					}
-	
-					if string(fullfields[j][0:3]) == "ecl" {
-						if string(fullfields[j][4:]) != "amb" && string(fullfields[j][4:]) != "blu" && string(fullfields[j][4:]) != "brn" && string(fullfields[j][4:]) != "gry" && string(fullfields[j][4:]) != "grn" && string(fullfields[j][4:]) != "hzl" && string(fullfields[j][4:]) != "oth"  {
+					case "ecl":
+						if !validateEcl(fields[j][4:]) {
 							valid = false
 						}
-					}
-	
-					if string(fullfields[j][0:3]) == "pid" {
-						r, _ := regexp.Compile("[0-9]{9}")
-						if !r.MatchString(string(fullfields[j][4:])) {
+					case "pid":
+						if !validatePid(fields[j][4:]) {
 							valid = false
 						}
 					}
 	
 				}
-				if valid {
-					validCount++
-					fmt.Println("VALID")
-				} else {
-					fmt.Println("INVALID")
-				}
-		} else {
-			fmt.Println("INVALID")
-		}
-
-	} else {
-		fmt.Println("INVALID")
-	}
-	
-
+			} else {
+				valid = false
+			}
+			if valid {
+				validCount++
+			}
+		} 
 	}
 	fmt.Println(validCount)
 }
@@ -234,4 +119,84 @@ func Contains(a []string, x string) bool {
         }
     }
     return false
+}
+
+func validateByr(byr string) bool {
+	i, err := strconv.Atoi(byr)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+	if i < 1920 || i > 2002 {
+		return false
+	}
+	return true
+}
+
+func validateIyr(iyr string) bool {
+	i, err := strconv.Atoi(iyr)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+	if i < 2010 || i > 2020 {
+		return false
+	}
+	return true
+}
+
+func validateEyr(eyr string) bool {
+	i, err := strconv.Atoi(eyr)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+	if i < 2020 || i > 2030 {
+		return false
+	}
+	return true
+}
+
+func validateHgt(hgt string) bool {
+	measurement  := hgt[len(hgt)-2:]
+	valueS := hgt[:len(hgt)-2]
+	value, err := strconv.Atoi(valueS)
+	if err != nil {
+		return false
+	}
+	if measurement == "cm" {
+		if value < 150 || value > 193 {
+			return false
+		}
+	} else if measurement == "in" {
+		if value < 59 || value > 76 {
+			return false
+		}
+	} else {
+		return false
+	}			
+	return true
+}
+
+func validateHcl(hcl string) bool {
+	r, _ := regexp.Compile("^#[0-9a-f]{6}$")
+	if !r.MatchString(hcl) {
+		return false
+	}
+	return true
+}
+
+func validateEcl(ecl string) bool {
+	if ecl != "amb" && ecl != "blu" && ecl != "brn" && ecl != "gry" && ecl != "grn" && ecl != "hzl" && ecl != "oth"  {
+		return false
+	}
+	return true
+}
+
+func validatePid(pid string) bool {
+	r, _ := regexp.Compile("^[0-9]{9}$")
+	if !r.MatchString(pid) {
+		return false
+	}
+	return true
 }
