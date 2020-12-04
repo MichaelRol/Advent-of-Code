@@ -23,15 +23,10 @@ func main() {
 	passports := strings.Split(text, "\n\n")
 	for i := 0; i < len(passports); i++ {
 		valid := true
-		data := strings.Fields(passports[i])
 		fields := strings.Fields(passports[i])
-		
-		for j := 0; j < len(data); j++ {
-			data[j] = string(data[j][0:3])
-		}
 
-		if len(data) == 8 {
-			for j := 0; j < len(data); j++ {
+		if len(fields) == 8 || len(fields) == 7{
+			for j := 0; j < len(fields); j++ {
 				switch fields[j][0:3]{
 				case "byr":
 					if !validateByr(fields[j][4:]) {
@@ -61,48 +56,11 @@ func main() {
 					if !validatePid(fields[j][4:]) {
 						valid = false
 					}
-				}
-			}
-			if valid {
-				validCount++
-			}
-		} else if len(data) == 7 {
-			if !Contains(data, "cid") {
-				for j := 0; j < len(data); j++ {
-					switch fields[j][0:3]{
-					case "byr":
-						if !validateByr(fields[j][4:]) {
-							valid = false
-						}
-					case "iyr":
-						if !validateIyr(fields[j][4:]) {
-							valid = false
-						}
-					case "eyr":
-						if !validateEyr(fields[j][4:]) {
-							valid = false
-						}
-					case "hgt":
-						if !validateHgt(fields[j][4:]) {
-							valid = false
-						}
-					case "hcl":
-						if !validateHcl(fields[j][4:]) {
-							valid = false
-						}
-					case "ecl":
-						if !validateEcl(fields[j][4:]) {
-							valid = false
-						}
-					case "pid":
-						if !validatePid(fields[j][4:]) {
-							valid = false
-						}
+				case "cid":
+					if len(fields) == 7{
+						valid = false
 					}
-	
 				}
-			} else {
-				valid = false
 			}
 			if valid {
 				validCount++
