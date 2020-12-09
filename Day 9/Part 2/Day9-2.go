@@ -11,7 +11,7 @@ import (
 
 func main() {
 	
-	numbers := readNumbers("input.txt")
+	numbers := readNumbers("../input.txt")
 
 	var invalid int
 	var position int

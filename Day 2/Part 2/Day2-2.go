@@ -13,7 +13,7 @@ import (
 func main() {
 	var count int = 0
 
-	file, err := os.Open("input.txt")
+	file, err := os.Open("../input.txt")
 	
     if err != nil {
         log.Fatal(err)

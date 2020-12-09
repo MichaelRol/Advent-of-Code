@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"sort"
 	"strings"
 )
 
 func main() {
 
-	content, err := ioutil.ReadFile("input.txt")
+	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,7 +23,7 @@ func main() {
 		seatIDs = append(seatIDs, calcSeatID(calcSeatPos(seat)))
 	}
 
-	fmt.Println(getMax(seatIDs))
+	fmt.Println(findSeat(seatIDs))
 }
 
 func calcSeatPos(seatCode string) (int, int) {
@@ -60,4 +61,14 @@ func getMax(values []int) int {
 		}
 	}
 	return max
+}
+
+func findSeat(seats []int) int {
+	sort.Ints(seats)
+	for i, seat := range seats {
+		if seats[i+1] != seat+1 {
+			return seat + 1
+		}
+	}
+	return 0
 }

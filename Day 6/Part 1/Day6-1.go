@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	content, err := ioutil.ReadFile("input.txt")
+	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -19,32 +19,14 @@ func main() {
 	groups := strings.Split(text, "\n\n")
 	total := 0
 	for _, group := range groups {
-		persons := strings.Split(group, "\n")
 		var ques []string
 		for _, char := range group {
 			if !unicode.IsSpace(char) && !stringInSlice(string(char), ques) {
 				ques = append(ques, string(char))
 			}
 		}
-		
-
-		q_count := 0
-		for _, que := range ques {
-			addIt := true
-			for _, ans := range persons {
-				if !strings.Contains(ans, que) {
-					addIt = false
-				}
-			}
-			if addIt == true {
-				q_count += 1
-				fmt.Println(que)
-			}
-		}
-
-		total += q_count
+		total += len(ques)
 	}
-
 	fmt.Println(total)
 }
 

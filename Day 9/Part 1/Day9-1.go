@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	numbers := readNumbers("input.txt")
+	numbers := readNumbers("../input.txt")
 	
 	for i := 25; i < len(numbers); i++ {
 		if !isValid(numbers[i-25:i], numbers[i]) {

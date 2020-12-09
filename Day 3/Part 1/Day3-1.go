@@ -13,7 +13,7 @@ func main() {
 	jump := 3
 	trees := 0 
 
-	file, err := os.Open("input.txt")
+	file, err := os.Open("../input.txt")
 	
     if err != nil {
         log.Fatal(err)
