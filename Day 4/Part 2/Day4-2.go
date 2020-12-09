@@ -70,15 +70,6 @@ func main() {
 	fmt.Println(validCount)
 }
 
-func Contains(a []string, x string) bool {
-    for _, n := range a {
-        if x == n {
-            return true
-        }
-    }
-    return false
-}
-
 func validateByr(byr string) bool {
 	i, err := strconv.Atoi(byr)
 	if err != nil {
@@ -138,10 +129,7 @@ func validateHgt(hgt string) bool {
 
 func validateHcl(hcl string) bool {
 	r, _ := regexp.Compile("^#[0-9a-f]{6}$")
-	if !r.MatchString(hcl) {
-		return false
-	}
-	return true
+	return r.MatchString(hcl)
 }
 
 func validateEcl(ecl string) bool {
@@ -153,8 +141,5 @@ func validateEcl(ecl string) bool {
 
 func validatePid(pid string) bool {
 	r, _ := regexp.Compile("^[0-9]{9}$")
-	if !r.MatchString(pid) {
-		return false
-	}
-	return true
+	return r.MatchString(pid)
 }

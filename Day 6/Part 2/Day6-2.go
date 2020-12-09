@@ -36,7 +36,7 @@ func main() {
 					addIt = false
 				}
 			}
-			if addIt == true {
+			if addIt {
 				q_count += 1
 			}
 		}

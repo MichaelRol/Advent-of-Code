@@ -53,16 +53,6 @@ func calcSeatID(row int, col int) int {
 	return row*8 + col
 }
 
-func getMax(values []int) int {
-	max := values[0]
-	for _, value := range values {
-		if value > max {
-			max = value
-		}
-	}
-	return max
-}
-
 func findSeat(seats []int) int {
 	sort.Ints(seats)
 	for i, seat := range seats {

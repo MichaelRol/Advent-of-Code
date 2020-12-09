@@ -70,7 +70,7 @@ func runProg (instructions []instruction) (int, int) {
 	
 	for i := 0; i < len(instructions); i++ {
 
-		if instructions[i].access == true{
+		if instructions[i].access {
 			return acc, 1
 		}
 		instructions[i].access = true

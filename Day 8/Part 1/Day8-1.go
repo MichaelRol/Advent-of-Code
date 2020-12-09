@@ -39,7 +39,7 @@ func main() {
 	acc := 0
 	for i := 0; i < len(instructions); i++ {
 
-		if instructions[i].access == true{
+		if instructions[i].access {
 			fmt.Println(acc)
 			return
 		}
