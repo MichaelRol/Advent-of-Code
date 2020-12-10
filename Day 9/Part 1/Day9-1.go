@@ -1,17 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
-	"strings"
 	"log"
 	"os"
 	"strconv"
-	"fmt"
+	"strings"
 )
 
 func main() {
 	numbers := readNumbers("../input.txt")
-	
+
 	for i := 25; i < len(numbers); i++ {
 		if !isValid(numbers[i-25:i], numbers[i]) {
 			fmt.Println(numbers[i])
@@ -26,7 +26,7 @@ func isValid(numbers []int, value int) bool {
 			if i == j {
 				continue
 			} else {
-				if i + j == value {
+				if i+j == value {
 					return true
 				}
 			}

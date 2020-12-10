@@ -1,13 +1,13 @@
 package main
 
 import (
-    "io/ioutil"
-    "fmt"
-    "log"
-	"strings"
-	"strconv"
+	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"regexp"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -15,9 +15,9 @@ func main() {
 	validCount := 0
 
 	content, err := ioutil.ReadFile("../input.txt")
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	text := string(content)
 	passports := strings.Split(text, "\n\n")
@@ -25,9 +25,9 @@ func main() {
 		valid := true
 		fields := strings.Fields(passports[i])
 
-		if len(fields) == 8 || len(fields) == 7{
+		if len(fields) == 8 || len(fields) == 7 {
 			for j := 0; j < len(fields); j++ {
-				switch fields[j][0:3]{
+				switch fields[j][0:3] {
 				case "byr":
 					if !validateByr(fields[j][4:]) {
 						valid = false
@@ -57,7 +57,7 @@ func main() {
 						valid = false
 					}
 				case "cid":
-					if len(fields) == 7{
+					if len(fields) == 7 {
 						valid = false
 					}
 				}
@@ -65,7 +65,7 @@ func main() {
 			if valid {
 				validCount++
 			}
-		} 
+		}
 	}
 	fmt.Println(validCount)
 }
@@ -107,7 +107,7 @@ func validateEyr(eyr string) bool {
 }
 
 func validateHgt(hgt string) bool {
-	measurement  := hgt[len(hgt)-2:]
+	measurement := hgt[len(hgt)-2:]
 	valueS := hgt[:len(hgt)-2]
 	value, err := strconv.Atoi(valueS)
 	if err != nil {
@@ -123,7 +123,7 @@ func validateHgt(hgt string) bool {
 		}
 	} else {
 		return false
-	}			
+	}
 	return true
 }
 
@@ -133,7 +133,7 @@ func validateHcl(hcl string) bool {
 }
 
 func validateEcl(ecl string) bool {
-	if ecl != "amb" && ecl != "blu" && ecl != "brn" && ecl != "gry" && ecl != "grn" && ecl != "hzl" && ecl != "oth"  {
+	if ecl != "amb" && ecl != "blu" && ecl != "brn" && ecl != "gry" && ecl != "grn" && ecl != "hzl" && ecl != "oth" {
 		return false
 	}
 	return true

@@ -1,21 +1,21 @@
 package main
 
 import (
-    "io"
-    "fmt"
-    "log"
-    "os"
+	"fmt"
+	"io"
+	"log"
+	"os"
 )
 
 func main() {
 	file, err := os.Open("../input.txt")
 
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	defer file.Close()
-	
+
 	var perline int
 	var nums []int
 
@@ -25,26 +25,26 @@ func main() {
 
 		if err != nil {
 
-				if err == io.EOF {
-						break // stop reading the file
-				}
-				fmt.Println(err)
-				os.Exit(1)
+			if err == io.EOF {
+				break // stop reading the file
+			}
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		nums = append(nums, perline)
-}
+	}
 
-for i:=0; i<len(nums); i++ {
-	for j:=0; j<len(nums); j++ {
-		if i == j {
-			continue
-		}
-		if nums[i] + nums[j] == 2020 {
-			fmt.Println(nums[i] * nums[j])
-			return
+	for i := 0; i < len(nums); i++ {
+		for j := 0; j < len(nums); j++ {
+			if i == j {
+				continue
+			}
+			if nums[i]+nums[j] == 2020 {
+				fmt.Println(nums[i] * nums[j])
+				return
+			}
 		}
 	}
-}
 
 }

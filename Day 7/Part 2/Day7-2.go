@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"strings"
-	"log"
 	"io/ioutil"
-	"strconv"
+	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -32,14 +32,14 @@ func main() {
 				colour = colour[:len(colour)-1]
 			}
 			var numAndName []string
-			if colour[:1] == "n"{
+			if colour[:1] == "n" {
 				numAndName = append(numAndName, "0")
 				numAndName = append(numAndName, "no other bags")
 			} else {
 				numAndName = append(numAndName, colour[:1])
 				numAndName = append(numAndName, colour[2:])
 			}
-			
+
 			rules[both[0][:len(both[0])-1]] = append(rules[both[0][:len(both[0])-1]], numAndName)
 		}
 	}
@@ -49,9 +49,7 @@ func main() {
 	numAndName = append(numAndName, "shiny gold bag")
 	fmt.Println(countBags(numAndName, &rules) - 1)
 
-
 }
-
 
 func countBags(bag []string, rules *map[string][][]string) int {
 
@@ -59,17 +57,17 @@ func countBags(bag []string, rules *map[string][][]string) int {
 	if bag[0] == "0" {
 		return 0
 	}
-	
+
 	for _, nextBag := range (*rules)[bag[1]] {
-		
+
 		i, err := strconv.Atoi(nextBag[0])
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(2)
 		}
-		
-		total = total + i * countBags(nextBag, rules)
+
+		total = total + i*countBags(nextBag, rules)
 	}
-	
+
 	return 1 + total
 }

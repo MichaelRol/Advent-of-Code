@@ -26,7 +26,6 @@ func main() {
 				ques = append(ques, string(char))
 			}
 		}
-		
 
 		q_count := 0
 		for _, que := range ques {

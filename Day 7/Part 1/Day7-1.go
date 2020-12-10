@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"strings"
-	"log"
 	"io/ioutil"
+	"log"
+	"strings"
 )
 
 func main() {
@@ -35,13 +35,12 @@ func main() {
 		}
 	}
 	for bag := range rules {
-		if lookInside(bag, &rules, &goldIn){
+		if lookInside(bag, &rules, &goldIn) {
 			goldIn[bag] = true
 		}
 	}
-	
-	fmt.Println(len(goldIn) - 1)
 
+	fmt.Println(len(goldIn) - 1)
 
 }
 
@@ -49,7 +48,7 @@ func lookInside(bag string, rules *map[string][]string, goldIn *map[string]bool)
 	if (*goldIn)[bag] {
 		return true
 	}
-	for _, eachBag := range((*rules)[bag]) {
+	for _, eachBag := range (*rules)[bag] {
 		if lookInside(eachBag, rules, goldIn) {
 			(*goldIn)[eachBag] = true
 			return true

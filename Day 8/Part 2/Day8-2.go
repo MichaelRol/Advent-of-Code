@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"strings"
-	"log"
 	"io/ioutil"
-	"strconv"
+	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type instruction struct {
-	op string
-	arg int
+	op     string
+	arg    int
 	access bool
 }
 
@@ -21,6 +21,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	const nop = "nop"
+	const jmp = "jmp"
 	text := string(content)
 	lines := strings.Split(text, "\n")
 
@@ -37,13 +39,13 @@ func main() {
 	}
 
 	for i := 0; i < len(instructions); i++ {
-		
-		if instructions[i].op == "nop" {
-			instructions[i].op = "jmp"
-		} else if instructions[i].op == "jmp"{
-			instructions[i].op = "nop"
+
+		if instructions[i].op == nop {
+			instructions[i].op = jmp
+		} else if instructions[i].op == jmp {
+			instructions[i].op = nop
 		}
-		
+
 		newList := make([]instruction, len(instructions))
 		copy(newList, instructions)
 
@@ -53,21 +55,20 @@ func main() {
 			fmt.Println(acc)
 			return
 		} else {
-			if instructions[i].op == "nop" {
-				instructions[i].op = "jmp"
-			} else if instructions[i].op == "jmp"{
-				instructions[i].op = "nop"
+			if instructions[i].op == nop {
+				instructions[i].op = jmp
+			} else if instructions[i].op == jmp {
+				instructions[i].op = nop
 			}
 		}
 	}
 
-	
 }
 
-func runProg (instructions []instruction) (int, int) {
+func runProg(instructions []instruction) (int, int) {
 
 	acc := 0
-	
+
 	for i := 0; i < len(instructions); i++ {
 
 		if instructions[i].access {

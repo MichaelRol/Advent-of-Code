@@ -1,37 +1,36 @@
 package main
 
-
 import (
-    "bufio"
-    "fmt"
-    "log"
+	"bufio"
+	"fmt"
+	"log"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 func main() {
 	var count int = 0
 
 	file, err := os.Open("../input.txt")
-	
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer file.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	var passwords []string
-	
-    for scanner.Scan() {
-        passwords = append(passwords, scanner.Text())
-    }
 
-    if err := scanner.Err(); err != nil {
-        log.Fatal(err)
+	for scanner.Scan() {
+		passwords = append(passwords, scanner.Text())
 	}
 
-	for i:=0; i<len(passwords); i++ {
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	for i := 0; i < len(passwords); i++ {
 		if isPassValid(passwords[i]) {
 			count++
 		}
@@ -53,14 +52,14 @@ func isPassValid(fullString string) bool {
 	var max, err2 = strconv.Atoi(splitString[1])
 
 	if err1 != nil {
-        fmt.Println(err1)
-        os.Exit(2)
+		fmt.Println(err1)
+		os.Exit(2)
 	}
-	
+
 	if err2 != nil {
-        fmt.Println(err2)
-        os.Exit(2)
-    }
+		fmt.Println(err2)
+		os.Exit(2)
+	}
 
 	letterCount := strings.Count(password, letter)
 

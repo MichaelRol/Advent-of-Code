@@ -3,18 +3,18 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
+	"sort"
 	"strconv"
 	"strings"
-	"log"
-	"sort"
-	"os"
 )
 
 func main() {
 	ratings := readNumbers("../input.txt")
 
 	sort.Ints(ratings)
-	ratings = append(ratings, ratings[len(ratings)-1] + 3)
+	ratings = append(ratings, ratings[len(ratings)-1]+3)
 
 	oneJumps := 0
 	threeJumps := 0
@@ -24,14 +24,14 @@ func main() {
 		threeJumps++
 	}
 
-	for i := 1; i<len(ratings); i++ {
-		if ratings[i] - ratings[i-1] == 1 {
+	for i := 1; i < len(ratings); i++ {
+		if ratings[i]-ratings[i-1] == 1 {
 			oneJumps++
-		} else if  ratings[i] - ratings[i-1] == 3 {
+		} else if ratings[i]-ratings[i-1] == 3 {
 			threeJumps++
 		}
 	}
-	fmt.Println(oneJumps*threeJumps)
+	fmt.Println(oneJumps * threeJumps)
 }
 
 func readNumbers(filename string) []int {

@@ -1,16 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
-	"strings"
 	"log"
 	"os"
 	"strconv"
-	"fmt"
+	"strings"
 )
 
 func main() {
-	
+
 	numbers := readNumbers("../input.txt")
 
 	var invalid int
@@ -33,10 +33,9 @@ func main() {
 		os.Exit(2)
 	}
 
-	
 }
 
-func findContiguousSum(target int, position int, numbers []int) []int{
+func findContiguousSum(target int, position int, numbers []int) []int {
 	for i := 0; i < position; i++ {
 		tally := numbers[i]
 		j := 1
@@ -56,7 +55,7 @@ func findContiguousSum(target int, position int, numbers []int) []int{
 func min(v []int) int {
 	m := 0
 	for i, e := range v {
-		if i==0 || e < m {
+		if i == 0 || e < m {
 			m = e
 		}
 	}
@@ -66,7 +65,7 @@ func min(v []int) int {
 func max(v []int) int {
 	m := 0
 	for i, e := range v {
-		if i==0 || e > m {
+		if i == 0 || e > m {
 			m = e
 		}
 	}
@@ -79,7 +78,7 @@ func isValid(numbers []int, value int) bool {
 			if i == j {
 				continue
 			} else {
-				if i + j == value {
+				if i+j == value {
 					return true
 				}
 			}

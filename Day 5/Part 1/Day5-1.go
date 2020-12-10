@@ -35,13 +35,13 @@ func calcSeatPos(seatCode string) (int, int) {
 	for index, letter := range colID {
 
 		if string(letter) == "R" {
-			col = col + 1<<(len(colID)-index-1)
+			col += 1 << (len(colID) - index - 1)
 		}
 	}
 
 	for index, letter := range rowID {
 		if string(letter) == "B" {
-			row = row + 1<<(len(rowID)-index-1)
+			row += 1 << (len(rowID) - index - 1)
 		}
 	}
 

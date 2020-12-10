@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"strings"
-	"log"
 	"io/ioutil"
-	"strconv"
+	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type instruction struct {
-	op string
-	arg int
+	op     string
+	arg    int
 	access bool
 }
 
