@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"io/ioutil"
-	"strings"
-	"log"
 	"strconv"
+	"strings"
 	"sort"
+	"log"
+	"os"
 )
 
 func main() {

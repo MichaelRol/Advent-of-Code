@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"io/ioutil"
+	"strconv"
 	"strings"
 	"log"
-	"strconv"
 	"sort"
+	"os"
 )
 
 func main() {
-	
 	ratings := readNumbers("../input.txt")
 
 	sort.Ints(ratings)
@@ -33,7 +32,6 @@ func main() {
 		}
 	}
 	fmt.Println(oneJumps*threeJumps)
-
 }
 
 func readNumbers(filename string) []int {
