@@ -52,89 +52,29 @@ func evolveSystem(chairs [][]int) [][]int {
 				newChairs[i][j] = 0
 			} else {
 				count := 0
-				for x := i - 1; x >= 0; x-- {
-					if chairs[x][j] == 2 {
-						count++
-						break
-					}
-					if chairs[x][j] == 1 {
-						break
-					}
+				if occupiedAbove(chairs, i, j) {
+					count++
 				}
-				for x := i + 1; x < len(chairs); x++ {
-					if chairs[x][j] == 2 {
-						count++
-						break
-					}
-					if chairs[x][j] == 1 {
-						break
-					}
+				if occupiedBelow(chairs, i, j) {
+					count++
 				}
-				for y := j - 1; y >= 0; y-- {
-					if chairs[i][y] == 2 {
-						count++
-						break
-					}
-					if chairs[i][y] == 1 {
-						break
-					}
+				if occupiedLeft(chairs, i, j) {
+					count++
 				}
-				for y := j + 1; y < len(chairs[0]); y++ {
-					if chairs[i][y] == 2 {
-						count++
-						break
-					}
-					if chairs[i][y] == 1 {
-						break
-					}
+				if occupiedRight(chairs, i, j) {
+					count++
 				}
-				for x := 1; x < len(chairs); x++ {
-					if i+x >= len(chairs) || j+x >= len(chairs[0]) {
-						break
-					}
-					if chairs[i+x][j+x] == 2 {
-						count++
-						break
-					}
-					if chairs[i+x][j+x] == 1 {
-						break
-					}
+				if occupiedDownRight(chairs, i, j) {
+					count++
 				}
-				for x := 1; x < len(chairs); x++ {
-					if i-x < 0 || j-x < 0 {
-						break
-					}
-					if chairs[i-x][j-x] == 2 {
-						count++
-						break
-					}
-					if chairs[i-x][j-x] == 1 {
-						break
-					}
+				if occupiedUpLeft(chairs, i, j) {
+					count++
 				}
-				for x := 1; x < len(chairs); x++ {
-					if i+x >= len(chairs) || j-x < 0 {
-						break
-					}
-					if chairs[i+x][j-x] == 2 {
-						count++
-						break
-					}
-					if chairs[i+x][j-x] == 1 {
-						break
-					}
+				if occupiedDownLeft(chairs, i, j) {
+					count++
 				}
-				for x := 1; x < len(chairs); x++ {
-					if i-x < 0 || j+x >= len(chairs[0]) {
-						break
-					}
-					if chairs[i-x][j+x] == 2 {
-						count++
-						break
-					}
-					if chairs[i-x][j+x] == 1 {
-						break
-					}
+				if occupiedUpRight(chairs, i, j) {
+					count++
 				}
 				if chairs[i][j] == 1 && count == 0 {
 					newChairs[i][j] = 2
@@ -145,6 +85,114 @@ func evolveSystem(chairs [][]int) [][]int {
 		}
 	}
 	return newChairs
+}
+
+func occupiedAbove(chairs [][]int, i, j int) bool {
+	for x := i - 1; x >= 0; x-- {
+		if chairs[x][j] == 2 {
+			return true
+		}
+		if chairs[x][j] == 1 {
+			return false
+		}
+	}
+	return false
+}
+
+func occupiedBelow(chairs [][]int, i, j int) bool {
+	for x := i + 1; x < len(chairs); x++ {
+		if chairs[x][j] == 2 {
+			return true
+		}
+		if chairs[x][j] == 1 {
+			return false
+		}
+	}
+	return false
+}
+
+func occupiedLeft(chairs [][]int, i, j int) bool {
+	for y := j - 1; y >= 0; y-- {
+		if chairs[i][y] == 2 {
+			return true
+		}
+		if chairs[i][y] == 1 {
+			return false
+		}
+	}
+	return false
+}
+
+func occupiedRight(chairs [][]int, i, j int) bool {
+	for y := j + 1; y < len(chairs[0]); y++ {
+		if chairs[i][y] == 2 {
+			return true
+		}
+		if chairs[i][y] == 1 {
+			return false
+		}
+	}
+	return false
+}
+
+func occupiedUpLeft(chairs [][]int, i, j int) bool {
+	for x := 1; x < len(chairs); x++ {
+		if i-x < 0 || j-x < 0 {
+			return false
+		}
+		if chairs[i-x][j-x] == 2 {
+			return true
+		}
+		if chairs[i-x][j-x] == 1 {
+			return false
+		}
+	}
+	return false
+}
+
+func occupiedDownRight(chairs [][]int, i, j int) bool {
+	for x := 1; x < len(chairs); x++ {
+		if i+x >= len(chairs) || j+x >= len(chairs[0]) {
+			return false
+		}
+		if chairs[i+x][j+x] == 2 {
+			return true
+		}
+		if chairs[i+x][j+x] == 1 {
+			return false
+		}
+	}
+	return false
+}
+
+func occupiedUpRight(chairs [][]int, i, j int) bool {
+	for x := 1; x < len(chairs); x++ {
+		if i-x < 0 || j+x >= len(chairs[0]) {
+			return false
+		}
+		if chairs[i-x][j+x] == 2 {
+			return true
+		}
+		if chairs[i-x][j+x] == 1 {
+			return false
+		}
+	}
+	return false
+}
+
+func occupiedDownLeft(chairs [][]int, i, j int) bool {
+	for x := 1; x < len(chairs); x++ {
+		if i+x >= len(chairs) || j-x < 0 {
+			return false
+		}
+		if chairs[i+x][j-x] == 2 {
+			return true
+		}
+		if chairs[i+x][j-x] == 1 {
+			return false
+		}
+	}
+	return false
 }
 
 func readLines(filename string) [][]int {
