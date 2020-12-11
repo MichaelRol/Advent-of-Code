@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-
 	valid := 0
 
 	content, err := ioutil.ReadFile("../input.txt")
@@ -22,7 +21,7 @@ func main() {
 	for i := 0; i < len(lines); i++ {
 		data := strings.Fields(lines[i])
 		for j := 0; j < len(data); j++ {
-			data[j] = string(data[j][0:3])
+			data[j] = data[j][0:3]
 		}
 
 		if len(data) == 8 {
@@ -33,10 +32,8 @@ func main() {
 				valid++
 			}
 		}
-
 	}
 	fmt.Println(valid)
-
 }
 
 func Contains(a []string, x string) bool {

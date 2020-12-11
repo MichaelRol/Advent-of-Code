@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	// "strings"
 )
 
 func main() {
@@ -28,7 +27,7 @@ func main() {
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	for i := 0; i < len(lines); i++ {
@@ -38,10 +37,9 @@ func main() {
 		index = incIndex(index, jump)
 	}
 	fmt.Println(trees)
-
 }
 
-func incIndex(index int, jump int) int {
+func incIndex(index, jump int) int {
 	index = (index + jump) % 31
 	return index
 }

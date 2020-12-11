@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-
 	file, err := os.Open("../input.txt")
 
 	if err != nil {
@@ -51,10 +50,9 @@ func main() {
 	total *= trees
 
 	fmt.Println(total)
-
 }
 
-func incIndex(index int, jump int) int {
+func incIndex(index, jump int) int {
 	index = (index + jump) % 31
 	return index
 }

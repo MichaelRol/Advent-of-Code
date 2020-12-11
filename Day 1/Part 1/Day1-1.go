@@ -18,18 +18,14 @@ func main() {
 
 	var perline int
 	var nums []int
-
 	for {
-
 		_, err := fmt.Fscanf(file, "%d\n", &perline) // give a patter to scan
-
 		if err != nil {
-
 			if err == io.EOF {
 				break // stop reading the file
 			}
 			fmt.Println(err)
-			os.Exit(1)
+			return
 		}
 
 		nums = append(nums, perline)
@@ -46,5 +42,4 @@ func main() {
 			}
 		}
 	}
-
 }

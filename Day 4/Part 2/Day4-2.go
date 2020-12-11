@@ -11,63 +11,66 @@ import (
 )
 
 func main() {
-
-	validCount := 0
-
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	validCount := 0
 	text := string(content)
 	passports := strings.Split(text, "\n\n")
 	for i := 0; i < len(passports); i++ {
-		valid := true
 		fields := strings.Fields(passports[i])
-
 		if len(fields) == 8 || len(fields) == 7 {
-			for j := 0; j < len(fields); j++ {
-				switch fields[j][0:3] {
-				case "byr":
-					if !validateByr(fields[j][4:]) {
-						valid = false
-					}
-				case "iyr":
-					if !validateIyr(fields[j][4:]) {
-						valid = false
-					}
-				case "eyr":
-					if !validateEyr(fields[j][4:]) {
-						valid = false
-					}
-				case "hgt":
-					if !validateHgt(fields[j][4:]) {
-						valid = false
-					}
-				case "hcl":
-					if !validateHcl(fields[j][4:]) {
-						valid = false
-					}
-				case "ecl":
-					if !validateEcl(fields[j][4:]) {
-						valid = false
-					}
-				case "pid":
-					if !validatePid(fields[j][4:]) {
-						valid = false
-					}
-				case "cid":
-					if len(fields) == 7 {
-						valid = false
-					}
-				}
-			}
-			if valid {
-				validCount++
-			}
+			validCount += checkFields(fields)
 		}
 	}
 	fmt.Println(validCount)
+}
+
+func checkFields(fields []string) int {
+	validCount := 0
+	valid := true
+	for j := 0; j < len(fields); j++ {
+		switch fields[j][0:3] {
+		case "byr":
+			if !validateByr(fields[j][4:]) {
+				valid = false
+			}
+		case "iyr":
+			if !validateIyr(fields[j][4:]) {
+				valid = false
+			}
+		case "eyr":
+			if !validateEyr(fields[j][4:]) {
+				valid = false
+			}
+		case "hgt":
+			if !validateHgt(fields[j][4:]) {
+				valid = false
+			}
+		case "hcl":
+			if !validateHcl(fields[j][4:]) {
+				valid = false
+			}
+		case "ecl":
+			if !validateEcl(fields[j][4:]) {
+				valid = false
+			}
+		case "pid":
+			if !validatePid(fields[j][4:]) {
+				valid = false
+			}
+		case "cid":
+			if len(fields) == 7 {
+				valid = false
+			}
+		}
+	}
+	if valid {
+		validCount++
+	}
+
+	return validCount
 }
 
 func validateByr(byr string) bool {
@@ -128,7 +131,7 @@ func validateHgt(hgt string) bool {
 }
 
 func validateHcl(hcl string) bool {
-	r, _ := regexp.Compile("^#[0-9a-f]{6}$")
+	r := regexp.MustCompile("^#[0-9a-f]{6}$")
 	return r.MatchString(hcl)
 }
 
@@ -140,6 +143,6 @@ func validateEcl(ecl string) bool {
 }
 
 func validatePid(pid string) bool {
-	r, _ := regexp.Compile("^[0-9]{9}$")
+	r := regexp.MustCompile(`^\d{9}$`)
 	return r.MatchString(pid)
 }

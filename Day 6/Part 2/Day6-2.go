@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -27,7 +26,7 @@ func main() {
 			}
 		}
 
-		q_count := 0
+		qCount := 0
 		for _, que := range ques {
 			addIt := true
 			for _, ans := range persons {
@@ -36,11 +35,11 @@ func main() {
 				}
 			}
 			if addIt {
-				q_count += 1
+				qCount++
 			}
 		}
 
-		total += q_count
+		total += qCount
 	}
 
 	fmt.Println(total)

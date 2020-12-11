@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	numbers := readNumbers("../input.txt")
 
 	var invalid int
@@ -32,10 +31,9 @@ func main() {
 		fmt.Println("No list found")
 		os.Exit(2)
 	}
-
 }
 
-func findContiguousSum(target int, position int, numbers []int) []int {
+func findContiguousSum(target, position int, numbers []int) []int {
 	for i := 0; i < position; i++ {
 		tally := numbers[i]
 		j := 1
@@ -77,10 +75,8 @@ func isValid(numbers []int, value int) bool {
 		for _, j := range numbers {
 			if i == j {
 				continue
-			} else {
-				if i+j == value {
-					return true
-				}
+			} else if i+j == value {
+				return true
 			}
 		}
 	}

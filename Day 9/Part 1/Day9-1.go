@@ -25,10 +25,8 @@ func isValid(numbers []int, value int) bool {
 		for _, j := range numbers {
 			if i == j {
 				continue
-			} else {
-				if i+j == value {
-					return true
-				}
+			} else if i+j == value {
+				return true
 			}
 		}
 	}

@@ -39,7 +39,6 @@ func main() {
 	}
 
 	for i := 0; i < len(instructions); i++ {
-
 		if instructions[i].op == nop {
 			instructions[i].op = jmp
 		} else if instructions[i].op == jmp {
@@ -54,23 +53,19 @@ func main() {
 		if fin == 0 {
 			fmt.Println(acc)
 			return
-		} else {
-			if instructions[i].op == nop {
-				instructions[i].op = jmp
-			} else if instructions[i].op == jmp {
-				instructions[i].op = nop
-			}
+		}
+		if instructions[i].op == nop {
+			instructions[i].op = jmp
+		} else if instructions[i].op == jmp {
+			instructions[i].op = nop
 		}
 	}
-
 }
 
-func runProg(instructions []instruction) (int, int) {
-
-	acc := 0
+func runProg(instructions []instruction) (acc, x int) {
+	acc = 0
 
 	for i := 0; i < len(instructions); i++ {
-
 		if instructions[i].access {
 			return acc, 1
 		}
@@ -83,7 +78,6 @@ func runProg(instructions []instruction) (int, int) {
 		if instructions[i].op == "jmp" {
 			i += instructions[i].arg - 1
 		}
-
 	}
 	return acc, 0
 }

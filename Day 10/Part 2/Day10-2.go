@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	ratings := readNumbers("../input.txt")
 
 	ratings = append(ratings, 0)
@@ -38,11 +37,9 @@ func main() {
 	cache := make(map[int]int64)
 
 	fmt.Println(transverse(ratings[0], graph, cache))
-
 }
 
 func transverse(node int, graph map[int][]int, cache map[int]int64) int64 {
-
 	var count int64 = 0
 	if len(graph[node]) == 0 {
 		return 1
@@ -60,7 +57,6 @@ func transverse(node int, graph map[int][]int, cache map[int]int64) int64 {
 }
 
 func createGraph(ratings []int) map[int][]int {
-
 	graph := make(map[int][]int)
 
 	for i, rating := range ratings {

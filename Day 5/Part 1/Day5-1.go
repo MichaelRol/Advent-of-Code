@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -25,15 +24,14 @@ func main() {
 	fmt.Println(getMax(seatIDs))
 }
 
-func calcSeatPos(seatCode string) (int, int) {
+func calcSeatPos(seatCode string) (row, col int) {
 	rowID := seatCode[:7]
 	colID := seatCode[7:]
 
-	row := 0
-	col := 0
+	row = 0
+	col = 0
 
 	for index, letter := range colID {
-
 		if string(letter) == "R" {
 			col += 1 << (len(colID) - index - 1)
 		}
@@ -48,7 +46,7 @@ func calcSeatPos(seatCode string) (int, int) {
 	return row, col
 }
 
-func calcSeatID(row int, col int) int {
+func calcSeatID(row, col int) int {
 	return row*8 + col
 }
 

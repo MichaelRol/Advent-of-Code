@@ -27,7 +27,7 @@ func main() {
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	for i := 0; i < len(passwords); i++ {
@@ -40,9 +40,8 @@ func main() {
 }
 
 func isPassValid(fullString string) bool {
-
 	var splitString []string = strings.Split(fullString, ": ")
-	var password = splitString[1]
+	var pass = splitString[1]
 
 	splitString = strings.Split(splitString[0], " ")
 	var letter = splitString[1]
@@ -60,10 +59,8 @@ func isPassValid(fullString string) bool {
 		fmt.Println(err2)
 		os.Exit(2)
 	}
-	if (string(password[min-1]) == letter && string(password[max-1]) != letter) || (string(password[min-1]) != letter && string(password[max-1]) == letter) {
+	if (string(pass[min-1]) == letter && string(pass[max-1]) != letter) || (string(pass[min-1]) != letter && string(pass[max-1]) == letter) {
 		return true
-	} else {
-		return false
 	}
-
+	return false
 }

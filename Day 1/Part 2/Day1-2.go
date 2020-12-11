@@ -20,11 +20,8 @@ func main() {
 	var nums []int
 
 	for {
-
 		_, err := fmt.Fscanf(file, "%d\n", &perline)
-
 		if err != nil {
-
 			if err == io.EOF {
 				break
 			}
@@ -48,5 +45,4 @@ func main() {
 			}
 		}
 	}
-
 }
