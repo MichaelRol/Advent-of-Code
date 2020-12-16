@@ -23,18 +23,18 @@ func main() {
 	for _, line := range lines {
 		both := strings.Split(line, " contain ")
 		contains := strings.Split(both[1], ", ")
-		for _, color := range contains {
-			if color[len(color)-1] == '.' {
-				color = color[:len(color)-1]
+		for _, colour := range contains {
+			if colour[len(colour)-1] == '.' {
+				colour = colour[:len(colour)-1]
 			}
-			if color[len(color)-1] == 's' {
-				color = color[:len(color)-1]
+			if colour[len(colour)-1] == 's' {
+				colour = colour[:len(colour)-1]
 			}
 			var numAndName []string
-			if color[:1] == "n" {
+			if colour[:1] == "n" {
 				numAndName = append(numAndName, "0", "no other bags")
 			} else {
-				numAndName = append(numAndName, color[:1], color[2:])
+				numAndName = append(numAndName, colour[:1], colour[2:])
 			}
 
 			rules[both[0][:len(both[0])-1]] = append(rules[both[0][:len(both[0])-1]], numAndName)
