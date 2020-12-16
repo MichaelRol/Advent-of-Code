@@ -18,6 +18,57 @@ type rule struct {
 
 func main() {
 	myTicket, nearbyTickets, rules := processInput("../input.txt")
+
+	validTickets := findValidTickets(rules, nearbyTickets)
+	possiblePositons := findPossiblePositions(rules, validTickets)
+	definitePositions := findDefinitePositions(possiblePositons)
+
+	total := 1
+	for name, value := range definitePositions {
+		if strings.Split(name, " ")[0] == "departure" {
+			total *= myTicket[value]
+		}
+	}
+	fmt.Println(total)
+}
+
+func findDefinitePositions(possiblePositons map[string][]int) map[string]int {
+	definitePositions := make(map[string]int)
+	for len(possiblePositons) > 0 {
+		for name, values := range possiblePositons {
+			if len(values) == 1 {
+				definitePositions[name] = values[0]
+				delete(possiblePositons, name)
+				for name1, values1 := range possiblePositons {
+					index := findIndex(values1, values[0])
+					possiblePositons[name1] = remove(possiblePositons[name1], index)
+				}
+			}
+		}
+	}
+	return definitePositions
+}
+
+func findPossiblePositions(rules map[string]rule, validTickets [][]int) map[string][]int {
+	possiblePositons := make(map[string][]int)
+	for name, rule := range rules {
+		for i := 0; i < len(validTickets[0]); i++ {
+			possible := true
+			for _, ticket := range validTickets {
+				if !fitRules(ticket[i], rule) {
+					possible = false
+					break
+				}
+			}
+			if possible {
+				possiblePositons[name] = append(possiblePositons[name], i)
+			}
+		}
+	}
+	return possiblePositons
+}
+
+func findValidTickets(rules map[string]rule, nearbyTickets [][]int) [][]int {
 	min := 1000
 	max := 0
 	for _, rule := range rules {
@@ -42,41 +93,7 @@ func main() {
 			validTickets = append(validTickets, ticket)
 		}
 	}
-	possiblePositons := make(map[string][]int)
-	for name, rule := range rules {
-		for i := 0; i < len(validTickets[0]); i++ {
-			possible := true
-			for _, ticket := range validTickets {
-				if !fitRules(ticket[i], rule) {
-					possible = false
-					break
-				}
-			}
-			if possible {
-				possiblePositons[name] = append(possiblePositons[name], i)
-			}
-		}
-	}
-	definatePositions := make(map[string]int)
-	for len(possiblePositons) > 0 {
-		for name, values := range possiblePositons {
-			if len(values) == 1 {
-				definatePositions[name] = values[0]
-				delete(possiblePositons, name)
-				for name1, values1 := range possiblePositons {
-					index := findIndex(values1, values[0])
-					possiblePositons[name1] = remove(possiblePositons[name1], index)
-				}
-			}
-		}
-	}
-	total := 1
-	for name, value := range definatePositions {
-		if strings.Split(name, " ")[0] == "departure" {
-			total *= myTicket[value]
-		}
-	}
-	fmt.Println(total)
+	return validTickets
 }
 
 func findIndex(list []int, value int) int {
