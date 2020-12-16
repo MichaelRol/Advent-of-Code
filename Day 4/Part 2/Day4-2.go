@@ -28,49 +28,43 @@ func main() {
 }
 
 func checkFields(fields []string) int {
-	validCount := 0
-	valid := true
 	for j := 0; j < len(fields); j++ {
 		switch fields[j][0:3] {
 		case "byr":
 			if !validateByr(fields[j][4:]) {
-				valid = false
+				return 0
 			}
 		case "iyr":
 			if !validateIyr(fields[j][4:]) {
-				valid = false
+				return 0
 			}
 		case "eyr":
 			if !validateEyr(fields[j][4:]) {
-				valid = false
+				return 0
 			}
 		case "hgt":
 			if !validateHgt(fields[j][4:]) {
-				valid = false
+				return 0
 			}
 		case "hcl":
 			if !validateHcl(fields[j][4:]) {
-				valid = false
+				return 0
 			}
 		case "ecl":
 			if !validateEcl(fields[j][4:]) {
-				valid = false
+				return 0
 			}
 		case "pid":
 			if !validatePid(fields[j][4:]) {
-				valid = false
+				return 0
 			}
 		case "cid":
 			if len(fields) == 7 {
-				valid = false
+				return 0
 			}
 		}
 	}
-	if valid {
-		validCount++
-	}
-
-	return validCount
+	return 1
 }
 
 func validateByr(byr string) bool {
