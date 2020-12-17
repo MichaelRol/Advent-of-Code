@@ -10,8 +10,8 @@ import (
 
 func main() {
 	inputGrid := readInput("../input.txt")
-	xs, ys, zs := 20, 20, 20
-	grid := generateGrid(xs, ys, zs)
+	size := 20
+	grid := generateGrid(size)
 	for x, line := range inputGrid {
 		for y, active := range line {
 			offsetX := (len(grid) - len(inputGrid)) / 2
@@ -20,16 +20,16 @@ func main() {
 		}
 	}
 	for cycle := 0; cycle < 6; cycle++ {
-		grid = cycleGrid(grid, xs, ys, zs)
+		grid = cycleGrid(grid, size)
 	}
-	fmt.Println(countActive(grid, xs, ys, zs))
+	fmt.Println(countActive(grid, size))
 }
 
-func countActive(grid [][][]int, xs, ys, zs int) int {
+func countActive(grid [][][]int, size int) int {
 	count := 0
-	for x := 0; x < xs; x++ {
-		for y := 0; y < ys; y++ {
-			for z := 0; z < zs; z++ {
+	for x := 0; x < size; x++ {
+		for y := 0; y < size; y++ {
+			for z := 0; z < size; z++ {
 				if grid[x][y][z] == 1 {
 					count++
 				}
@@ -38,27 +38,12 @@ func countActive(grid [][][]int, xs, ys, zs int) int {
 	}
 	return count
 }
-func cycleGrid(grid [][][]int, xs, ys, zs int) [][][]int {
+func cycleGrid(grid [][][]int, size int) [][][]int {
 	newGrid := copyInt3d(grid)
-	for x := 0; x < xs; x++ {
-		for y := 0; y < ys; y++ {
-			for z := 0; z < zs; z++ {
-				activeCount := 0
-				for i := -1; i <= 1; i++ {
-					for j := -1; j <= 1; j++ {
-						for k := -1; k <= 1; k++ {
-							if i == 0 && j == 0 && k == 0 {
-								continue
-							}
-							if x+i < 0 || x+i >= xs || y+j < 0 || y+j >= ys || z+k < 0 || z+k >= zs {
-								continue
-							}
-							if grid[x+i][y+j][z+k] == 1 {
-								activeCount++
-							}
-						}
-					}
-				}
+	for x := 0; x < size; x++ {
+		for y := 0; y < size; y++ {
+			for z := 0; z < size; z++ {
+				activeCount := activeNeighbours(grid, x, y, z, size)
 				if grid[x][y][z] == 1 {
 					if activeCount == 2 || activeCount == 3 {
 						newGrid[x][y][z] = 1
@@ -77,6 +62,26 @@ func cycleGrid(grid [][][]int, xs, ys, zs int) [][][]int {
 	}
 
 	return newGrid
+}
+
+func activeNeighbours(grid [][][]int, x, y, z, size int) int {
+	activeCount := 0
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
+			for k := -1; k <= 1; k++ {
+				if i == 0 && j == 0 && k == 0 {
+					continue
+				}
+				if x+i < 0 || x+i >= size || y+j < 0 || y+j >= size || z+k < 0 || z+k >= size {
+					continue
+				}
+				if grid[x+i][y+j][z+k] == 1 {
+					activeCount++
+				}
+			}
+		}
+	}
+	return activeCount
 }
 
 func copyInt3d(src [][][]int) [][][]int {
@@ -101,13 +106,13 @@ func copyInt1d(src []int) []int {
 	return dst
 }
 
-func generateGrid(xs, ys, zs int) [][][]int {
-	var grid = make([][][]int, xs) // x axis
-	for x := 0; x < xs; x++ {
-		grid[x] = make([][]int, ys) // y axis
-		for y := 0; y < ys; y++ {
-			grid[x][y] = make([]int, zs) // z axis
-			for z := 0; z < zs; z++ {
+func generateGrid(size int) [][][]int {
+	var grid = make([][][]int, size) // x axis
+	for x := 0; x < size; x++ {
+		grid[x] = make([][]int, size) // y axis
+		for y := 0; y < size; y++ {
+			grid[x][y] = make([]int, size) // z axis
+			for z := 0; z < size; z++ {
 				grid[x][y][z] = 0
 			}
 		}
