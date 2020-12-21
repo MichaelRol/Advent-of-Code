@@ -11,17 +11,12 @@ import (
 func main() {
 	rules, _ := readInput("../input.txt")
 
-	expandedRule := expandRule(rules["0"], rules)
+	expandedRule := expandRule(rules["0"][0], rules)
 	fmt.Println(expandedRule)
-
 }
 
-func expandRule(rule [][]string, rules map[string][][]string) [][]string {
+func expandRule(rule []string, rules map[string][][]string) [][]string {
 	var newRule [][]string
-
-	for _, subRule := range rules {
-		newRule = append(newRule, expandRule(subRule, rules))
-	}
 
 	return newRule
 }

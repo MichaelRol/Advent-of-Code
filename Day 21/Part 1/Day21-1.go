@@ -33,6 +33,7 @@ func main() {
 func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingredients []string, allergens map[string]string) {
 	possibleAllergens := make(map[string][]string)
 	allergens = make(map[string]string)
+
 	for x := 0; x < len(ingredientList); x++ {
 		for _, allergen := range allergensList[x] {
 			_, ok := possibleAllergens[allergen]
@@ -49,26 +50,27 @@ func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingre
 		for allergen, ingredients := range possibleAllergens {
 			if len(ingredients) == 1 {
 				allergens[ingredients[0]] = allergen
-
-				for otherAllergen, otherAllergenIngredients := range possibleAllergens {
-					var newList []string
-
-					for _, i := range otherAllergenIngredients {
-						if i != ingredients[0] {
-							newList = append(newList, i)
-						}
-					}
-
-					possibleAllergens[otherAllergen] = newList
-				}
-
+				possibleAllergens = deleteIngredient(possibleAllergens, ingredients[0])
 				delete(possibleAllergens, allergen)
 				break
 			}
 		}
 	}
-
 	return ingredients, allergens
+}
+
+func deleteIngredient(possibleAllergens map[string][]string, ingredient string) map[string][]string {
+	for allergen, otherIngredients := range possibleAllergens {
+		var newList []string
+
+		for _, i := range otherIngredients {
+			if i != ingredient {
+				newList = append(newList, i)
+			}
+		}
+		possibleAllergens[allergen] = newList
+	}
+	return possibleAllergens
 }
 
 func findSharedMembers(setA, setB []string) (sharedMembers []string) {

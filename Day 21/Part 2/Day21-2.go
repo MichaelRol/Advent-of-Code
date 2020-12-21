@@ -14,7 +14,11 @@ func main() {
 	ingredientList, allergensList := readInput("../input.txt")
 
 	_, allergens := findIngrediantAndAllergens(ingredientList, allergensList)
+	part2Answer := produceIngrediantList(allergens)
+	fmt.Println(part2Answer)
+}
 
+func produceIngrediantList(allergens map[string]string) string {
 	mapAllergensToIngrediants := make(map[string]string)
 	var listOfAllergens []string
 
@@ -34,7 +38,7 @@ func main() {
 	answer := buffer.String()
 	answer = answer[:len(answer)-1]
 
-	fmt.Println(answer)
+	return answer
 }
 
 func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingredients []string, allergens map[string]string) {
@@ -56,19 +60,7 @@ func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingre
 		for allergen, ingredients := range possibleAllergens {
 			if len(ingredients) == 1 {
 				allergens[ingredients[0]] = allergen
-
-				for otherAllergen, otherAllergenIngredients := range possibleAllergens {
-					var newList []string
-
-					for _, i := range otherAllergenIngredients {
-						if i != ingredients[0] {
-							newList = append(newList, i)
-						}
-					}
-
-					possibleAllergens[otherAllergen] = newList
-				}
-
+				possibleAllergens = deleteIngredient(possibleAllergens, ingredients[0])
 				delete(possibleAllergens, allergen)
 				break
 			}
@@ -76,6 +68,20 @@ func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingre
 	}
 
 	return ingredients, allergens
+}
+
+func deleteIngredient(possibleAllergens map[string][]string, ingredient string) map[string][]string {
+	for allergen, otherIngredients := range possibleAllergens {
+		var newList []string
+
+		for _, i := range otherIngredients {
+			if i != ingredient {
+				newList = append(newList, i)
+			}
+		}
+		possibleAllergens[allergen] = newList
+	}
+	return possibleAllergens
 }
 
 func findSharedMembers(setA, setB []string) (sharedMembers []string) {
