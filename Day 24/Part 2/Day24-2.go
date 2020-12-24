@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 type direction int
@@ -30,6 +31,7 @@ type hex struct {
 }
 
 func main() {
+	start := time.Now()
 	directionsList := readInput("../input.txt")
 	tiles := make(map[hex]bool)
 	refTile := newHex(0, 0)
@@ -55,6 +57,10 @@ func main() {
 	}
 
 	fmt.Println(countBlackTiles(tiles))
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func gameOfLife(tiles map[hex]bool) map[hex]bool {
@@ -73,8 +79,6 @@ func gameOfLife(tiles map[hex]bool) map[hex]bool {
 				if blackNeighbour {
 					blackNeighbours++
 				}
-			} else {
-				newTiles[hexNeighbor(tile, direction(d))] = false
 			}
 		}
 		if isBlack {
