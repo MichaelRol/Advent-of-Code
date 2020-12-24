@@ -33,25 +33,8 @@ type hex struct {
 func main() {
 	start := time.Now()
 	directionsList := readInput("../input.txt")
-	tiles := make(map[hex]bool)
-	refTile := newHex(0, 0)
+	tiles := initiliseTiles(directionsList)
 
-	tiles[refTile] = false
-
-	for _, directions := range directionsList {
-		currTile := refTile
-		for _, direction := range directions {
-			currTile = hexNeighbor(currTile, direction)
-			if _, ok := tiles[currTile]; !ok {
-				tiles[currTile] = false
-			}
-		}
-		if _, ok := tiles[currTile]; ok {
-			tiles[currTile] = !tiles[currTile]
-		} else {
-			tiles[currTile] = true
-		}
-	}
 	for i := 0; i < 100; i++ {
 		tiles = gameOfLife(tiles)
 	}
@@ -65,9 +48,9 @@ func main() {
 
 func gameOfLife(tiles map[hex]bool) map[hex]bool {
 	newTiles := make(map[hex]bool)
-	for tile := range tiles {
+	for tile, isBlack := range tiles {
 		for d := 0; d < 6; d++ {
-			if _, ok := tiles[hexNeighbor(tile, direction(d))]; !ok {
+			if _, ok := tiles[hexNeighbor(tile, direction(d))]; !ok && isBlack {
 				tiles[hexNeighbor(tile, direction(d))] = false
 			}
 		}
@@ -75,10 +58,8 @@ func gameOfLife(tiles map[hex]bool) map[hex]bool {
 	for tile, isBlack := range tiles {
 		blackNeighbours := 0
 		for d := 0; d < 6; d++ {
-			if blackNeighbour, ok := tiles[hexNeighbor(tile, direction(d))]; ok {
-				if blackNeighbour {
-					blackNeighbours++
-				}
+			if blackNeighbour, ok := tiles[hexNeighbor(tile, direction(d))]; ok && blackNeighbour {
+				blackNeighbours++
 			}
 		}
 		if isBlack {
@@ -97,6 +78,28 @@ func gameOfLife(tiles map[hex]bool) map[hex]bool {
 	}
 
 	return newTiles
+}
+
+func initiliseTiles(directionsList [][]direction) map[hex]bool {
+	tiles := make(map[hex]bool)
+	refTile := newHex(0, 0)
+	tiles[refTile] = false
+
+	for _, directions := range directionsList {
+		currTile := refTile
+		for _, direction := range directions {
+			currTile = hexNeighbor(currTile, direction)
+			if _, ok := tiles[currTile]; !ok {
+				tiles[currTile] = false
+			}
+		}
+		if _, ok := tiles[currTile]; ok {
+			tiles[currTile] = !tiles[currTile]
+		} else {
+			tiles[currTile] = true
+		}
+	}
+	return tiles
 }
 
 func countBlackTiles(tiles map[hex]bool) int {

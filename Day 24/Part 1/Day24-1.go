@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 type direction int
@@ -30,6 +31,7 @@ type hex struct {
 }
 
 func main() {
+	start := time.Now()
 	directionsList := readInput("../input.txt")
 	tiles := make(map[hex]bool)
 	refTile := newHex(0, 0)
@@ -54,6 +56,10 @@ func main() {
 		}
 	}
 	fmt.Println(blackCount)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func newHex(q, r int) hex {
