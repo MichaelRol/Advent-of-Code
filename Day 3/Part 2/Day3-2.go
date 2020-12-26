@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	file, err := os.Open("../input.txt")
 
 	if err != nil {
@@ -49,7 +51,12 @@ func main() {
 	}
 	total *= trees
 
+	fmt.Print("Answer: ")
 	fmt.Println(total)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func incIndex(index, jump int) int {

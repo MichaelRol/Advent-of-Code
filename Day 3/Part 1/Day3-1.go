@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	index := 0
 	jump := 3
 	trees := 0
@@ -36,7 +38,12 @@ func main() {
 		}
 		index = incIndex(index, jump)
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(trees)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func incIndex(index, jump int) int {

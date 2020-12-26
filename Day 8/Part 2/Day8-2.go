@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type instruction struct {
@@ -16,6 +17,7 @@ type instruction struct {
 }
 
 func main() {
+	start := time.Now()
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -51,7 +53,12 @@ func main() {
 		acc, fin := runProg(newList)
 
 		if fin == 0 {
+			fmt.Print("Answer: ")
 			fmt.Println(acc)
+			t := time.Now()
+			elapsed := t.Sub(start)
+			fmt.Print("Execution time: ")
+			fmt.Println(elapsed)
 			return
 		}
 		if instructions[i].op == nop {

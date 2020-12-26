@@ -5,9 +5,11 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	valid := 0
 
 	content, err := ioutil.ReadFile("../input.txt")
@@ -33,7 +35,12 @@ func main() {
 			}
 		}
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(valid)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func Contains(a []string, x string) bool {

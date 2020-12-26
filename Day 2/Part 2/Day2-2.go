@@ -7,9 +7,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	var count int = 0
 
 	file, err := os.Open("../input.txt")
@@ -36,7 +38,12 @@ func main() {
 		}
 	}
 
+	fmt.Print("Answer: ")
 	fmt.Println(count)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func isPassValid(fullString string) bool {

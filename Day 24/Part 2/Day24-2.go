@@ -38,7 +38,7 @@ func main() {
 	for i := 0; i < 100; i++ {
 		tiles = gameOfLife(tiles)
 	}
-
+	fmt.Print("Answer: ")
 	fmt.Println(countBlackTiles(tiles))
 	t := time.Now()
 	elapsed := t.Sub(start)

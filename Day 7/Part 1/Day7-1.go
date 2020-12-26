@@ -5,9 +5,11 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -38,8 +40,12 @@ func main() {
 			goldIn[bag] = true
 		}
 	}
-
+	fmt.Print("Answer: ")
 	fmt.Println(len(goldIn) - 1)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func lookInside(bag string, rules map[string][]string, goldIn map[string]bool) bool {

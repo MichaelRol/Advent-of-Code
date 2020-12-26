@@ -49,17 +49,22 @@ func main() {
 			tiles[currTile] = true
 		}
 	}
+	fmt.Print("Answer: ")
+	fmt.Println(countBlackTiles(tiles))
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
+}
+
+func countBlackTiles(tiles map[hex]bool) int {
 	blackCount := 0
 	for _, isBlack := range tiles {
 		if isBlack {
 			blackCount++
 		}
 	}
-	fmt.Println(blackCount)
-	t := time.Now()
-	elapsed := t.Sub(start)
-	fmt.Print("Execution time: ")
-	fmt.Println(elapsed)
+	return blackCount
 }
 
 func newHex(q, r int) hex {

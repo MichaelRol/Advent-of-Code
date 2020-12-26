@@ -6,9 +6,11 @@ import (
 	"log"
 	"sort"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -22,7 +24,12 @@ func main() {
 		seatIDs = append(seatIDs, calcSeatID(calcSeatPos(seat)))
 	}
 
+	fmt.Print("Answer: ")
 	fmt.Println(findSeat(seatIDs))
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func calcSeatPos(seatCode string) (row, col int) {

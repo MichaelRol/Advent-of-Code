@@ -5,10 +5,12 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 	"unicode"
 )
 
 func main() {
+	start := time.Now()
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -42,7 +44,12 @@ func main() {
 		total += qCount
 	}
 
+	fmt.Print("Answer: ")
 	fmt.Println(total)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func stringInSlice(a string, list []string) bool {

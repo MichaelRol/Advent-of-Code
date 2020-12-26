@@ -5,9 +5,11 @@ import (
 	"io"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	file, err := os.Open("../input.txt")
 
 	if err != nil {
@@ -39,7 +41,12 @@ func main() {
 					continue
 				}
 				if nums[i]+nums[j]+nums[k] == 2020 {
+					fmt.Print("Answer: ")
 					fmt.Println(nums[i] * nums[j] * nums[k])
+					t := time.Now()
+					elapsed := t.Sub(start)
+					fmt.Print("Execution time: ")
+					fmt.Println(elapsed)
 					return
 				}
 			}

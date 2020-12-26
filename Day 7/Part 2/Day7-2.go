@@ -7,9 +7,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	content, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -43,7 +45,13 @@ func main() {
 
 	var numAndName []string
 	numAndName = append(numAndName, "1", "shiny gold bag")
+
+	fmt.Print("Answer: ")
 	fmt.Println(countBags(numAndName, rules) - 1)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func countBags(bag []string, rules map[string][][]string) int {
