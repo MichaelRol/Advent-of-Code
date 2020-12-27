@@ -31,7 +31,7 @@ func main() {
 	fmt.Println(elapsed)
 }
 
-func readLines(filename string) (time int, busTimes []int) {
+func readLines(filename string) (earliestTime int, busTimes []int) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -41,7 +41,7 @@ func readLines(filename string) (time int, busTimes []int) {
 	text := string(content)
 	lines := strings.Split(text, "\n")
 
-	time, err = strconv.Atoi(lines[0])
+	earliestTime, err = strconv.Atoi(lines[0])
 	if err != nil {
 		fmt.Println("Invald time")
 		os.Exit(2)
@@ -56,5 +56,5 @@ func readLines(filename string) (time int, busTimes []int) {
 		}
 		busTimes = append(busTimes, busTimeInt)
 	}
-	return time, busTimes
+	return earliestTime, busTimes
 }
