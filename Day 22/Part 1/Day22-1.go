@@ -7,19 +7,26 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	player1, player2 := readHands("../input.txt")
 	for len(player1) > 0 && len(player2) > 0 {
 		player1, player2 = playHand(player1, player2)
 	}
 
+	fmt.Print("Answer: ")
 	if len(player1) != 0 {
 		fmt.Println(countScore(player1))
 	} else {
 		fmt.Println(countScore(player2))
 	}
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func countScore(cards []int) int {

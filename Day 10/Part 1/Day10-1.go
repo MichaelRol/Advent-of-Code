@@ -8,9 +8,11 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	ratings := readNumbers("../input.txt")
 
 	sort.Ints(ratings)
@@ -31,7 +33,12 @@ func main() {
 			threeJumps++
 		}
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(oneJumps * threeJumps)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func readNumbers(filename string) []int {

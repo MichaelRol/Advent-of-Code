@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type rule struct {
@@ -17,6 +18,7 @@ type rule struct {
 }
 
 func main() {
+	start := time.Now()
 	myTicket, nearbyTickets, rules := processInput("../input.txt")
 
 	validTickets := findValidTickets(rules, nearbyTickets)
@@ -29,7 +31,12 @@ func main() {
 			total *= myTicket[value]
 		}
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(total)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func findDefinitePositions(possiblePositons map[string][]int) map[string]int {

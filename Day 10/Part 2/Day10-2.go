@@ -8,9 +8,11 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	ratings := readNumbers("../input.txt")
 
 	ratings = append(ratings, 0)
@@ -36,7 +38,12 @@ func main() {
 	graph := createGraph(ratings)
 	cache := make(map[int]int64)
 
+	fmt.Print("Answer: ")
 	fmt.Println(transverse(ratings[0], graph, cache))
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func transverse(node int, graph map[int][]int, cache map[int]int64) int64 {

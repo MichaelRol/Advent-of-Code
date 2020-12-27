@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type instruct struct {
@@ -16,6 +17,7 @@ type instruct struct {
 }
 
 func main() {
+	start := time.Now()
 	instructions := readLines("../input.txt")
 	direction := 90
 	north := 0
@@ -24,7 +26,12 @@ func main() {
 	for _, instruction := range instructions {
 		direction, north, east = processInstruct(instruction, direction, north, east)
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(manhattenDist(north, east))
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func manhattenDist(north, east int) float64 {

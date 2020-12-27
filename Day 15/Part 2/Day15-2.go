@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	input := []int{8, 11, 0, 19, 1, 2}
 	lastSpoke := make(map[int]int)
 	for turn, number := range input {
@@ -27,7 +29,12 @@ func main() {
 		}
 
 		if turn == 30000000-1 {
+			fmt.Print("Answer: ")
 			fmt.Println(lastNumber)
+			t := time.Now()
+			elapsed := t.Sub(start)
+			fmt.Print("Execution time: ")
+			fmt.Println(elapsed)
 			break
 		}
 	}

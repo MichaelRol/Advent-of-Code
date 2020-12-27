@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type tile struct {
@@ -18,6 +19,7 @@ type tile struct {
 }
 
 func main() {
+	start := time.Now()
 	tiles := readInput("../input.txt")
 	total := 1
 	for name, tile := range tiles {
@@ -45,8 +47,12 @@ func main() {
 			total *= value
 		}
 	}
-
+	fmt.Print("Answer: ")
 	fmt.Println(total)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func matchTiles(mainTile, checkTile tile) bool {

@@ -7,16 +7,24 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	player1, player2 := readHands("../input.txt")
 	player1, player2 = recursiveCombat(player1, player2)
+
+	fmt.Print("Answer: ")
 	if len(player1) != 0 {
 		fmt.Println(countScore(player1))
 	} else {
 		fmt.Println(countScore(player2))
 	}
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func countScore(cards []int) int {

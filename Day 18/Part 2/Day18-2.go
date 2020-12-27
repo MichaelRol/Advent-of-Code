@@ -7,16 +7,23 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	equations := readInput("../input.txt")
 	sum := 0
 	for _, equation := range equations {
 		num := processEquation(equation)
 		sum += num
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(sum)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func processEquation(equation string) int {

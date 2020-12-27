@@ -6,9 +6,11 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	inputGrid := readInput("../input.txt")
 	size := 20
 	grid := generateGrid(size)
@@ -22,7 +24,12 @@ func main() {
 	for cycle := 0; cycle < 6; cycle++ {
 		grid = cycleGrid(grid, size)
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(countActive(grid, size))
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func countActive(grid [][][][]int, size int) int {

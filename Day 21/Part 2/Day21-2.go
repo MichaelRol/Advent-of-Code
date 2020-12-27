@@ -8,14 +8,21 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	ingredientList, allergensList := readInput("../input.txt")
 
 	_, allergens := findIngrediantAndAllergens(ingredientList, allergensList)
 	part2Answer := produceIngrediantList(allergens)
+	fmt.Print("Answer: ")
 	fmt.Println(part2Answer)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func produceIngrediantList(allergens map[string]string) string {

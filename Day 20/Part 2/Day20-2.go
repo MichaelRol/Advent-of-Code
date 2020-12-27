@@ -13,6 +13,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var grid [][]int
@@ -27,10 +28,16 @@ type Tile struct {
 }
 
 func main() {
+	start := time.Now()
 	gridLength, tileLength := processInput("../input.txt")
 	fillGrid(prepareRefTile(), 0, 0)
 	fullImage := stitchImage(tileLength, gridLength)
+	fmt.Print("Answer: ")
 	fmt.Println(countWaves(tileLength, gridLength, fullImage))
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func produceHash(hash uint, length int) uint {

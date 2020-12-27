@@ -7,9 +7,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	busTimes := readLines("../input.txt")
 
 	part2, step := 0, 1
@@ -23,8 +25,12 @@ func main() {
 		}
 		step *= bus
 	}
-
+	fmt.Print("Answer: ")
 	fmt.Println(part2)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func readLines(filename string) []int {

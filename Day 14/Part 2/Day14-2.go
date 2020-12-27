@@ -8,9 +8,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	commands := readLines("../input.txt")
 
 	mask := ""
@@ -36,8 +38,12 @@ func main() {
 		}
 		total += int(intValue)
 	}
-
+	fmt.Print("Answer: ")
 	fmt.Println(total)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func applyMask(index int, mask string) (indexes []int) {

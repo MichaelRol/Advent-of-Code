@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type rule struct {
@@ -17,6 +18,7 @@ type rule struct {
 }
 
 func main() {
+	start := time.Now()
 	_, nearbyTickets, rules := processInput("../input.txt")
 	min := 1000
 	max := 0
@@ -37,7 +39,12 @@ func main() {
 			}
 		}
 	}
+	fmt.Print("Answer: ")
 	fmt.Println(errorRate)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func processInput(filename string) (myTicket []int, nearbyTickets [][]int, rules map[string]rule) {

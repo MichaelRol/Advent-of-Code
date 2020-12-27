@@ -7,9 +7,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	numbers := readNumbers("../input.txt")
 
 	var invalid int
@@ -26,7 +28,12 @@ func main() {
 
 	contiguousList := findContiguousSum(invalid, position, numbers)
 	if contiguousList != nil {
+		fmt.Print("Answer: ")
 		fmt.Println(max(contiguousList) + min(contiguousList))
+		t := time.Now()
+		elapsed := t.Sub(start)
+		fmt.Print("Execution time: ")
+		fmt.Println(elapsed)
 	} else {
 		fmt.Println("No list found")
 		os.Exit(2)

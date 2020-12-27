@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 type game struct {
@@ -20,6 +21,7 @@ type cup struct {
 }
 
 func main() {
+	start := time.Now()
 	input := "643719258"
 	var inputArray []int
 	for _, num := range input {
@@ -33,7 +35,13 @@ func main() {
 	for i := 0; i < 100; i++ {
 		game.playRound()
 	}
+
+	fmt.Print("Answer: ")
 	game.listCupsAfter1()
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func (g *game) playRound() {

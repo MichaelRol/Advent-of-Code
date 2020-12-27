@@ -7,16 +7,24 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	numbers := readNumbers("../input.txt")
 
 	for i := 25; i < len(numbers); i++ {
-		if !isValid(numbers[i-25:i], numbers[i]) {
-			fmt.Println(numbers[i])
-			return
+		if isValid(numbers[i-25:i], numbers[i]) {
+			continue
 		}
+		fmt.Print("Answer: ")
+		fmt.Println(numbers[i])
+		t := time.Now()
+		elapsed := t.Sub(start)
+		fmt.Print("Execution time: ")
+		fmt.Println(elapsed)
+		return
 	}
 }
 

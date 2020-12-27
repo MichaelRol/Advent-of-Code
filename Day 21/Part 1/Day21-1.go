@@ -6,9 +6,11 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	ingredientList, allergensList := readInput("../input.txt")
 
 	ingredients, allergens := findIngrediantAndAllergens(ingredientList, allergensList)
@@ -26,8 +28,12 @@ func main() {
 			count++
 		}
 	}
-
+	fmt.Print("Answer: ")
 	fmt.Println(count)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingredients []string, allergens map[string]string) {

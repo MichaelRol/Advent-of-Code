@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	input := "643719258"
 	var cups []int
 	nextCup := make(map[int]int)
@@ -32,7 +34,13 @@ func main() {
 
 	num1 := nextCup[1]
 	num2 := nextCup[nextCup[1]]
+
+	fmt.Print("Answer: ")
 	fmt.Println(num1 * num2)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
 }
 
 func playRound(currentCup, numOfCups int, nextCup map[int]int) map[int]int {
