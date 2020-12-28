@@ -2,37 +2,19 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
 func main() {
 	start := time.Now()
-	file, err := os.Open("../input.txt")
+	nums := readInput("../input.txt")
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer file.Close()
-
-	var perline int
-	var nums []int
-	for {
-		_, err := fmt.Fscanf(file, "%d\n", &perline) // give a patter to scan
-		if err != nil {
-			if err == io.EOF {
-				break // stop reading the file
-			}
-			fmt.Println(err)
-			return
-		}
-
-		nums = append(nums, perline)
-	}
-
+	// Reads through list of numbers, find two that sum to 2020
 	for i := 0; i < len(nums); i++ {
 		for j := 0; j < len(nums); j++ {
 			if i == j {
@@ -49,4 +31,26 @@ func main() {
 			}
 		}
 	}
+}
+
+func readInput(filename string) []int {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(2)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n")
+
+	var numbers []int
+
+	for _, line := range lines {
+		num, err := strconv.Atoi(line)
+		if err != nil {
+			continue
+		}
+		numbers = append(numbers, num)
+	}
+
+	return numbers
 }

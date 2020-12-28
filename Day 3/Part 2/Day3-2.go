@@ -1,40 +1,30 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
 func main() {
 	start := time.Now()
-	file, err := os.Open("../input.txt")
+	lines := readInput("../input.txt")
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	var lines []string
-
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-	}
-
+	// Runs through input moving along different amounts with each run
+	// Multiply number of trees encountered with each run
 	total := 1
 	for j := 1; j <= 7; j += 2 {
 		jump := j
 		index := 0
 		trees := 0
-		for i := 0; i < len(lines); i++ {
-			if string(lines[i][index]) == "#" {
+		for _, line := range lines {
+			if line == "" {
+				continue
+			}
+			if string(line[index]) == "#" {
 				trees++
 			}
 			index = incIndex(index, jump)
@@ -43,6 +33,7 @@ func main() {
 	}
 	index := 0
 	trees := 0
+	// Finally moves down 2 lines and 1 across each time
 	for i := 0; i < len(lines); i += 2 {
 		if string(lines[i][index]) == "#" {
 			trees++
@@ -62,4 +53,16 @@ func main() {
 func incIndex(index, jump int) int {
 	index = (index + jump) % 31
 	return index
+}
+
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(2)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n")
+
+	return lines
 }

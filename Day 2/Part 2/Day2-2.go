@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -13,27 +13,13 @@ import (
 func main() {
 	start := time.Now()
 	var count int = 0
+	passwords := readInput("../input.txt")
 
-	file, err := os.Open("../input.txt")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	var passwords []string
-
-	for scanner.Scan() {
-		passwords = append(passwords, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-	}
-
-	for i := 0; i < len(passwords); i++ {
-		if isPassValid(passwords[i]) {
+	for _, password := range passwords {
+		if password == "" {
+			continue
+		}
+		if isPassValid(password) {
 			count++
 		}
 	}
@@ -47,6 +33,7 @@ func main() {
 }
 
 func isPassValid(fullString string) bool {
+	// splits input line into a password, a letter and two positions a and b
 	var splitString []string = strings.Split(fullString, ": ")
 	var pass = splitString[1]
 
@@ -54,8 +41,8 @@ func isPassValid(fullString string) bool {
 	var letter = splitString[1]
 
 	splitString = strings.Split(splitString[0], "-")
-	var min, err1 = strconv.Atoi(splitString[0])
-	var max, err2 = strconv.Atoi(splitString[1])
+	var a, err1 = strconv.Atoi(splitString[0])
+	var b, err2 = strconv.Atoi(splitString[1])
 
 	if err1 != nil {
 		fmt.Println(err1)
@@ -66,8 +53,22 @@ func isPassValid(fullString string) bool {
 		fmt.Println(err2)
 		os.Exit(2)
 	}
-	if (string(pass[min-1]) == letter && string(pass[max-1]) != letter) || (string(pass[min-1]) != letter && string(pass[max-1]) == letter) {
+
+	// checks if the letter is in position a or b, but not both
+	if (string(pass[a-1]) == letter && string(pass[b-1]) != letter) || (string(pass[a-1]) != letter && string(pass[b-1]) == letter) {
 		return true
 	}
 	return false
+}
+
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(2)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n")
+
+	return lines
 }

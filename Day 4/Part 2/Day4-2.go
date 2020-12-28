@@ -13,15 +13,13 @@ import (
 
 func main() {
 	start := time.Now()
-	content, err := ioutil.ReadFile("../input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
 	validCount := 0
-	text := string(content)
-	passports := strings.Split(text, "\n\n")
-	for i := 0; i < len(passports); i++ {
-		fields := strings.Fields(passports[i])
+	passports := readInput("../input.txt")
+
+	// Checks each passport has the correct number of fields
+	// and that each field is valid
+	for _, passport := range passports {
+		fields := strings.Fields(passport)
 		if len(fields) == 8 || len(fields) == 7 {
 			validCount += checkFields(fields)
 		}
@@ -146,4 +144,16 @@ func validateEcl(ecl string) bool {
 func validatePid(pid string) bool {
 	r := regexp.MustCompile(`^\d{9}$`)
 	return r.MatchString(pid)
+}
+
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(2)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n\n")
+
+	return lines
 }
