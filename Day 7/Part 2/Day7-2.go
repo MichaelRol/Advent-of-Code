@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -12,14 +10,39 @@ import (
 
 func main() {
 	start := time.Now()
-	content, err := ioutil.ReadFile("../input.txt")
-	if err != nil {
-		log.Fatal(err)
+	lines := readInput("../input.txt")
+	rules := processRules(lines)
+
+	var numAndName []string
+	numAndName = append(numAndName, "1", "shiny gold bag")
+
+	fmt.Print("Answer: ")
+	fmt.Println(countBags(numAndName, rules) - 1)
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Print("Execution time: ")
+	fmt.Println(elapsed)
+}
+
+// Recursively count bags
+func countBags(bag []string, rules map[string][][]string) int {
+	total := 0
+	if bag[0] == "0" {
+		return 0
 	}
 
-	text := string(content)
-	lines := strings.Split(text, "\n")
+	for _, nextBag := range rules[bag[1]] {
+		i, err := strconv.Atoi(nextBag[0])
+		if err != nil {
+			panic(err)
+		}
+		total += i * countBags(nextBag, rules)
+	}
 
+	return 1 + total
+}
+
+func processRules(lines []string) map[string][][]string {
 	rules := make(map[string][][]string)
 
 	for _, line := range lines {
@@ -42,32 +65,16 @@ func main() {
 			rules[both[0][:len(both[0])-1]] = append(rules[both[0][:len(both[0])-1]], numAndName)
 		}
 	}
-
-	var numAndName []string
-	numAndName = append(numAndName, "1", "shiny gold bag")
-
-	fmt.Print("Answer: ")
-	fmt.Println(countBags(numAndName, rules) - 1)
-	t := time.Now()
-	elapsed := t.Sub(start)
-	fmt.Print("Execution time: ")
-	fmt.Println(elapsed)
+	return rules
 }
 
-func countBags(bag []string, rules map[string][][]string) int {
-	total := 0
-	if bag[0] == "0" {
-		return 0
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
 	}
+	text := string(content)
+	lines := strings.Split(text, "\n")
 
-	for _, nextBag := range rules[bag[1]] {
-		i, err := strconv.Atoi(nextBag[0])
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(2)
-		}
-		total += i * countBags(nextBag, rules)
-	}
-
-	return 1 + total
+	return lines
 }

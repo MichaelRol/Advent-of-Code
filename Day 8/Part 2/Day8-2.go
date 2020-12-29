@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -18,29 +16,14 @@ type instruction struct {
 
 func main() {
 	start := time.Now()
-	content, err := ioutil.ReadFile("../input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
+	lines := readInput("../input.txt")
+	instructions := processInstructions(lines)
 
 	const nop = "nop"
 	const jmp = "jmp"
-	text := string(content)
-	lines := strings.Split(text, "\n")
-
-	var instructions []instruction
-
-	for _, line := range lines {
-		operation := line[:3]
-		i, err := strconv.Atoi(line[4:])
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(2)
-		}
-		instructions = append(instructions, instruction{op: operation, arg: i, access: false})
-	}
 
 	for i := 0; i < len(instructions); i++ {
+		// For each instruction, if jmp change to nop, and vice versa.
 		if instructions[i].op == nop {
 			instructions[i].op = jmp
 		} else if instructions[i].op == jmp {
@@ -49,7 +32,7 @@ func main() {
 
 		newList := make([]instruction, len(instructions))
 		copy(newList, instructions)
-
+		// See if program terminations
 		acc, fin := runProg(newList)
 
 		if fin == 0 {
@@ -61,6 +44,7 @@ func main() {
 			fmt.Println(elapsed)
 			return
 		}
+		// Swap back instruction (we only want to swap one intruction at a time)
 		if instructions[i].op == nop {
 			instructions[i].op = jmp
 		} else if instructions[i].op == jmp {
@@ -87,4 +71,29 @@ func runProg(instructions []instruction) (acc, x int) {
 		}
 	}
 	return acc, 0
+}
+
+func processInstructions(lines []string) []instruction {
+	var instructions []instruction
+
+	for _, line := range lines {
+		operation := line[:3]
+		i, err := strconv.Atoi(line[4:])
+		if err != nil {
+			panic(err)
+		}
+		instructions = append(instructions, instruction{op: operation, arg: i, access: false})
+	}
+	return instructions
+}
+
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n")
+
+	return lines
 }

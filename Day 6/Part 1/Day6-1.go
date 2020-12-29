@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"strings"
 	"time"
 	"unicode"
@@ -11,13 +10,7 @@ import (
 
 func main() {
 	start := time.Now()
-	content, err := ioutil.ReadFile("../input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	text := string(content)
-	groups := strings.Split(text, "\n\n")
+	groups := readInput("../input.txt")
 	total := 0
 	for _, group := range groups {
 		var ques []string
@@ -43,4 +36,15 @@ func stringInSlice(a string, list []string) bool {
 		}
 	}
 	return false
+}
+
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n\n")
+
+	return lines
 }

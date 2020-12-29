@@ -3,20 +3,13 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"strings"
 	"time"
 )
 
 func main() {
 	start := time.Now()
-	content, err := ioutil.ReadFile("../input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	text := string(content)
-	seats := strings.Split(text, "\n")
+	seats := readInput("../input.txt")
 
 	var seatIDs []int
 	for _, seat := range seats {
@@ -31,6 +24,8 @@ func main() {
 	fmt.Println(elapsed)
 }
 
+// Seat positions calculated by binary space partioning
+// Front/Back is 0/1 and Left/Right is 0/1
 func calcSeatPos(seatCode string) (row, col int) {
 	rowID := seatCode[:7]
 	colID := seatCode[7:]
@@ -65,4 +60,15 @@ func getMax(values []int) int {
 		}
 	}
 	return max
+}
+
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n")
+
+	return lines
 }

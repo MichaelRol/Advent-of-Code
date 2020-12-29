@@ -15,6 +15,8 @@ func main() {
 	numbers := readNumbers("../input.txt")
 
 	for i := 25; i < len(numbers); i++ {
+		// After first 25 numbers (the preamble)
+		// Checks if each number in list is a sum of two of the previous 25 numbers
 		if isValid(numbers[i-25:i], numbers[i]) {
 			continue
 		}

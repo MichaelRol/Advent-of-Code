@@ -18,6 +18,7 @@ func main() {
 	var position int
 	preamble := 25
 
+	// Like in Part 1 find first value that is not a sum of two of the previous 25 numbers
 	for i := preamble; i < len(numbers); i++ {
 		if !isValid(numbers[i-preamble:i], numbers[i]) {
 			invalid = numbers[i]
@@ -40,6 +41,7 @@ func main() {
 	}
 }
 
+// Finds contiguous set of numbers that sum to a target
 func findContiguousSum(target, position int, numbers []int) []int {
 	for i := 0; i < position; i++ {
 		tally := numbers[i]

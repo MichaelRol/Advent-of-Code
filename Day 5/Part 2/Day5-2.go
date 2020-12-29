@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"sort"
 	"strings"
 	"time"
@@ -11,13 +10,7 @@ import (
 
 func main() {
 	start := time.Now()
-	content, err := ioutil.ReadFile("../input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	text := string(content)
-	seats := strings.Split(text, "\n")
+	seats := readInput("../input.txt")
 
 	var seatIDs []int
 	for _, seat := range seats {
@@ -32,6 +25,8 @@ func main() {
 	fmt.Println(elapsed)
 }
 
+// Seat positions calculated by binary space partioning
+// Front/Back is 0/1 and Left/Right is 0/1
 func calcSeatPos(seatCode string) (row, col int) {
 	rowID := seatCode[:7]
 	colID := seatCode[7:]
@@ -58,6 +53,7 @@ func calcSeatID(row, col int) int {
 	return row*8 + col
 }
 
+// Finds missing seat
 func findSeat(seats []int) int {
 	sort.Ints(seats)
 	for i, seat := range seats {
@@ -66,4 +62,15 @@ func findSeat(seats []int) int {
 		}
 	}
 	return 0
+}
+
+func readInput(filename string) []string {
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	text := string(content)
+	lines := strings.Split(text, "\n")
+
+	return lines
 }
