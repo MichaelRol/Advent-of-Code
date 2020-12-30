@@ -13,6 +13,7 @@ func main() {
 	start := time.Now()
 	chairs := readLines("../input.txt")
 
+	// Same premise as Part 1, with new mechanism for evolving system
 	newChairs := evolveSystem(chairs)
 
 	for !match(chairs, newChairs) {
@@ -46,6 +47,9 @@ func match(chairs, newChairs [][]int) bool {
 	return true
 }
 
+// System evolution updated from Part 1 so that rather than only caring about its
+// 8 immediate neighbouts, each chair cares about the first chair it can see in
+// each direction (i.e first none floor cell)
 func evolveSystem(chairs [][]int) [][]int {
 	var newChairs [][]int
 	for _, line := range chairs {

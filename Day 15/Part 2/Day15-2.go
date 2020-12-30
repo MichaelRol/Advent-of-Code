@@ -1,3 +1,4 @@
+// Identical premise to Part 1 except result is the 30000000th number spoken.
 package main
 
 import (
@@ -17,6 +18,7 @@ func main() {
 	}
 	lastNumber := input[len(input)-1]
 
+	// Instead of looking backwards, keep track of the turn number when each number is spoken
 	for turn := len(input); ; turn++ {
 		i, spoke := lastSpoke[lastNumber]
 		if !spoke {

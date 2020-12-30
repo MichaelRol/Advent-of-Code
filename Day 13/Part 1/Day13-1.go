@@ -16,6 +16,7 @@ func main() {
 
 	shortestWait := 1000000
 	var busID int
+	// Find shortest wait for a bus
 	for _, busTime := range busTimes {
 		x := busTime - (myTime % busTime)
 		if x < shortestWait {

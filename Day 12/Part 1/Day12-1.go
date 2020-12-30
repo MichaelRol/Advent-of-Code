@@ -1,3 +1,6 @@
+// Processes each instruction which can move boat a fixed amount north, east, south or west.
+// It can also turn the boat by a number of degrees or move the boat forwards in the direction
+// it is facing.
 package main
 
 import (

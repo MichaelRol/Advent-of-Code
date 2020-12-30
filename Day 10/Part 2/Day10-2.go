@@ -15,26 +15,11 @@ func main() {
 	start := time.Now()
 	ratings := readNumbers("../input.txt")
 
+	// Sort adapters, after adding outlet and your built-in adapter
 	ratings = append(ratings, 0)
 	sort.Ints(ratings)
 	ratings = append(ratings, ratings[len(ratings)-1]+3)
 
-	oneJumps := 0
-	threeJumps := 0
-
-	if ratings[0] == 1 {
-		oneJumps++
-	} else if ratings[0] == 3 {
-		threeJumps++
-	}
-
-	for i := 1; i < len(ratings); i++ {
-		if ratings[i]-ratings[i-1] == 1 {
-			oneJumps++
-		} else if ratings[i]-ratings[i-1] == 3 {
-			threeJumps++
-		}
-	}
 	graph := createGraph(ratings)
 	cache := make(map[int]int64)
 
@@ -46,6 +31,7 @@ func main() {
 	fmt.Println(elapsed)
 }
 
+// Transverse graph to find all ways in which your charger can connect to the outlet (0 jolts)
 func transverse(node int, graph map[int][]int, cache map[int]int64) int64 {
 	var count int64 = 0
 	if len(graph[node]) == 0 {
@@ -63,6 +49,7 @@ func transverse(node int, graph map[int][]int, cache map[int]int64) int64 {
 	return count
 }
 
+// Create a graph will each adapter connected to all adapters that it can connect to (within 3 jolts)
 func createGraph(ratings []int) map[int][]int {
 	graph := make(map[int][]int)
 

@@ -1,3 +1,7 @@
+// Task is to find a time such that the first bus in the input departs at that time
+// and then each bus in the input then departs at each subsequent minute depending on
+// its position in the input, i.e. first bus leaves at t, 2nd at t+1, 3rd at t+2 etc.
+// If input bus is * it means that minute is skipped.
 package main
 
 import (

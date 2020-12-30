@@ -1,3 +1,7 @@
+// Similar to part 1 except mask is applied to memory address, not the value.
+// X's in the mask are floating, meaning the value is stored in both address
+// where the X is 0 or 1, this means the value can end up being stored in many
+// addresses if there are multiple Xs in the mask.
 package main
 
 import (

@@ -13,12 +13,17 @@ func main() {
 	start := time.Now()
 	chairs := readLines("../input.txt")
 
+	// Basically a game of life with chairs that are occupied or empty and
+	// floor cells don't change.
 	newChairs := evolveSystem(chairs)
 
+	// Evolves system until it stops changing (old system = new system)
 	for !match(chairs, newChairs) {
 		chairs = newChairs
 		newChairs = evolveSystem(chairs)
 	}
+
+	// Count occuptied chairs
 	count := 0
 	for _, line := range chairs {
 		for _, num := range line {

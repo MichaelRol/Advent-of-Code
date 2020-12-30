@@ -1,3 +1,5 @@
+// Input is a lisk of masks and values to be stored in memory after having
+// current mask applied.
 package main
 
 import (
@@ -17,6 +19,7 @@ func main() {
 	mask := ""
 	data := make(map[int]string)
 	for _, command := range commands {
+		// Either update mask value, or apply mask to value stored at index
 		if command[0] == "mask" {
 			mask = command[1]
 		} else {

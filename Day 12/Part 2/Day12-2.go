@@ -1,3 +1,6 @@
+// Differs from Part 1 in that the N/E/S/W instructions move a waypoint rather than the ship itself.
+// Rotation instructions (R/L) rotate the waypoint around the boat.
+// Forward instructions move boat towards waypoint.
 package main
 
 import (

@@ -15,7 +15,9 @@ func main() {
 	start := time.Now()
 	ratings := readNumbers("../input.txt")
 
+	// Sort input numbers, which are "joltage" ratings
 	sort.Ints(ratings)
+	// Add your in-built adapter which is 3 jolts higher than your highest adapter
 	ratings = append(ratings, ratings[len(ratings)-1]+3)
 
 	oneJumps := 0
@@ -26,6 +28,7 @@ func main() {
 		threeJumps++
 	}
 
+	// Count the number of 1-jolt and 3-jolt jumps between adapters
 	for i := 1; i < len(ratings); i++ {
 		if ratings[i]-ratings[i-1] == 1 {
 			oneJumps++
