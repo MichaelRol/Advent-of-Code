@@ -2,6 +2,8 @@
 https://github.com/pmcxs/hexgrid/blob/master/hex.go as the hex type was unexported but I needed it for my tiles map so
 being a bit thick I couldn't work out what else to do, so I copied the code I needed in. Cheers Pedro */
 
+// Bit of a Hexagonal Game of Life
+
 package main
 
 import (
@@ -33,6 +35,7 @@ type hex struct {
 func main() {
 	start := time.Now()
 	directionsList := readInput("../input.txt")
+	// This is basically Part 1
 	tiles := initiliseTiles(directionsList)
 
 	for i := 0; i < 100; i++ {
@@ -48,6 +51,7 @@ func main() {
 
 func gameOfLife(tiles map[hex]bool) map[hex]bool {
 	newTiles := make(map[hex]bool)
+	// Go through all tiles, and initilise any unintilised neighbours of black tiles (this expands the floor.)
 	for tile, isBlack := range tiles {
 		for d := 0; d < 6; d++ {
 			if _, ok := tiles[hexNeighbor(tile, direction(d))]; !ok && isBlack {
@@ -55,6 +59,7 @@ func gameOfLife(tiles map[hex]bool) map[hex]bool {
 			}
 		}
 	}
+	// Apply GoL rules
 	for tile, isBlack := range tiles {
 		blackNeighbours := 0
 		for d := 0; d < 6; d++ {

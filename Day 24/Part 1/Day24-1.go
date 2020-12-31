@@ -2,6 +2,8 @@
 https://github.com/pmcxs/hexgrid/blob/master/hex.go as the hex type was unexported but I needed it for my tiles map so
 being a bit thick I couldn't work out what else to do, so I copied the code I needed in. Cheers Pedro */
 
+// Input is series of compass directions indicating which tiles to flip
+
 package main
 
 import (
@@ -38,6 +40,7 @@ func main() {
 
 	tiles[refTile] = false
 
+	// Go through each set of directions flipping resulting tile
 	for _, directions := range directionsList {
 		currTile := refTile
 		for _, direction := range directions {

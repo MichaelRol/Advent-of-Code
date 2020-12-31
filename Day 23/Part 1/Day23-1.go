@@ -1,3 +1,4 @@
+// Crab Cups! Some pretty self explanitory code. A game of moving cups around.
 package main
 
 import (
@@ -22,6 +23,7 @@ type cup struct {
 
 func main() {
 	start := time.Now()
+	// Each number is a cup
 	input := "643719258"
 	var inputArray []int
 	for _, num := range input {

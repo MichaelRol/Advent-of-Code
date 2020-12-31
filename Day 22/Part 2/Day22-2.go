@@ -1,3 +1,4 @@
+// Recursive Combat Card Game
 package main
 
 import (
@@ -41,8 +42,10 @@ func recursiveCombat(player1, player2 []int) (newPlayer1, newPlayer2 []int) {
 	var handList [][][]int
 	handPair := [][]int{player1, player2}
 	handList = append(handList, handPair)
+	// If no one has won, play a round
 	for len(player1) > 0 && len(player2) > 0 {
 		player1, player2 = playRound(player1, player2)
+		// If exact hand has been played before make Player 1 win by emptying Player 2's hand.
 		if isHandInHandList(handList, [][]int{player1, player2}) {
 			player2 = []int{}
 		}
@@ -55,6 +58,9 @@ func recursiveCombat(player1, player2 []int) (newPlayer1, newPlayer2 []int) {
 }
 
 func playRound(player1, player2 []int) (newPlayer1, newPlayer2 []int) {
+	// If both players have more cards than the value of the one they are playing
+	// start recursive game with each player having the number of cards equal to the
+	// value of the car they played.
 	if player1[0] <= len(player1)-1 && player2[0] <= len(player2)-1 {
 		player1Input := make([]int, len(player1[1:player1[0]+1]))
 		player2Input := make([]int, len(player2[1:player2[0]+1]))
@@ -77,6 +83,7 @@ func playRound(player1, player2 []int) (newPlayer1, newPlayer2 []int) {
 			fmt.Println("Error")
 			os.Exit(2)
 		}
+		// Otherwise play normal Combat
 	} else {
 		if player1[0] > player2[0] {
 			winningCard := player1[0]

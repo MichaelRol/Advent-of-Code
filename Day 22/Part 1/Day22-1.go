@@ -1,3 +1,6 @@
+// Combat Card Game: Two players have even hands, each draw their top card. Player with highest
+// card wins and adds both card to bottom of deck, winning card first. Continues until one
+// player runs out of cards.
 package main
 
 import (
@@ -13,10 +16,12 @@ import (
 func main() {
 	start := time.Now()
 	player1, player2 := readHands("../input.txt")
+	// Play untl someone has no cards left
 	for len(player1) > 0 && len(player2) > 0 {
 		player1, player2 = playHand(player1, player2)
 	}
 
+	// Score is each card multiplied by the inverse of its position in the deck, i.e last card is 1, 2nd to last is 2.
 	fmt.Print("Answer: ")
 	if len(player1) != 0 {
 		fmt.Println(countScore(player1))

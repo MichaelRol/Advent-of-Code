@@ -1,3 +1,5 @@
+// Cracking some weakass crypto. Was nice of the to finish on an easy one.
+
 package main
 
 import (
@@ -26,6 +28,7 @@ func main() {
 	fmt.Println(elapsed)
 }
 
+// Use loop size to produce encryption key
 func transformSubject(subject, loopSize int) int {
 	value := 1
 	divisor := 20201227
@@ -36,6 +39,7 @@ func transformSubject(subject, loopSize int) int {
 	return value
 }
 
+// Find the number of times the subject value is acted on before it turns into the PK
 func calcLoopSize(subject, publicKey int) int {
 	value := 1
 	divisor := 20201227

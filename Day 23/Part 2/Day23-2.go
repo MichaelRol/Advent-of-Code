@@ -1,3 +1,4 @@
+// Same as Part 1, except the Crab turns out to be crazy. Now there is 1,000,000 cups and 10,000,000 moves.
 package main
 
 import (
@@ -14,9 +15,11 @@ func main() {
 	for _, num := range input {
 		cups = append(cups, stringToInt(string(num)))
 	}
+	// Append cups 10-1,000,000 in order
 	for i := 10; i < 1000001; i++ {
 		cups = append(cups, i)
 	}
+	// Set up map from each cup to its next cup.
 	numOfCups := len(cups)
 	for i, cup := range cups {
 		if cup == numOfCups {
@@ -44,6 +47,7 @@ func main() {
 }
 
 func playRound(currentCup, numOfCups int, nextCup map[int]int) map[int]int {
+	// Find three cups to move + destination cup.
 	cup1 := nextCup[currentCup]
 	cup2 := nextCup[cup1]
 	cup3 := nextCup[cup2]
@@ -57,6 +61,7 @@ func playRound(currentCup, numOfCups int, nextCup map[int]int) map[int]int {
 			dest = numOfCups
 		}
 	}
+	// Set new nextCup values.
 	nextCup[currentCup] = nextCup[cup3]
 	nextCup[cup3] = nextCup[dest]
 	nextCup[dest] = cup1
