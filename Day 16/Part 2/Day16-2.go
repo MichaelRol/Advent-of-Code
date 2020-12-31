@@ -1,3 +1,6 @@
+// You have a train ticket with set of values, but you can't read the fields the values relate to.
+// You have a set of rules which dictate the values each field can take.
+// You use the rules and a large set of tickets to determine which values relate to which fields.
 package main
 
 import (
@@ -21,8 +24,11 @@ func main() {
 	start := time.Now()
 	myTicket, nearbyTickets, rules := processInput("../input.txt")
 
+	// Disregard definitely invalid tickets
 	validTickets := findValidTickets(rules, nearbyTickets)
+	// Find all indexes that could match each rule
 	possiblePositons := findPossiblePositions(rules, validTickets)
+	// Iteratively find where there is only one possible index, and make that the definite position.
 	definitePositions := findDefinitePositions(possiblePositons)
 
 	total := 1

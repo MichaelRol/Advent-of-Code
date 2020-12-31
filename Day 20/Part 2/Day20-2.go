@@ -1,5 +1,7 @@
 /* It should be noted that this solution was inspired by https://github.com/Snosixtyboo/aoc2020/blob/master/20-2.go
    cause frankly this problem was ****ing mental. */
+// Idea is to put image together and find "monsters" in it (subshape of pixels)
+// Basically find matching edges and rotate/flip tiles to match them, then remove edges and stick image together.
 
 package main
 

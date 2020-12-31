@@ -1,3 +1,5 @@
+// Process list of equations where there is no operator precedence and each operation is
+// simply evaluated left to right.
 package main
 
 import (
@@ -32,6 +34,7 @@ func processEquation(equation string) int {
 	for i := 0; i < len(equation); i++ {
 		if string(equation[i]) == " " {
 			continue
+			// Count number of parenthesis so I know when I'm out of all brackets
 		} else if string(equation[i]) == "(" {
 			startIndex := i + 1
 			parenCount := 1
@@ -40,6 +43,8 @@ func processEquation(equation string) int {
 					parenCount++
 				} else if string(equation[j]) == ")" {
 					parenCount--
+					// When out of all brackets treat equation within outer most brackets as a new equation
+					// and solve recursively.
 					if parenCount == 0 {
 						subEquation := equation[startIndex:j]
 						num := processEquation(subEquation)

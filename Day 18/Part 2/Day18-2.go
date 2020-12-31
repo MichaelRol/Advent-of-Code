@@ -1,3 +1,4 @@
+// In Part 2 addition is evaluated before multiplication.
 package main
 
 import (
@@ -37,6 +38,7 @@ func processEquation(equation string) int {
 			startIndex := i + 1
 			parenCount := 1
 			for j := i + 1; j < len(equation); j++ {
+				// Count parenthesis and process subequations like in Part 1
 				if string(equation[j]) == "(" {
 					parenCount++
 				} else if string(equation[j]) == ")" {
@@ -68,6 +70,7 @@ func processEquation(equation string) int {
 				fmt.Println("Invalid character")
 				os.Exit(2)
 			}
+			// If operation is addition, perform it, otherwise store multiplication value for the end
 			if value == 0 {
 				value = num
 			} else if operation == "+" {
@@ -80,6 +83,7 @@ func processEquation(equation string) int {
 	}
 	values = append(values, value)
 	total := 1
+	// Perform multiplications
 	for _, value := range values {
 		total *= value
 	}

@@ -1,3 +1,5 @@
+// Input is a set of tiles which match together by their border values.
+// Challenge is to find corner pieces and multiply their IDs.
 package main
 
 import (
@@ -22,13 +24,14 @@ func main() {
 	start := time.Now()
 	tiles := readInput("../input.txt")
 	total := 1
+	// Check each tile against all over tiles
 	for name, tile := range tiles {
 		count := 0
-
 		for checkTileName, checkTile := range tiles {
 			if name == checkTileName {
 				continue
 			}
+			// If it matches more than 2 other tiles, skip - it is not an corner piece.
 			if matchTiles(tile, checkTile) {
 				count++
 			}
@@ -36,7 +39,7 @@ func main() {
 				break
 			}
 		}
-
+		// If a tile only matches two other tiles, it must be a corner piece.
 		if count == 2 {
 			value, err := strconv.Atoi(name)
 			if err != nil {

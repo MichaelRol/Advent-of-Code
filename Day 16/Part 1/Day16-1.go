@@ -1,3 +1,6 @@
+// You have a large set of train tickets each with set of values, but you can't read the fields the values relate to.
+// You have a set of rules which dictate the values each field can take. The task is to find which tickets have
+// values which don't fit any of the rules, and are therefore invalid.
 package main
 
 import (
@@ -22,6 +25,7 @@ func main() {
 	_, nearbyTickets, rules := processInput("../input.txt")
 	min := 1000
 	max := 0
+	// Find range of accepted values (low ranges and high ranges overlap so only overall max/min are needed)
 	for _, rule := range rules {
 		if rule.lowMin < min {
 			min = rule.lowMin
@@ -30,7 +34,7 @@ func main() {
 			max = rule.highMax
 		}
 	}
-
+	// Total values outside of accepted range as error rate
 	errorRate := 0
 	for _, ticket := range nearbyTickets {
 		for _, value := range ticket {

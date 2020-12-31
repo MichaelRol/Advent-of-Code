@@ -1,3 +1,6 @@
+// Input contains a list of recipes with ingredients in a language you don't understand and a list of
+// allergens you do understand, although the list may be incomplete.
+// Task is to find which ingredients cannot be allergens and count how may times they appear.
 package main
 
 import (
@@ -16,6 +19,7 @@ func main() {
 	ingredients, allergens := findIngrediantAndAllergens(ingredientList, allergensList)
 
 	count := 0
+	// If ingredient is not key in allergens mapping, it is inert so add to count
 	for _, ingredient := range ingredients {
 		isIn := false
 		for i := range allergens {
@@ -42,6 +46,9 @@ func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingre
 
 	for x := 0; x < len(ingredientList); x++ {
 		for _, allergen := range allergensList[x] {
+			// If never seen allergen before, add all ingredients to its possible list
+			// Otherwise find the insect between its existing list of possible matching ingredients and
+			// the new ingredients list.
 			_, ok := possibleAllergens[allergen]
 			if ok {
 				possibleAllergens[allergen] = findSharedMembers(possibleAllergens[allergen], ingredientList[x])
@@ -49,9 +56,12 @@ func findIngrediantAndAllergens(ingredientList, allergensList [][]string) (ingre
 				possibleAllergens[allergen] = ingredientList[x]
 			}
 		}
+		// Create list of ingredients, this is needed for the final answer.
 		ingredients = append(ingredients, ingredientList[x]...)
 	}
 
+	// Where an allergen only has one possible ingredient, map that ingredient to allergen and then
+	// remove that ingredient from all other possible allergen lists.
 	for len(possibleAllergens) > 0 {
 		for allergen, ingredients := range possibleAllergens {
 			if len(ingredients) == 1 {

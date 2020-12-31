@@ -1,3 +1,5 @@
+// Very little change from Part 1, except answer requires the ingredients to be listed alphabetically
+// by their respective allergen.
 package main
 
 import (
@@ -29,20 +31,24 @@ func produceIngrediantList(allergens map[string]string) string {
 	mapAllergensToIngrediants := make(map[string]string)
 	var listOfAllergens []string
 
+	// Simply swap ingredients to allergens mapping to the reverse and make list of allergens.
 	for i, a := range allergens {
 		mapAllergensToIngrediants[a] = i
 		listOfAllergens = append(listOfAllergens, a)
 	}
 
+	// Sort the list of allergens alphabetically
 	sort.Strings(listOfAllergens)
 	var buffer bytes.Buffer
 
+	// Go through alphabetically ordered allergens list and build string of respective ingredients.
 	for _, a := range listOfAllergens {
 		buffer.WriteString(mapAllergensToIngrediants[a])
 		buffer.WriteString(",")
 	}
 
 	answer := buffer.String()
+	// Remove last comma
 	answer = answer[:len(answer)-1]
 
 	return answer

@@ -1,3 +1,4 @@
+// Basically a 3-D expanding game of life
 package main
 
 import (
@@ -14,6 +15,7 @@ func main() {
 	inputGrid := readInput("../input.txt")
 	size := 20
 	grid := generateGrid(size)
+	// Place input in the middle of grid
 	for x, line := range inputGrid {
 		for y, active := range line {
 			offsetX := (len(grid) - len(inputGrid)) / 2
