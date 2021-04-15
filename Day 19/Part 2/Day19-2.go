@@ -14,11 +14,12 @@ import (
 func main() {
 	start := time.Now()
 	rules, messages := readRules("../input.txt")
-	regex := regexp.MustCompile(parseRules(rules))
+	unlooped := unloopWithDepth(rules, 6)
+	rgx := regexp.MustCompile(parseRules(unlooped))
 
 	var counter = 0
 	for _, msg := range strings.Split(messages, "\n") {
-		if regex.MatchString(msg) {
+		if rgx.MatchString(msg) {
 			counter++
 		}
 	}
@@ -77,6 +78,34 @@ func parseRules(rawRules string) string {
 	}
 	// we are interested in an exact match of rule 0
 	return "^" + mem[0] + "$"
+}
+
+// generates x possible loop variations (loop depth) for rules with loops (8 and 11)
+func unloopWithDepth(rawRules string, depth int) string {
+	var unlooped string
+	for _, line := range strings.Split(rawRules, "\n") {
+		newLine := line
+		// unloop rule 8
+		if line[0:2] == "8:" {
+			newLine = "8: 42 +"
+		}
+		// unloop rule 11
+		if line[0:3] == "11:" {
+			rule := "42 31"
+			for i := 2; i < depth; i++ {
+				rule += " | "
+				for j := 0; j < i; j++ {
+					rule += " 42 "
+				}
+				for j := 0; j < i; j++ {
+					rule += " 31 "
+				}
+			}
+			newLine = "11: " + rule
+		}
+		unlooped += newLine + "\n"
+	}
+	return unlooped[:len(unlooped)-1]
 }
 
 func readRules(filename string) (rules, messages string) {
