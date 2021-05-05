@@ -15,4 +15,4 @@ Each year is written in a different programming language and all solutions are d
 $ go run Day[Day number]-[1|2].go
 ```
 
-2019 challenges can be run by inporting the files into an suitable Java IDE (e.g. Eclipse).
+2019 challenges can be run by importing the files into an suitable Java IDE (e.g. Eclipse).
