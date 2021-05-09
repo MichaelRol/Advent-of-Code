@@ -1,4 +1,4 @@
-# Advent of Code 2020
+# Advent of Code
 A repository for holding my solutions to the Advent of Code challenges. More info: [https://adventofcode.com/](https://adventofcode.com/)
 
 Each year is written in a different programming language and all solutions are designed to complete within 15 seconds on relatively basic hardware. 
