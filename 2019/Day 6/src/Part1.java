@@ -29,5 +29,6 @@ public class Part1 {
 		}
 		return total;
 	}
+	
 
 }
