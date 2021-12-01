@@ -9,6 +9,12 @@ Each year is written in a different programming language and all solutions are d
 
 ## Running Challenges
 
+2021 challenges can be run using
+
+```
+$ swift run AOC2021 [Day number] [Part number]
+```
+
 2020 challenges can be run using
 
 ```console
