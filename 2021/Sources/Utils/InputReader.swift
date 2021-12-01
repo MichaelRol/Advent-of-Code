@@ -17,7 +17,7 @@ public class InputReader {
         } else {
             aocDir = "."
         }
-        inputFile = "\(aocDir!)/Inputs/\(input).txt"
+        inputFile = "\(aocDir!)/Sources/Inputs/\(input).txt"
         print(inputFile)
     }
     
