@@ -11,7 +11,7 @@ Each year is written in a different programming language and all solutions are d
 
 2021 challenges can be run using
 
-```
+```console
 $ swift run AOC2021 [Day number] [Part number]
 ```
 
