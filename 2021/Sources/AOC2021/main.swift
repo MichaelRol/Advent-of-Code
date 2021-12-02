@@ -27,6 +27,8 @@ var puzzle: Puzzle!
 switch day {
 case 1:
     puzzle = Day1(inputFile: input)
+case 2:
+    puzzle = Day2(inputFile: input)
 default:
     print("Cannot load puzzle for Day \(day)")
     exit(1)

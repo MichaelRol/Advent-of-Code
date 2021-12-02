@@ -21,6 +21,23 @@ public class InputReader {
         print(inputFile)
     }
     
+    public func toString2dArray(delim : String = " ", trimBlank: Bool = true) -> [[String]] {
+        do {
+            let text = try String(contentsOfFile: inputFile, encoding: String.Encoding.utf8)
+            var lines = text.components(separatedBy: CharacterSet.newlines)
+            if trimBlank {
+                lines = lines.filter { $0 != "" }
+            }
+            var array = [[String]]()
+            for line in lines {
+                array.append(line.components(separatedBy: delim))
+            }
+            return array
+        } catch {
+            fatalError("Cannot load file \(inputFile)")
+        }
+    }
+    
     public func toStringArray(trimBlank: Bool = true) -> [String] {
         do {
             let text = try String(contentsOfFile: inputFile, encoding: String.Encoding.utf8)
