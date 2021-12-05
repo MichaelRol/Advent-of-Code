@@ -11,16 +11,24 @@ import Puzzles
 
 let start = Date()
 
-if CommandLine.arguments.count != 3{
-    print("Please specify the day number to run and the stage of the puzzle.")
+var test = false
+if CommandLine.arguments.count == 4 && CommandLine.arguments[3] == "test" {
+    test = true
+}
+
+if CommandLine.arguments.count != 3 && !test {
+    print("Please specify the day number to run and the stage of the puzzle (optional: add \"test\" to use test file.)")
     exit(1)
 }
 
 let day: Int = Int(CommandLine.arguments[1]) ?? 0
 let stage: Int = Int(CommandLine.arguments[2]) ?? 0
-let input = "input" + String(day)
+var input = "input" + String(day)
+if test {
+    input = "test" + String(day)
+}
 
-print("Day \(day), Part \(stage)")
+print("Day: \(day), Part: \(stage), Test: \(test)")
 
 var puzzle: Puzzle!
 
@@ -33,6 +41,8 @@ case 3:
     puzzle = Day3(inputFile: input)
 case 4:
     puzzle = Day4(inputFile: input)
+case 5:
+    puzzle = Day5(inputFile: input)
 default:
     print("Cannot load puzzle for Day \(day)")
     exit(1)
