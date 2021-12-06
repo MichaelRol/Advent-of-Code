@@ -38,10 +38,13 @@ public class InputReader {
         }
     }
     
-    public func toStringArray(trimBlank: Bool = true) -> [String] {
+    public func toStringArray(trimBlank: Bool = true, delim: CharacterSet = CharacterSet.newlines) -> [String] {
         do {
-            let text = try String(contentsOfFile: inputFile, encoding: String.Encoding.utf8)
-            var lines = text.components(separatedBy: CharacterSet.newlines)
+            var text = try String(contentsOfFile: inputFile, encoding: String.Encoding.utf8)
+            if trimBlank && text.hasSuffix("\n") {
+                text = text.substring(toIndex: text.count - 1)
+            }
+            var lines = text.components(separatedBy: delim)
             if trimBlank {
                 lines = lines.filter { $0 != "" }
             }

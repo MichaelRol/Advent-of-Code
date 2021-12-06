@@ -16,3 +16,9 @@ public func ^^ (radix: Int, power: Int) -> Int {
 public func binaryToInt(binaryString: String) -> Int {
   return Int(strtoul(binaryString, nil, 2))
 }
+
+public func mod(_ a: Int, _ n: Int) -> Int {
+    precondition(n > 0, "modulus must be positive")
+    let r = a % n
+    return r >= 0 ? r : r + n
+}
