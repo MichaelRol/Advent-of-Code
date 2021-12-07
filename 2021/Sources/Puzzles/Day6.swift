@@ -18,7 +18,7 @@ public class Day6 : Puzzle {
 
     public func part1() -> String {
         let reader = InputReader(input: inputFile)
-        let data = reader.toStringArray(delim: CharacterSet.init(charactersIn: ",")).map{Int($0)!}
+        let data = reader.toIntArray()
         var fish = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         var six = 6
         for daysLeft in data {

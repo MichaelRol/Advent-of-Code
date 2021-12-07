@@ -57,4 +57,8 @@ public class InputReader {
     public func toString() -> String {
         return toStringArray().first!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
+    
+    public func toIntArray(trimBlank: Bool = true, delim: String = ",") -> [Int] {
+        return toStringArray(delim: CharacterSet.init(charactersIn: delim)).map{ Int($0)! }
+    }
 }
