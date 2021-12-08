@@ -1,5 +1,5 @@
 //
-//  day1.swift
+//  Day1.swift
 //  
 //
 //  Created by Michael Rollins on 01/12/2021.
