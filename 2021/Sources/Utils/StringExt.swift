@@ -31,4 +31,11 @@ public extension String {
         let end = index(start, offsetBy: range.upperBound - range.lowerBound)
         return String(self[start ..< end])
     }
+    
+    func replace( _ index: Int, _ newChar: Character) -> String {
+        var chars = Array(self)     // gets an array of characters
+        chars[index] = newChar
+        let modifiedString = String(chars)
+        return modifiedString
+    }
 }
