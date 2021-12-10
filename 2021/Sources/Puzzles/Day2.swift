@@ -1,6 +1,11 @@
 //
 //  Day2.swift
 //  
+//  Input was a serious of "up", "down", "forward" commands with values (X) next to each
+//  Part 1 treats "up" and "down" as moving a sub vertically by X, and "forward" horizontally by X.
+//  Calculate final distance and return horizontal position * vertical position.
+//  Part 2 changes the controls where "up" and "down" move your "aim" and "forward" moves horizontally by X
+//  and vertically by aim * X. Same return calc.
 //
 //  Created by Michael Rollins on 02/12/2021.
 //

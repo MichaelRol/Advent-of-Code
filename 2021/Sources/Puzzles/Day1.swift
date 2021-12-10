@@ -1,6 +1,10 @@
 //
 //  Day1.swift
-//  
+//
+//  Input is list of numbers.
+//  Part 1 is to find the number of occasion a number is greater than the previous one.
+//  Part 2 is very much the same as part 1, but use a sliding window 3 numbers wide, so counting the number
+//  of times the sum of the sliding window increases.
 //
 //  Created by Michael Rollins on 01/12/2021.
 //

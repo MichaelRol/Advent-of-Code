@@ -51,6 +51,8 @@ case 8:
     puzzle = Day8(inputFile: input)
 case 9:
     puzzle = Day9(inputFile: input)
+case 10:
+    puzzle = Day10(inputFile: input)
 default:
     print("Cannot load puzzle for Day \(day)")
     exit(1)

@@ -1,6 +1,7 @@
 //
 //  Day3.swift
-//  
+//
+//  Input is list of 5-bit binary numbers.
 //
 //  Created by Michael Rollins on 03/12/2021.
 //
