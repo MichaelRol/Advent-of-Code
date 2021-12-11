@@ -1,6 +1,10 @@
 //
 //  Day5.swift
-//  
+//
+//  Input its a list of start and end coords of lines.
+//
+//  Part 1 asks to ignore all diagonal lines, then cound the number of points which horizontal and vertical lines cross.
+//  Part 2 is to consider all lines and count the number of points where at least 2 lines overlap.
 //
 //  Created by Michael Rollins on 05/12/2021.
 //
@@ -21,6 +25,7 @@ public class Day5 : Puzzle {
         let data = reader.toStringArray()
         var vents: [String: Int] = [:]
         for line in data {
+            // Split rows into each set of coords
             let coordPair = String(line).components(separatedBy: " -> ")
             let startCoords = coordPair[0].split(separator: ",")
             let endCoords = coordPair[1].split(separator: ",")
@@ -28,6 +33,7 @@ public class Day5 : Puzzle {
                 let yStart = Int(startCoords[1])!
                 let yEnd = Int(endCoords[1])!
                 let step = (yStart-yEnd)/abs(yStart-yEnd) * -1
+                // increase the count of each point along the line
                 for y in stride(from: yStart, through: yEnd, by: step){
                     vents[String(startCoords[0]) + ", " + String(y)] = (vents[String(startCoords[0]) + ", " + String(y)] ?? 0) + 1
                 }
@@ -35,6 +41,7 @@ public class Day5 : Puzzle {
                 let xStart = Int(startCoords[0])!
                 let xEnd = Int(endCoords[0])!
                 let step = (xStart-xEnd)/abs(xStart-xEnd) * -1
+                // increase the count of each point along the line
                 for x in stride(from: xStart, through: xEnd, by: step){
                     vents[String(x) + ", " + String(startCoords[1])] = (vents[String(x) + ", " + String(startCoords[1])] ?? 0) + 1
                 }

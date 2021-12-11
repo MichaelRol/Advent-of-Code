@@ -1,6 +1,12 @@
 //
 //  Day4.swift
 //  
+//  Input is a series of 5x5 bingo grids and a list of numbers to be called out.
+//
+//  Part 1 is to find the first board that will win, and then return its score equal to the sum of all unmarked numbers
+//  multiplied by the number that was called that won the game.
+//
+//  Part 2 is to find the board that will win last.
 //
 //  Created by Michael Rollins on 04/12/2021.
 //
@@ -22,6 +28,7 @@ public class Day4 : Puzzle {
         let nums = data[0].split(separator: ",")
         data = Array(data.dropFirst())
         var tables: [[[String]]] = []
+        // process input
         for tableString in data {
             var table: [[String]] = []
             let lines = tableString.components(separatedBy: CharacterSet.newlines)
@@ -31,6 +38,7 @@ public class Day4 : Puzzle {
             tables.append(table)
         }
         for num in nums {
+            // check if num is present in each square of each board, mark with X if so
             for t in 0...tables.count - 1 {
                 for r in 0...tables[t].count - 1 {
                     for c in 0...tables[t][r].count - 1 {
@@ -39,6 +47,7 @@ public class Day4 : Puzzle {
                         }
                     }
                 }
+                // Check if game has been won, if so return score
                 if (bingoCol(grid: tables[t]) || bingoRow(grid: tables[t])) {
                     return calcScore(grid: tables[t], num: String(num))
                 }
@@ -74,7 +83,8 @@ public class Day4 : Puzzle {
                         }
                     }
                 }
-
+                // keep track of boards that have already won, until the number won = the total number
+                // then return the score of the last board to win
                 if (bingoCol(grid: tables[t]) || bingoRow(grid: tables[t])) {
                     won.append(t)
                     if won.count == tables.count{
