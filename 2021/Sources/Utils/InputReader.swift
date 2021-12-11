@@ -38,6 +38,27 @@ public class InputReader {
         }
     }
     
+    public func toInt2dArray(delim : String = " ", trimBlank: Bool = true) -> [[Int]] {
+        do {
+            let text = try String(contentsOfFile: inputFile, encoding: String.Encoding.utf8)
+            var lines = text.components(separatedBy: CharacterSet.newlines)
+            if trimBlank {
+                lines = lines.filter { $0 != "" }
+            }
+            var array = [[Int]]()
+            for line in lines {
+                var intLine: [Int] = []
+                for num in line {
+                    intLine.append(Int(String(num))!)
+                }
+                array.append(intLine)
+            }
+            return array
+        } catch {
+            fatalError("Cannot load file \(inputFile)")
+        }
+    }
+    
     public func toStringArray(trimBlank: Bool = true, delim: CharacterSet = CharacterSet.newlines) -> [String] {
         do {
             var text = try String(contentsOfFile: inputFile, encoding: String.Encoding.utf8)
