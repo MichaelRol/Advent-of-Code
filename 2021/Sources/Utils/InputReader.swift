@@ -76,7 +76,12 @@ public class InputReader {
     }
     
     public func toString() -> String {
-        return toStringArray().first!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        do {
+            let text = try String(contentsOfFile: inputFile, encoding: String.Encoding.utf8)
+            return text
+        } catch {
+            fatalError("Cannot load file \(inputFile)")
+        }
     }
     
     public func toIntArray(trimBlank: Bool = true, delim: String = ",") -> [Int] {

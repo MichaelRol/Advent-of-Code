@@ -74,4 +74,10 @@ final class AOC2021Tests: XCTestCase {
         XCTAssertEqual(puzzle.part1(), "3563")
         XCTAssertEqual(puzzle.part2(), "105453")
     }
+    
+    func test13() {
+        let puzzle = Day13(inputFile: "input13")
+        XCTAssertEqual(puzzle.part1(), "716")
+        XCTAssertEqual(puzzle.part2(), "97")
+    }
 }
