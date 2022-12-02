@@ -6,4 +6,6 @@
 2019/Day\ 1/.idea/
 .DS_Store
 2019/*/.DS_Store
-2022/aoc2022/target/*
+2022/aoc2022/target/
+2022/aoc2022/.vscode/
+2019/*/.project/
