@@ -42,6 +42,16 @@ fn run(day: &str, part: &str) {
                 return;
             }
         },
+        "3" => {
+            if part == "1" {
+                result = puzzles::day_3::part1();
+            } else if part == "2" {
+                result = puzzles::day_3::part2();
+            } else {
+                print!("Part number must be 1 or 2, but was {part}.\n");
+                return;
+            }
+        },
         _ => {
             print!("Unknown day number: {day}\n");
             return;
@@ -57,6 +67,8 @@ fn run_all() {
     print!("Day 1 Part 2: {}\n", puzzles::day_1::part2());
     print!("Day 2 Part 1: {}\n", puzzles::day_2::part1());
     print!("Day 2 Part 2: {}\n", puzzles::day_2::part2());
+    print!("Day 3 Part 1: {}\n", puzzles::day_3::part1());
+    print!("Day 3 Part 2: {}\n", puzzles::day_3::part2());
     let elapsed = now.elapsed();
     print!("Total time: {:.2?}", elapsed);
 }
