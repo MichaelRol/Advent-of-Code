@@ -1,9 +1,9 @@
 use std::fs;
 use std::collections::HashMap;
 
-pub fn part1() -> i32 {
+pub fn part1(path: String) -> i32 {
 
-    let contents = fs::read_to_string("src/inputs/input2.txt")
+    let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
     let result = contents.lines().map(|line| calc_score1(line.to_string())).sum::<i32>();
@@ -31,9 +31,9 @@ fn calc_score1(line: String) -> i32 {
     return *me;
 }
 
-pub fn part2() -> i32 {
+pub fn part2(path: String) -> i32 {
 
-    let contents = fs::read_to_string("src/inputs/input2.txt")
+    let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
     let result = contents.lines().map(|line| calc_score2(line.to_string())).sum::<i32>();
@@ -69,11 +69,11 @@ mod test {
     
     #[test]
     fn test_part1() {
-        assert_eq!(part1(), 11841);
+        assert_eq!(part1("src/inputs/input2.txt".to_owned()), 11841);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(), 13022);
+        assert_eq!(part2("src/inputs/input2.txt".to_owned()), 13022);
     }
 }

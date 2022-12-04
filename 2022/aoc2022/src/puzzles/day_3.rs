@@ -3,18 +3,18 @@ extern crate itertools;
 use itertools::Itertools;
 use std::fs;
 
-pub fn part1() -> i32 {
+pub fn part1(path: String) -> i32 {
 
-    let contents = fs::read_to_string("src/inputs/input3.txt")
+    let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
     let result = contents.lines().map(|line| calc_priority(line.to_string())).sum::<i32>();
     return result;
 }
 
-pub fn part2() -> i32 {
+pub fn part2(path: String) -> i32 {
 
-    let contents = fs::read_to_string("src/inputs/input3.txt")
+    let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
     return contents.lines()
@@ -62,3 +62,17 @@ fn find_priority(the_char: char) -> i32 {
     return the_char as i32 - 38;
 }
 
+#[cfg(test)]
+mod test {
+    use super::*;
+    
+    #[test]
+    fn test_part1() {
+        assert_eq!(part1("src/inputs/input3.txt".to_owned()), 8349);
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2("src/inputs/input3.txt".to_owned()), 2681);
+    }
+}

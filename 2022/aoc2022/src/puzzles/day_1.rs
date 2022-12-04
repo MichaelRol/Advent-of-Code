@@ -1,8 +1,8 @@
 use std::fs;
 
-pub fn part1() -> i32 {
+pub fn part1(path: String) -> i32 {
 
-    let contents = fs::read_to_string("src/inputs/input1.txt")
+    let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
     let groups = contents.split("\n\n");
@@ -24,9 +24,9 @@ pub fn part1() -> i32 {
     return max;
 }
 
-pub fn part2() -> i32 {
+pub fn part2(path: String) -> i32 {
 
-    let contents = fs::read_to_string("src/inputs/input1.txt")
+    let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
     let groups = contents.split("\n\n");
@@ -62,11 +62,11 @@ mod test {
     
     #[test]
     fn test_part1() {
-        assert_eq!(part1(), 67622);
+        assert_eq!(part1("src/inputs/input1.txt".to_owned()), 67622);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(), 201491);
+        assert_eq!(part2("src/inputs/input1.txt".to_owned()), 201491);
     }
 }

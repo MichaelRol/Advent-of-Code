@@ -4,7 +4,6 @@ mod utils;
 use std::env;
 use std::time::Instant;
 
-
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() == 1 {
@@ -24,9 +23,9 @@ fn run(day: &str, part: &str) {
     match day {
         "1" => {
             if part == "1" {
-                result = puzzles::day_1::part1();
+                result = puzzles::day_1::part1(get_path(day));
             } else if part == "2" {
-                result = puzzles::day_1::part2();
+                result = puzzles::day_1::part2(get_path(day));
             } else {
                 print!("Part number must be 1 or 2, but was {part}.\n");
                 return;
@@ -34,9 +33,9 @@ fn run(day: &str, part: &str) {
         },
         "2" => {
             if part == "1" {
-                result = puzzles::day_2::part1();
+                result = puzzles::day_2::part1(get_path(day));
             } else if part == "2" {
-                result = puzzles::day_2::part2();
+                result = puzzles::day_2::part2(get_path(day));
             } else {
                 print!("Part number must be 1 or 2, but was {part}.\n");
                 return;
@@ -44,9 +43,19 @@ fn run(day: &str, part: &str) {
         },
         "3" => {
             if part == "1" {
-                result = puzzles::day_3::part1();
+                result = puzzles::day_3::part1(get_path(day));
             } else if part == "2" {
-                result = puzzles::day_3::part2();
+                result = puzzles::day_3::part2(get_path(day));
+            } else {
+                print!("Part number must be 1 or 2, but was {part}.\n");
+                return;
+            }
+        },
+        "4" => {
+            if part == "1" {
+                result = puzzles::day_4::part1(get_path(day));
+            } else if part == "2" {
+                result = puzzles::day_4::part2(get_path(day));
             } else {
                 print!("Part number must be 1 or 2, but was {part}.\n");
                 return;
@@ -63,12 +72,18 @@ fn run(day: &str, part: &str) {
 
 fn run_all() {
     let now = Instant::now();
-    print!("Day 1 Part 1: {}\n", puzzles::day_1::part1());
-    print!("Day 1 Part 2: {}\n", puzzles::day_1::part2());
-    print!("Day 2 Part 1: {}\n", puzzles::day_2::part1());
-    print!("Day 2 Part 2: {}\n", puzzles::day_2::part2());
-    print!("Day 3 Part 1: {}\n", puzzles::day_3::part1());
-    print!("Day 3 Part 2: {}\n", puzzles::day_3::part2());
+    print!("Day 1 Part 1: {}\n", puzzles::day_1::part1(get_path("1")));
+    print!("Day 1 Part 2: {}\n", puzzles::day_1::part2(get_path("1")));
+    print!("Day 2 Part 1: {}\n", puzzles::day_2::part1(get_path("2")));
+    print!("Day 2 Part 2: {}\n", puzzles::day_2::part2(get_path("2")));
+    print!("Day 3 Part 1: {}\n", puzzles::day_3::part1(get_path("3")));
+    print!("Day 3 Part 2: {}\n", puzzles::day_3::part2(get_path("3")));
+    print!("Day 4 Part 1: {}\n", puzzles::day_4::part1(get_path("4")));
+    print!("Day 4 Part 2: {}\n", puzzles::day_4::part2(get_path("4")));
     let elapsed = now.elapsed();
     print!("Total time: {:.2?}", elapsed);
+}
+
+fn get_path(day: &str) -> String {
+    return "src/inputs/input".to_owned() + day.trim() + ".txt";
 }
