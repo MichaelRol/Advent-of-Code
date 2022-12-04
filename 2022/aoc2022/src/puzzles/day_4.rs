@@ -31,8 +31,7 @@ impl Pair {
     }
 
     fn any_overlap(&self) -> bool {
-        return (self.a_max >= self.b_min && self.a_max <= self.b_max) || (self.a_min >= self.b_min && self.a_min <= self.b_max) || 
-               (self.b_max >= self.a_min && self.b_max <= self.a_max) || (self.b_min >= self.a_min && self.b_min <= self.a_max);
+        return (self.a_max >= self.b_min && self.a_max <= self.b_max) || (self.b_max >= self.a_min && self.b_max <= self.a_max);
     }
 }
 
