@@ -19,7 +19,7 @@ pub fn part2(path: String) -> i32 {
 
     return contents.lines()
             .collect::<Vec<&str>>()
-            .into_iter()
+            .iter()
             .tuples()
             .map(|(a, b, c)| find_common_letter_three(a, b, c))
             .map(|character| find_priority(character))

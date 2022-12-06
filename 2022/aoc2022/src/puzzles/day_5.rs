@@ -94,11 +94,11 @@ impl FromStr for Move {
     type Err = ParseIntError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         // bit hacky, but fortunately every part of the string we want to remove contains an "o" character.
-        let ints: Vec<&str> = s.split(" ").filter(|sec| !sec.contains("o")).collect();
+        let ints: Vec<&str> = s.split(" ").collect();
         return Ok( Move { 
-            count: ints[0].parse()?, 
-            src: ints[1].parse()?, 
-            dest: ints[2].parse()?, 
+            count: ints[1].parse()?, 
+            src: ints[3].parse()?, 
+            dest: ints[5].parse()?, 
         });
     }
 }

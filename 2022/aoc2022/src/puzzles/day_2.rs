@@ -1,11 +1,18 @@
 use std::fs;
 
 pub fn part1(path: String) -> i32 {
-
     let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
     let result = contents.lines().map(|line| calc_score1(line.to_string())).sum::<i32>();
+    return result;
+}
+
+pub fn part2(path: String) -> i32 {
+    let contents = fs::read_to_string(path)
+        .expect("Should have been able to read the file");
+
+    let result = contents.lines().map(|line| calc_score2(line.to_string())).sum::<i32>();
     return result;
 }
 
@@ -19,16 +26,6 @@ fn calc_score1(line: String) -> i32 {
         return me + 7;
     }
     return me + 1;
-}
-
-pub fn part2(path: String) -> i32 {
-
-    let contents = fs::read_to_string(path)
-        .expect("Should have been able to read the file");
-
-    let result = contents.lines().map(|line| calc_score2(line.to_string())).sum::<i32>();
-    return result;
-
 }
 
 fn calc_score2(line: String) -> i32 {

@@ -1,59 +1,29 @@
 use std::fs;
 
-pub fn part1(path: String) -> i32 {
+use itertools::Itertools;
 
+pub fn part1(path: String) -> i32 {
     let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
-
-    let groups = contents.split("\n\n");
-    let mut max = 0;
-    for group in groups {
-        let values = group.split("\n");
-        let mut sum = 0;
-        for value in values {
-            match value.parse::<i32>() {
-                Ok(n) => sum += n,
-                Err(_) => continue,
-              }
-        }
-        if sum > max {
-            max = sum;
-        }
-
-    }
-    return max;
+    return contents.split("\n\n")
+        .map(|group| group.split("\n")
+            .map(|num| num.parse::<i32>().unwrap())
+            .sum())
+        .max()
+        .unwrap();
 }
 
 pub fn part2(path: String) -> i32 {
-
     let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
 
-    let groups = contents.split("\n\n");
-    let mut max0 = 0;
-    let mut max1 = 0;
-    let mut max2 = 0;
-    for group in groups {
-        let values = group.split("\n");
-        let mut sum = 0;
-        for value in values {
-            match value.parse::<i32>() {
-                Ok(n) => sum += n,
-                Err(_) => continue,
-              }
-        }
-        if sum > max0 {
-            max2 = max1;
-            max1 = max0;
-            max0 = sum;
-        } else if sum > max1 {
-            max2 = max1;
-            max1 = sum;
-        } else if sum > max2 {
-            max2 = sum;
-        }
-    }
-    return max0 + max1 + max2;
+    return contents.split("\n\n")
+        .map(|group| group.split("\n")
+            .map(|num| num.parse::<i32>().unwrap())
+            .sum::<i32>())
+        .sorted_by(|a, b| Ord::cmp(b, a))
+        .take(3)
+        .sum();
 }
 
 #[cfg(test)]
