@@ -122,3 +122,18 @@ pub fn part2(path: String) -> i32 {
     }
     return *scores.iter().max().unwrap();
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    
+    #[test]
+    fn test_part1() {
+        assert_eq!(part1("src/inputs/input8.txt".to_owned()), 1870);
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2("src/inputs/input8.txt".to_owned()), 517440);
+    }
+}
