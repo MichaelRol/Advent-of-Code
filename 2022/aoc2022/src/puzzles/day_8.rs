@@ -29,7 +29,7 @@ pub fn part1(path: String) -> i32 {
         for x in (0..len).rev() {
             let height = forest[y*len + x];
             if forest[y*len + x] > max {
-                max = forest[y*len + x];
+                max = height;
                 visible.push(y*len + x);
             }
             if height == 9 {
@@ -42,7 +42,7 @@ pub fn part1(path: String) -> i32 {
         for y in 0..depth {
             let height = forest[y*len + x];
             if forest[y*len + x] > max {
-                max = forest[y*len + x];
+                max = height;
                 visible.push(y*len + x);
             }
             if height == 9 {
@@ -53,7 +53,7 @@ pub fn part1(path: String) -> i32 {
         for y in (0..depth).rev() {
             let height = forest[y*len + x];
             if forest[y*len + x] > max {
-                max = forest[y*len + x];
+                max = height;
                 visible.push(y*len + x);
             }
             if height == 9 {

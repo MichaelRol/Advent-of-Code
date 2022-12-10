@@ -12,22 +12,24 @@ pub fn part1(path: String) -> i32 {
     history.push(tail);
     for a_move in moves {
         match a_move.dir {
-            'R' => head.1 += a_move.dist,
-            'L' => head.1 -= a_move.dist,
-            'U' => head.0 += a_move.dist,
-            'D' => head.0 -= a_move.dist,
+            'R' => head.0 += a_move.dist,
+            'L' => head.0 -= a_move.dist,
+            'U' => head.1 += a_move.dist,
+            'D' => head.1 -= a_move.dist,
             _ => panic!("Unknown move direction {}", a_move.dir),
         } 
         while further_than_one(head, tail) {
             let dif_x = head.0 - tail.0;
+            let abs_x = dif_x.abs();
             let dif_y = head.1 - tail.1;
-            if dif_x.abs() > 0 && dif_y.abs() > 0 {
-                tail.0 += dif_x/dif_x.abs();
-                tail.1 += dif_y/dif_y.abs();
+            let abs_y = dif_y.abs();
+            if abs_x > 0 && abs_y > 0 {
+                tail.0 += dif_x/abs_x;
+                tail.1 += dif_y/abs_y;
             } else if dif_x.abs() > 0 {
-                tail.0 += dif_x/dif_x.abs();
+                tail.0 += dif_x/abs_x
             } else {
-                tail.1 += dif_y/dif_y.abs();
+                tail.1 += dif_y/abs_y
             }
             history.push(tail);
         }

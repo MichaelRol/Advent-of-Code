@@ -5,7 +5,7 @@ use itertools::Itertools;
 pub fn part1(path: String) -> i32 {
     let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
-        return find_all_unique(contents, 4);
+    return find_all_unique(contents, 4);
 }
 
 pub fn part2(path: String) -> i32 {    
