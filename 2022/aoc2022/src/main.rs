@@ -1,5 +1,4 @@
 mod puzzles;
-mod utils;
 
 use std::env;
 use std::time::{Instant, Duration};
@@ -162,6 +161,20 @@ fn run(day: &str, part: &str) {
                 return;
             }
         },
+        "11" => {
+            if part == "1" {
+                now = Instant::now();
+                result = puzzles::day_11::part1(get_path(day)).to_string();
+                elapsed = now.elapsed();
+            } else if part == "2" {
+                let now = Instant::now();
+                result = puzzles::day_11::part2(get_path(day)).to_string();
+                elapsed = now.elapsed();
+            } else {
+                print!("Part number must be 1 or 2, but was {part}.\n");
+                return;
+            }
+        },
         _ => {
             print!("Unknown day number: {day}\n");
             return;
@@ -192,6 +205,8 @@ fn run_all() {
     print!("Day 9 Part 2: {}\n", puzzles::day_9::part2(get_path("9")));
     print!("Day 10 Part 1: {}\n", puzzles::day_10::part1(get_path("10")));
     print!("Day 10 Part 2: {}\n", puzzles::day_10::part2(get_path("10")));
+    print!("Day 11 Part 1: {}\n", puzzles::day_11::part1(get_path("11")));
+    print!("Day 11 Part 2: {}\n", puzzles::day_11::part2(get_path("11")));
     let elapsed = now.elapsed();
     print!("Total time: {:.2?}", elapsed);
 }
