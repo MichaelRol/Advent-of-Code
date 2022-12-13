@@ -189,6 +189,20 @@ fn run(day: &str, part: &str) {
                 return;
             }
         },
+        "13" => {
+            if part == "1" {
+                now = Instant::now();
+                result = puzzles::day_13::part1(get_path(day)).to_string();
+                elapsed = now.elapsed();
+            } else if part == "2" {
+                let now = Instant::now();
+                result = puzzles::day_13::part2(get_path(day)).to_string();
+                elapsed = now.elapsed();
+            } else {
+                print!("Part number must be 1 or 2, but was {part}.\n");
+                return;
+            }
+        },
         _ => {
             print!("Unknown day number: {day}\n");
             return;
@@ -223,6 +237,8 @@ fn run_all() {
     print!("Day 11 Part 2: {}\n", puzzles::day_11::part2(get_path("11")));
     print!("Day 12 Part 1: {}\n", puzzles::day_12::part1(get_path("12")));
     print!("Day 12 Part 2: {}\n", puzzles::day_12::part2(get_path("12")));
+    print!("Day 13 Part 1: {}\n", puzzles::day_13::part1(get_path("13")));
+    print!("Day 13 Part 2: {}\n", puzzles::day_13::part2(get_path("13")));
     let elapsed = now.elapsed();
     print!("Total time: {:.2?}", elapsed);
 }
