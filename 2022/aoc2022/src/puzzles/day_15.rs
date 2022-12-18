@@ -5,12 +5,16 @@ use itertools::Itertools;
 pub fn part1(path: String) -> i32 {
     let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
-    return contents.lines()
+    
+    let ranges = contents.lines()
         .map(|line| line.parse::<Sensor>().unwrap())
         .filter(|sensor| sensor.does_reach_y(2000000))
-            .flat_map(|sensor| sensor.find_xs_a_y(2000000))
-        .unique()
-        .count() as i32;
+        .map(|sensor| sensor.find_range_at_y(2000000))
+        .sorted_by(|a, b| a.0.cmp(&b.0));
+
+    return merge_ranges(ranges).iter()
+        .map(|(min, max)| max - min)
+        .sum();
 }
 
 pub fn part2(path: String) -> i64 {    
@@ -26,6 +30,8 @@ pub fn part2(path: String) -> i64 {
         let ranges = sorted_sensors.iter()
             .filter(|sensor| sensor.does_reach_y(y))
             .map(|sensor| sensor.find_range_at_y(y))
+            .map(|(a, b)| if a < 0 { (0, b)} else {(a, b)})
+            .map(|(a, b)| if b > 4000000 { (a, 4000000)} else {(a, b)})
             .sorted_by(|a, b| a.0.cmp(&b.0));
         let merged = merge_ranges(ranges);
         if merged.len() > 1 {
@@ -40,6 +46,9 @@ fn merge_ranges(ranges: IntoIter<(i32, i32)>) -> Vec<(i32, i32)> {
     let mut min = 0;
     let mut max = 0;
     ranges.tuple_windows().for_each( |(ranges1, ranges2)| {
+        if ranges1.0 < min {
+            min = ranges1.0;
+        }
         if ranges1.1 >= ranges2.0 - 1 || ranges1.1 < max {
             if max < ranges2.1 {
                 max = ranges2.1
@@ -79,35 +88,12 @@ impl Sensor {
         return (self.y > y && self.y - dist < y) || (self.y < y && self.y + dist > y);
     }
 
-    fn find_range_at_y(&self, y: i32) -> (i32, i32) {
+    fn find_range_at_y(&self, y: i32, ) -> (i32, i32) {
         let dist_from_beacon = self.distance_from_beacon();
         let dist_from_y = (self.y - y).abs();
-        let mut range_left = self.x - (dist_from_beacon - dist_from_y);
-        let mut range_right = self.x + (dist_from_beacon - dist_from_y);
-        if range_left < 0 {
-            range_left = 0;
-        }
-        if range_right > 4000000 {
-            range_right = 4000000;
-        }
+        let range_left = self.x - (dist_from_beacon - dist_from_y);
+        let range_right = self.x + (dist_from_beacon - dist_from_y);
         return (range_left, range_right);
-    } 
-
-    fn find_xs_a_y(&self, y: i32) -> Vec<i32> {
-        let dist_from_beacon = self.distance_from_beacon();
-        let dist_from_y = (self.y - y).abs();
-        let mut xs: Vec<i32> = Vec::new();
-        for x in self.x..=self.x + (dist_from_beacon - dist_from_y) {
-            if self.beacon_x != x || self.beacon_y != y {
-                xs.push(x);
-            }
-        }
-        for x in self.x - (dist_from_beacon - dist_from_y)..self.x {
-            if self.beacon_x != x || self.beacon_y != y {
-                xs.push(x);
-            }
-        }
-        return xs;
     }
 }
 
