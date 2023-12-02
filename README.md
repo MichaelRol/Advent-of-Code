@@ -3,6 +3,8 @@ A repository for holding my solutions to the Advent of Code challenges. More inf
 
 Each year is written in a different programming language and all solutions are designed to complete within 15 seconds on relatively basic hardware. 
 
+2023 is written in Java. I have decided to take a year off from abusing myself. 
+
 2022 is written in Rust. This was my first attempt at using the Rust programming language.
 
 2021 is written in Swift. This was my first attempt at using the Swift programming language.
