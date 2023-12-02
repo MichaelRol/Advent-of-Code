@@ -58,7 +58,6 @@ public class Aoc2023 {
           return List.of(partNumber);
         }
         throw new IllegalArgumentException("Invalid part number: " + partNumber);
-
       } catch (NumberFormatException ex) {
         throw new IllegalArgumentException("Could not parse number from: " + partString);
       }

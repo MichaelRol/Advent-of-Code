@@ -5,8 +5,6 @@
  */
 package org.michaelrol;
 
-import static java.util.function.Predicate.not;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,11 +54,7 @@ public class Day1 implements Day {
     numbers.put("7", 7);
     numbers.put("8", 8);
     numbers.put("9", 9);
-    return input.stream()
-        .map(String::toLowerCase)
-        .map(line -> 10 * findFirstNumber(line, numbers) + findLastNumber(line, numbers))
-        .mapToInt(Integer::intValue)
-        .sum();
+    return sumFirstAndLastNumbers(numbers);
   }
 
   @Override
@@ -84,11 +78,16 @@ public class Day1 implements Day {
     numbers.put("seven", 7);
     numbers.put("eight", 8);
     numbers.put("nine", 9);
-    return input.stream()
-        .map(String::toLowerCase)
-        .map(line -> 10 * findFirstNumber(line, numbers) + findLastNumber(line, numbers))
-        .mapToInt(Integer::intValue)
-        .sum();
+    return sumFirstAndLastNumbers(numbers);
+  }
+
+  private int sumFirstAndLastNumbers(Map<String, Integer> numbers) {
+    int sum = 0;
+    for (String line : input) {
+      line = line.toLowerCase();
+      sum += 10 * findFirstNumber(line, numbers) + findLastNumber(line, numbers);
+    }
+    return sum;
   }
 
   private int findFirstNumber(String line, Map<String, Integer> numbers) {
@@ -108,5 +107,4 @@ public class Day1 implements Day {
         .map(Pair::getRight)
         .orElse(0);
   }
-
 }
