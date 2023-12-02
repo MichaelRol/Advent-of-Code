@@ -1,14 +1,10 @@
 package org.michaelrol;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
 
 public class Day2 implements Day {
 
@@ -33,7 +29,7 @@ public class Day2 implements Day {
     @Override
     public int Part1() {
         int sum = 0;
-        for(Map.Entry<Integer, Map<String, Integer>> game : processInput().entrySet()) {
+        for (Map.Entry<Integer, Map<String, Integer>> game : processInput().entrySet()) {
             Integer red = game.getValue().getOrDefault("red", 0);
             Integer green = game.getValue().getOrDefault("green", 0);
             Integer blue = game.getValue().getOrDefault("blue", 0);
@@ -47,7 +43,7 @@ public class Day2 implements Day {
     @Override
     public int Part2() {
         int sum = 0;
-        for(Map<String, Integer> game : processInput().values()) {
+        for (Map<String, Integer> game : processInput().values()) {
             int product = 1;
             for (Integer count : game.values()) {
                 product += count;

@@ -19,92 +19,92 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class Day1 implements Day {
 
-  private final List<String> input;
+    private final List<String> input;
 
-  public Day1(String inputPath) {
-    ClassLoader classLoader = Day1.class.getClassLoader();
-    List<String> input1;
-    try (InputStream inputStream = classLoader.getResourceAsStream(inputPath)) {                // Use BufferedReader to read the content of the file
-      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-      // Create a List to store the lines
-      List<String> lines = new ArrayList<>();
-      // Read lines and add them to the List
-      String line;
-      while ((line = reader.readLine()) != null) {
-        lines.add(line);
-      }
-      input1 = lines;
-    } catch (IOException ex) {
-      input1 = null;
-      System.out.println("File with path: " + inputPath + " could not be read.");
-      System.exit(1);
+    public Day1(String inputPath) {
+        ClassLoader classLoader = Day1.class.getClassLoader();
+        List<String> input1;
+        try (InputStream inputStream = classLoader.getResourceAsStream(inputPath)) {                // Use BufferedReader to read the content of the file
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            // Create a List to store the lines
+            List<String> lines = new ArrayList<>();
+            // Read lines and add them to the List
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            input1 = lines;
+        } catch (IOException ex) {
+            input1 = null;
+            System.out.println("File with path: " + inputPath + " could not be read.");
+            System.exit(1);
+        }
+        input = input1;
     }
-    input = input1;
-  }
 
-  @Override
-  public int Part1() {
-    Map<String, Integer> numbers = new HashMap<>();
-    numbers.put("1", 1);
-    numbers.put("2", 2);
-    numbers.put("3", 3);
-    numbers.put("4", 4);
-    numbers.put("5", 5);
-    numbers.put("6", 6);
-    numbers.put("7", 7);
-    numbers.put("8", 8);
-    numbers.put("9", 9);
-    return sumFirstAndLastNumbers(numbers);
-  }
-
-  @Override
-  public int Part2() {
-    Map<String, Integer> numbers = new HashMap<>();
-    numbers.put("1", 1);
-    numbers.put("2", 2);
-    numbers.put("3", 3);
-    numbers.put("4", 4);
-    numbers.put("5", 5);
-    numbers.put("6", 6);
-    numbers.put("7", 7);
-    numbers.put("8", 8);
-    numbers.put("9", 9);
-    numbers.put("one", 1);
-    numbers.put("two", 2);
-    numbers.put("three", 3);
-    numbers.put("four", 4);
-    numbers.put("five", 5);
-    numbers.put("six", 6);
-    numbers.put("seven", 7);
-    numbers.put("eight", 8);
-    numbers.put("nine", 9);
-    return sumFirstAndLastNumbers(numbers);
-  }
-
-  private int sumFirstAndLastNumbers(Map<String, Integer> numbers) {
-    int sum = 0;
-    for (String line : input) {
-      line = line.toLowerCase();
-      sum += 10 * findFirstNumber(line, numbers) + findLastNumber(line, numbers);
+    @Override
+    public int Part1() {
+        Map<String, Integer> numbers = new HashMap<>();
+        numbers.put("1", 1);
+        numbers.put("2", 2);
+        numbers.put("3", 3);
+        numbers.put("4", 4);
+        numbers.put("5", 5);
+        numbers.put("6", 6);
+        numbers.put("7", 7);
+        numbers.put("8", 8);
+        numbers.put("9", 9);
+        return sumFirstAndLastNumbers(numbers);
     }
-    return sum;
-  }
 
-  private int findFirstNumber(String line, Map<String, Integer> numbers) {
-    return numbers.keySet().stream()
-        .filter(line::contains)
-        .map(num -> Pair.of(line.indexOf(num), numbers.get(num)))
-        .min(Comparator.comparingInt(Pair::getLeft))
-        .map(Pair::getRight)
-        .orElse(0);
-  }
+    @Override
+    public int Part2() {
+        Map<String, Integer> numbers = new HashMap<>();
+        numbers.put("1", 1);
+        numbers.put("2", 2);
+        numbers.put("3", 3);
+        numbers.put("4", 4);
+        numbers.put("5", 5);
+        numbers.put("6", 6);
+        numbers.put("7", 7);
+        numbers.put("8", 8);
+        numbers.put("9", 9);
+        numbers.put("one", 1);
+        numbers.put("two", 2);
+        numbers.put("three", 3);
+        numbers.put("four", 4);
+        numbers.put("five", 5);
+        numbers.put("six", 6);
+        numbers.put("seven", 7);
+        numbers.put("eight", 8);
+        numbers.put("nine", 9);
+        return sumFirstAndLastNumbers(numbers);
+    }
 
-  private int findLastNumber(String line, Map<String, Integer> numbers) {
-    return numbers.keySet().stream()
-        .filter(line::contains)
-        .map(num -> Pair.of(line.lastIndexOf(num), numbers.get(num)))
-        .max(Comparator.comparingInt(Pair::getLeft))
-        .map(Pair::getRight)
-        .orElse(0);
-  }
+    private int sumFirstAndLastNumbers(Map<String, Integer> numbers) {
+        int sum = 0;
+        for (String line : input) {
+            line = line.toLowerCase();
+            sum += 10 * findFirstNumber(line, numbers) + findLastNumber(line, numbers);
+        }
+        return sum;
+    }
+
+    private int findFirstNumber(String line, Map<String, Integer> numbers) {
+        return numbers.keySet().stream()
+                .filter(line::contains)
+                .map(num -> Pair.of(line.indexOf(num), numbers.get(num)))
+                .min(Comparator.comparingInt(Pair::getLeft))
+                .map(Pair::getRight)
+                .orElse(0);
+    }
+
+    private int findLastNumber(String line, Map<String, Integer> numbers) {
+        return numbers.keySet().stream()
+                .filter(line::contains)
+                .map(num -> Pair.of(line.lastIndexOf(num), numbers.get(num)))
+                .max(Comparator.comparingInt(Pair::getLeft))
+                .map(Pair::getRight)
+                .orElse(0);
+    }
 }
