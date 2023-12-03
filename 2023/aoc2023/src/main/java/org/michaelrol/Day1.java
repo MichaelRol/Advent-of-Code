@@ -24,7 +24,8 @@ public class Day1 implements Day {
     public Day1(String inputPath) {
         ClassLoader classLoader = Day1.class.getClassLoader();
         List<String> input1;
-        try (InputStream inputStream = classLoader.getResourceAsStream(inputPath)) {                // Use BufferedReader to read the content of the file
+        try (InputStream inputStream = classLoader.getResourceAsStream(inputPath)) {
+            // Use BufferedReader to read the content of the file
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             // Create a List to store the lines
             List<String> lines = new ArrayList<>();

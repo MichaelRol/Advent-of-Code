@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Aoc2023 {
 
-    private static final List<Integer> VALID_DAYS = List.of(1, 2);
+    private static final List<Integer> VALID_DAYS = List.of(1, 2, 3);
 
     public static void main(String[] args) {
         if (args.length > 2) {
@@ -19,7 +19,7 @@ public class Aoc2023 {
                     Day day = (Day) clazz.getDeclaredConstructor(String.class).newInstance("inputs/input" + dayNumber + ".txt");
                     runDay(day, part);
                 } catch (Exception ex) {
-                    System.out.println("Error occurred whilst running challenge: " + ex);
+                    System.out.println("Error occurred whilst running challenge: " + ex.getMessage());
                 }
             }
         }

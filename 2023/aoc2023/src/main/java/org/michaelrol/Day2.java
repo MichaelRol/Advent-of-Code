@@ -11,7 +11,7 @@ public class Day2 implements Day {
     private final List<String> lines = new ArrayList<>();
 
     public Day2(String inputPath) {
-        ClassLoader classLoader = Day1.class.getClassLoader();
+        ClassLoader classLoader = Day2.class.getClassLoader();
         try (InputStream inputStream = classLoader.getResourceAsStream(inputPath)) {
             // Use BufferedReader to read the content of the file
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
