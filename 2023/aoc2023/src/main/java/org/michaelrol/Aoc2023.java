@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Aoc2023 {
 
-    private static final List<Integer> VALID_DAYS = List.of(1, 2, 3);
+    private static final List<Integer> VALID_DAYS = List.of(1, 2, 3, 4);
 
     public static void main(String[] args) {
         if (args.length > 2) {
