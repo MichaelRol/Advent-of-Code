@@ -44,7 +44,7 @@ public class Day1 implements Day {
     }
 
     @Override
-    public int Part1() {
+    public long Part1() {
         Map<String, Integer> numbers = new HashMap<>();
         numbers.put("1", 1);
         numbers.put("2", 2);
@@ -59,7 +59,7 @@ public class Day1 implements Day {
     }
 
     @Override
-    public int Part2() {
+    public long Part2() {
         Map<String, Integer> numbers = new HashMap<>();
         numbers.put("1", 1);
         numbers.put("2", 2);

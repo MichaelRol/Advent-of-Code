@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Aoc2023 {
 
-    private static final List<Integer> VALID_DAYS = List.of(1, 2, 3, 4);
+    private static final List<Integer> VALID_DAYS = List.of(1, 2, 3, 4, 5);
 
     public static void main(String[] args) {
         if (args.length > 2) {
@@ -27,7 +27,7 @@ public class Aoc2023 {
 
     private static void runDay(Day day, int part) {
         final long startTime = System.currentTimeMillis();
-        int answer = part == 1 ? day.Part1() : day.Part2();
+        long answer = part == 1 ? day.Part1() : day.Part2();
         final long endTime = System.currentTimeMillis();
         System.out.println(day.getClass().getSimpleName() +
                 " - Part " + part + ": " + answer + ", ran in " + (endTime - startTime) + "ms.");

@@ -47,7 +47,7 @@ public class Day4 implements Day {
   }
 
   @Override
-  public int Part1() {
+  public long Part1() {
     int sum = 0;
     for (int i = 0; i < numbers.size(); i++) {
       long winningCount = numbers.get(i).stream().filter(winners.get(i)::contains).count();
@@ -59,7 +59,7 @@ public class Day4 implements Day {
   }
 
   @Override
-  public int Part2() {
+  public long Part2() {
     List<Integer> cardCount = new ArrayList<>(Collections.nCopies(winners.size(), 1));
     for (int i = 0; i < numbers.size(); i++) {
       long winningCount = numbers.get(i).stream().filter(winners.get(i)::contains).count();

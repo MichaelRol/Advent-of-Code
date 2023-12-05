@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Day2 implements Day {
 
@@ -27,7 +30,7 @@ public class Day2 implements Day {
     }
 
     @Override
-    public int Part1() {
+    public long Part1() {
         int sum = 0;
         for (Map.Entry<Integer, Map<String, Integer>> game : processInput().entrySet()) {
             Integer red = game.getValue().getOrDefault("red", 0);
@@ -41,12 +44,12 @@ public class Day2 implements Day {
     }
 
     @Override
-    public int Part2() {
+    public long Part2() {
         int sum = 0;
         for (Map<String, Integer> game : processInput().values()) {
             int product = 1;
             for (Integer count : game.values()) {
-                product += count;
+                product *= count;
             }
             sum += product;
         }

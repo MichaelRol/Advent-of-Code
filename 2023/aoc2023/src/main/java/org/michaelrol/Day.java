@@ -7,8 +7,8 @@ package org.michaelrol;
 
 public interface Day {
 
-  public abstract int Part1();
+  public abstract long Part1();
 
-  public abstract int Part2();
+  public abstract long Part2();
 
 }

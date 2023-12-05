@@ -36,7 +36,7 @@ public class Day3 implements Day {
     }
 
     @Override
-    public int Part1() {
+    public long Part1() {
         int sum = 0;
         for (int x = 0; x < input.size(); x++) {
             for (int y = 0; y < input.get(0).size(); y++) {
@@ -63,7 +63,7 @@ public class Day3 implements Day {
     }
 
     @Override
-    public int Part2() {
+    public long Part2() {
         int sum = 0;
         for (int x = 0; x < input.size(); x++) {
             for (int y = 0; y < input.get(0).size(); y++) {
