@@ -19,28 +19,22 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class Day1 implements Day {
 
-    private final List<String> input;
+    private final List<String> input = new ArrayList<>();
 
     public Day1(String inputPath) {
         ClassLoader classLoader = Day1.class.getClassLoader();
-        List<String> input1;
         try (InputStream inputStream = classLoader.getResourceAsStream(inputPath)) {
             // Use BufferedReader to read the content of the file
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            // Create a List to store the lines
-            List<String> lines = new ArrayList<>();
             // Read lines and add them to the List
             String line;
             while ((line = reader.readLine()) != null) {
-                lines.add(line);
+                input.add(line);
             }
-            input1 = lines;
         } catch (IOException ex) {
-            input1 = null;
             System.out.println("File with path: " + inputPath + " could not be read.");
             System.exit(1);
         }
-        input = input1;
     }
 
     @Override
