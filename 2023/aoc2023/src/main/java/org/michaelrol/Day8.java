@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,25 +69,37 @@ public class Day8 implements Day {
   @Override
   public long Part2() {
     List<String> nodes = findStartingNodes();
-    int steps = 0;
-    while (true) {
-      for (Character direction : directions) {
-        for (int i = 0; i < nodes.size(); i++) {
+    BigInteger lcm = BigInteger.ONE;
+    for (int i = 0; i < nodes.size(); i++) {
+      String node = nodes.get(i);
+      int steps = 0;
+      boolean looping = true;
+      while (looping) {
+        for (Character direction : directions) {
           if (direction == 'L') {
-            nodes.set(i, graph.get(nodes.get(i)).getLeft());
+            node = graph.get(node).getLeft();
           } else {
-            nodes.set(i, graph.get(nodes.get(i)).getRight());
+            node = graph.get(node).getRight();
           }
-        }
-        steps++;
-        if (nodes.stream().allMatch(node -> node.endsWith("Z"))) {
-          return steps;
+          steps++;
+          if (node.charAt(2) == 'Z') {
+            lcm = findLcm(lcm, BigInteger.valueOf(steps));
+            looping = false;
+            break;
+          }
         }
       }
     }
+    return lcm.longValue();
   }
 
   private List<String> findStartingNodes() {
-    return graph.keySet().stream().filter(key -> key.endsWith("A")).collect(toList());
+    return graph.keySet().stream().filter(key -> key.charAt(2) == 'A').collect(toList());
+  }
+
+  private static BigInteger findLcm(BigInteger a, BigInteger b) {
+    // LCM(a, b) = (a * b) / GCD(a, b)
+    BigInteger gcd = a.gcd(b);
+    return a.multiply(b).divide(gcd);
   }
 }
