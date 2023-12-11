@@ -37,7 +37,9 @@ public class Day9 implements Day {
         for (int i = 0; i < input.size(); i++) {
             List<Integer> currList = input.get(i);
             List<List<Integer>> differences = new ArrayList<>();
-            while (differences.isEmpty() || differences.get(differences.size() - 1).stream().anyMatch(num -> !Objects.equals(num, differences.get(differences.size() - 1).get(0)))) {
+            while (differences.isEmpty() || differences.get(differences.size() - 1).stream()
+                    .anyMatch(num -> !Objects.equals(num, differences.get(differences.size() - 1).get(0)))) {
+
                 List<Integer> newList = new ArrayList<>();
                 for (int j = 0; j < currList.size() - 1; j++) {
                     newList.add(currList.get(j + 1) - currList.get(j));
@@ -63,7 +65,9 @@ public class Day9 implements Day {
         for (int i = 0; i < input.size(); i++) {
             List<Integer> currList = input.get(i);
             List<List<Integer>> differences = new ArrayList<>();
-            while (differences.isEmpty() || differences.get(differences.size() - 1).stream().anyMatch(num -> !Objects.equals(num, differences.get(differences.size() - 1).get(0)))) {
+            while (differences.isEmpty() || differences.get(differences.size() - 1).stream()
+                    .anyMatch(num -> !Objects.equals(num, differences.get(differences.size() - 1).get(0)))) {
+
                 List<Integer> newList = new ArrayList<>();
                 for (int j = 0; j < currList.size() - 1; j++) {
                     newList.add(currList.get(j + 1) - currList.get(j));

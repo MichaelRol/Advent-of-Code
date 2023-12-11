@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
@@ -55,109 +57,97 @@ public class Day10 implements Day {
     @Override
     public long Part2() {
         Pair<Integer, Integer> startCoords = findStartCoords();
+        insertCorrectS(startCoords);
         Pair<Integer, Integer> currPos = findLoopEnd(startCoords);
-        List<Pair<Integer, Integer>> loop = new ArrayList<>(List.of(startCoords));
+        Set<Pair<Integer, Integer>> loop = new HashSet<>();
+        loop.add(startCoords);
+        loop.add(currPos);
         while (!currPos.equals(startCoords)) {
             currPos = stepForwardInLoop(currPos);
             loop.add(currPos);
         }
-        int count = 0;
-        currPos = findLoopEnd(startCoords);
-        while (!currPos.equals(startCoords)) {
-            if (input.get(currPos.getLeft()).get(currPos.getRight()) == '-') {
-                if (direction == Direction.WEST) {
-                    //check south
-                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight(), loop);
-                } else  if (direction == Direction.EAST) {
-                    // check north
-                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight(), loop);
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '|') {
-                if (direction == Direction.SOUTH) {
-                    //check EAST
-                    count += findNeighbors(currPos.getLeft(), currPos.getRight() + 1, loop);
-                } else if (direction == Direction.NORTH) {
-                    // check west
-                    count += findNeighbors(currPos.getLeft(), currPos.getRight() - 1, loop);
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'F') {
-                if (direction == Direction.SOUTH) {
-                    //check NORTH
-                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight(), loop);
-                    // check WEST
-                    count += findNeighbors(currPos.getLeft(), currPos.getRight() - 1, loop);
-                    // check NORTH WEST
-                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() - 1, loop);
-                } else if (direction == Direction.EAST) {
-                    // check SOUTH EAST
-                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() + 1, loop);
-
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'L') {
-                if (direction == Direction.NORTH) {
-                    //check SOUTH
-                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight(), loop);
-                    // check WEST
-                    count += findNeighbors(currPos.getLeft(), currPos.getRight() - 1, loop);
-                    // check SOUTH WEST
-                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() - 1, loop);
-                } else if (direction == Direction.EAST) {
-                    // check NORTH EAST
-                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() + 1, loop);
-
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'J') {
-                if (direction == Direction.NORTH) {
-                    //check SOUTH
-                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight(), loop);
-                    // check EAST
-                    count += findNeighbors(currPos.getLeft(), currPos.getRight() + 1, loop);
-                    // check SOUTH EAST
-                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() + 1, loop);
-                } else if (direction == Direction.EAST) {
-                    // check NORTH WEST
-                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() - 1, loop);
-
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '7') {
-                if (direction == Direction.WEST) {
-                    //check NORTH
-                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight(), loop);
-                    // check EAST
-                    count += findNeighbors(currPos.getLeft(), currPos.getRight() + 1, loop);
-                    // check NORTH EAST
-                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() + 1, loop);
-                } else if (direction == Direction.SOUTH) {
-                    // check SOUTH WEST
-                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() - 1, loop);
-
+        for (int i = 0; i < input.size(); i++) {
+            for (int j = 0; j < input.get(0).size(); j++) {
+                if (!loop.contains(Pair.of(i, j))) {
+                    input.get(i).set(j, ' ');
                 }
             }
-            currPos = stepForwardInLoop(currPos);
         }
-        for (Pair<Integer, Integer> point : loop) {
-            input.get(point.getLeft()).set(point.getRight(), 'P');
-        }
-        for (List<Character> row : input){
-            System.out.println(row);
+        int count = 0;
+        for (int i = 0; i < input.size(); i++) {
+            boolean inside = false;
+            char firstHit = ' ';
+            for (int j = 0; j < input.get(0).size(); j++) {
+                Character currChar = getCharacterAt(i, j);
+                if (currChar != ' ') {
+                    if (firstHit == ' ') {
+                        firstHit = currChar;
+                    }
+                    if (currChar == '|') {
+                        inside = !inside;
+                        firstHit = ' ';
+                    }
+                    if (currChar == 'J' && firstHit == 'F') {
+                        inside = !inside;
+                        firstHit = ' ';
+                    }
+                    if (currChar == 'J' && firstHit == 'L') {
+                        firstHit = ' ';
+                    }
+                    if (currChar == '7' && firstHit == 'L') {
+                        inside = !inside;
+                        firstHit = ' ';
+                    }
+                    if (currChar == '7' && firstHit == 'F') {
+                        firstHit = ' ';
+                    }
+                } else if (inside) {
+                    count++;
+                    firstHit = ' ';
+                }
+            }
         }
         return count;
     }
 
-    private int findNeighbors(int i, int j, List<Pair<Integer, Integer>> loop) {
-        if (i < 0 || j < 0 || j >= input.get(0).size() || i >= input.size() || loop.contains(Pair.of(i, j)) || input.get(i).get(j) == 'I') {
-            return 0;
+    private void insertCorrectS(Pair<Integer, Integer> startCoords) {
+        List<Direction> directions = new ArrayList<>();
+        int y = startCoords.getLeft();
+        int x = startCoords.getRight();
+        if (y > 0 && List.of('|', '7', 'F').contains(getCharacterAt(y - 1, x))) {
+            directions.add(Direction.NORTH);
         }
-        input.get(i).set(j, 'I');
-        return 1 + findNeighbors(i + 1, j, loop) +
-                findNeighbors(i - 1, j, loop) +
-                findNeighbors(i, j + 1, loop) +
-                findNeighbors(i, j - 1, loop);
+        if (y < input.size() && List.of('|', 'L', 'J').contains(getCharacterAt(y + 1, x))) {
+            directions.add(Direction.SOUTH);
+        }
+        if (x > 0 && List.of('-', 'L', 'F').contains(getCharacterAt(y, x - 1))) {
+            directions.add(Direction.WEST);
+        }
+        if (x < input.get(0).size() && List.of('-', 'J', '7').contains(getCharacterAt(y, x + 1))) {
+            directions.add(Direction.EAST);
+        }
+        if (directions.contains(Direction.NORTH) && directions.contains(Direction.SOUTH)) {
+            input.get(y).set(x, '|');
+        } else if (directions.contains(Direction.NORTH) && directions.contains(Direction.EAST)) {
+            input.get(y).set(x, 'L');
+        } else if (directions.contains(Direction.NORTH) && directions.contains(Direction.WEST)) {
+            input.get(y).set(x, 'J');
+        } else if (directions.contains(Direction.SOUTH) && directions.contains(Direction.EAST)) {
+            input.get(y).set(x, 'F');
+        } else if (directions.contains(Direction.SOUTH) && directions.contains(Direction.WEST)) {
+            input.get(y).set(x, '7');
+        } else {
+            throw new IllegalStateException("Could not find start pipe.");
+        }
+    }
+
+    private Character getCharacterAt(int i, int j) {
+        return input.get(i).get(j);
     }
 
     private Pair<Integer, Integer> findStartCoords() {
         for (int i = 0; i < input.size(); i++) {
-            for (int j = 0; j <input.get(0).size(); j++) {
+            for (int j = 0; j < input.get(0).size(); j++) {
                 if (input.get(i).get(j) == 'S') {
                     return Pair.of(i, j);
                 }
