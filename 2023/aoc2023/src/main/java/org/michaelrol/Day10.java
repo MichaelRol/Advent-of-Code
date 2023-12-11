@@ -22,7 +22,7 @@ public class Day10 implements Day {
 
     private final List<List<Character>> input = new ArrayList<>();
 
-    private Direction direction= Direction.NORTH;
+    private Direction direction = Direction.NORTH;
 
     public Day10(String inputPath) {
         ClassLoader classLoader = Day1.class.getClassLoader();
@@ -39,71 +39,14 @@ public class Day10 implements Day {
             System.exit(1);
         }
     }
+
     @Override
     public long Part1() {
         Pair<Integer, Integer> startCoords = findStartCoords();
         Pair<Integer, Integer> currPos = findLoopEnd(startCoords);
         int steps = 1;
         while (!currPos.equals(startCoords)) {
-            if (input.get(currPos.getLeft()).get(currPos.getRight()) == '|') {
-                if (direction == Direction.NORTH) {
-                    currPos = Pair.of(currPos.getLeft() - 1, currPos.getRight());
-                } else if (direction == Direction.SOUTH) {
-                    currPos = Pair.of(currPos.getLeft() + 1, currPos.getRight());
-                } else {
-                    throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '7') {
-                if (direction == Direction.NORTH) {
-                    currPos = Pair.of(currPos.getLeft(), currPos.getRight() - 1);
-                    direction = Direction.WEST;
-                } else if (direction == Direction.EAST) {
-                    direction = Direction.SOUTH;
-                    currPos = Pair.of(currPos.getLeft() + 1, currPos.getRight());
-                } else {
-                    throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'F') {
-                if (direction == Direction.NORTH) {
-                    currPos = Pair.of(currPos.getLeft(), currPos.getRight() + 1);
-                    direction = Direction.EAST;
-                } else if (direction == Direction.WEST) {
-                    direction = Direction.SOUTH;
-                    currPos = Pair.of(currPos.getLeft() + 1, currPos.getRight());
-                } else {
-                    throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '-') {
-                if (direction == Direction.EAST) {
-                    currPos = Pair.of(currPos.getLeft(), currPos.getRight() + 1);
-                } else if (direction == Direction.WEST) {
-                    currPos = Pair.of(currPos.getLeft(), currPos.getRight() - 1);
-                } else {
-                    throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'L') {
-                if (direction == Direction.SOUTH) {
-                    direction = Direction.EAST;
-                    currPos = Pair.of(currPos.getLeft(), currPos.getRight() + 1);
-                } else if (direction == Direction.WEST) {
-                    direction = Direction.NORTH;
-                    currPos = Pair.of(currPos.getLeft() - 1, currPos.getRight());
-                } else {
-                    throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
-                }
-            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'J') {
-                if (direction == Direction.SOUTH) {
-                    direction = Direction.WEST;
-                    currPos = Pair.of(currPos.getLeft(), currPos.getRight() - 1);
-                } else if (direction == Direction.EAST) {
-                    direction = Direction.NORTH;
-                    currPos = Pair.of(currPos.getLeft() - 1, currPos.getRight());
-                } else {
-                    throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
-                }
-            } else {
-                throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
-            }
+            currPos = stepForwardInLoop(currPos);
             steps++;
         }
         return Math.round(steps / 2d);
@@ -111,7 +54,105 @@ public class Day10 implements Day {
 
     @Override
     public long Part2() {
-        return 0;
+        Pair<Integer, Integer> startCoords = findStartCoords();
+        Pair<Integer, Integer> currPos = findLoopEnd(startCoords);
+        List<Pair<Integer, Integer>> loop = new ArrayList<>(List.of(startCoords));
+        while (!currPos.equals(startCoords)) {
+            currPos = stepForwardInLoop(currPos);
+            loop.add(currPos);
+        }
+        int count = 0;
+        currPos = findLoopEnd(startCoords);
+        while (!currPos.equals(startCoords)) {
+            if (input.get(currPos.getLeft()).get(currPos.getRight()) == '-') {
+                if (direction == Direction.WEST) {
+                    //check south
+                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight(), loop);
+                } else  if (direction == Direction.EAST) {
+                    // check north
+                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight(), loop);
+                }
+            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '|') {
+                if (direction == Direction.SOUTH) {
+                    //check EAST
+                    count += findNeighbors(currPos.getLeft(), currPos.getRight() + 1, loop);
+                } else if (direction == Direction.NORTH) {
+                    // check west
+                    count += findNeighbors(currPos.getLeft(), currPos.getRight() - 1, loop);
+                }
+            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'F') {
+                if (direction == Direction.SOUTH) {
+                    //check NORTH
+                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight(), loop);
+                    // check WEST
+                    count += findNeighbors(currPos.getLeft(), currPos.getRight() - 1, loop);
+                    // check NORTH WEST
+                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() - 1, loop);
+                } else if (direction == Direction.EAST) {
+                    // check SOUTH EAST
+                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() + 1, loop);
+
+                }
+            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'L') {
+                if (direction == Direction.NORTH) {
+                    //check SOUTH
+                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight(), loop);
+                    // check WEST
+                    count += findNeighbors(currPos.getLeft(), currPos.getRight() - 1, loop);
+                    // check SOUTH WEST
+                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() - 1, loop);
+                } else if (direction == Direction.EAST) {
+                    // check NORTH EAST
+                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() + 1, loop);
+
+                }
+            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'J') {
+                if (direction == Direction.NORTH) {
+                    //check SOUTH
+                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight(), loop);
+                    // check EAST
+                    count += findNeighbors(currPos.getLeft(), currPos.getRight() + 1, loop);
+                    // check SOUTH EAST
+                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() + 1, loop);
+                } else if (direction == Direction.EAST) {
+                    // check NORTH WEST
+                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() - 1, loop);
+
+                }
+            } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '7') {
+                if (direction == Direction.WEST) {
+                    //check NORTH
+                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight(), loop);
+                    // check EAST
+                    count += findNeighbors(currPos.getLeft(), currPos.getRight() + 1, loop);
+                    // check NORTH EAST
+                    count += findNeighbors(currPos.getLeft() - 1, currPos.getRight() + 1, loop);
+                } else if (direction == Direction.SOUTH) {
+                    // check SOUTH WEST
+                    count += findNeighbors(currPos.getLeft() + 1, currPos.getRight() - 1, loop);
+
+                }
+            }
+            currPos = stepForwardInLoop(currPos);
+        }
+        for (Pair<Integer, Integer> point : loop) {
+            input.get(point.getLeft()).set(point.getRight(), 'P');
+        }
+        for (List<Character> row : input){
+            System.out.println(row);
+        }
+        return count;
+    }
+
+    private int findNeighbors(int i, int j, List<Pair<Integer, Integer>> loop) {
+        if (i < 0 || j < 0 || j >= input.get(0).size() || i >= input.size() || loop.contains(Pair.of(i, j)) || input.get(i).get(j) == 'I') {
+            return 0;
+        }
+        input.get(i).set(j, 'I');
+        return 1 + findNeighbors(i + 1, j, loop) +
+                findNeighbors(i - 1, j, loop) +
+                findNeighbors(i, j + 1, loop) +
+                findNeighbors(i, j - 1, loop);
     }
 
     private Pair<Integer, Integer> findStartCoords() {
@@ -159,5 +200,68 @@ public class Day10 implements Day {
             return Pair.of(startCoords.getLeft(), startCoords.getRight() + 1);
         }
         throw new IllegalStateException("Could not find loop end.");
+    }
+
+    private Pair<Integer, Integer> stepForwardInLoop(Pair<Integer, Integer> currPos) {
+        if (input.get(currPos.getLeft()).get(currPos.getRight()) == '|') {
+            if (direction == Direction.NORTH) {
+                currPos = Pair.of(currPos.getLeft() - 1, currPos.getRight());
+            } else if (direction == Direction.SOUTH) {
+                currPos = Pair.of(currPos.getLeft() + 1, currPos.getRight());
+            } else {
+                throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
+            }
+        } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '7') {
+            if (direction == Direction.NORTH) {
+                currPos = Pair.of(currPos.getLeft(), currPos.getRight() - 1);
+                direction = Direction.WEST;
+            } else if (direction == Direction.EAST) {
+                direction = Direction.SOUTH;
+                currPos = Pair.of(currPos.getLeft() + 1, currPos.getRight());
+            } else {
+                throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
+            }
+        } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'F') {
+            if (direction == Direction.NORTH) {
+                currPos = Pair.of(currPos.getLeft(), currPos.getRight() + 1);
+                direction = Direction.EAST;
+            } else if (direction == Direction.WEST) {
+                direction = Direction.SOUTH;
+                currPos = Pair.of(currPos.getLeft() + 1, currPos.getRight());
+            } else {
+                throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
+            }
+        } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == '-') {
+            if (direction == Direction.EAST) {
+                currPos = Pair.of(currPos.getLeft(), currPos.getRight() + 1);
+            } else if (direction == Direction.WEST) {
+                currPos = Pair.of(currPos.getLeft(), currPos.getRight() - 1);
+            } else {
+                throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
+            }
+        } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'L') {
+            if (direction == Direction.SOUTH) {
+                direction = Direction.EAST;
+                currPos = Pair.of(currPos.getLeft(), currPos.getRight() + 1);
+            } else if (direction == Direction.WEST) {
+                direction = Direction.NORTH;
+                currPos = Pair.of(currPos.getLeft() - 1, currPos.getRight());
+            } else {
+                throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
+            }
+        } else if (input.get(currPos.getLeft()).get(currPos.getRight()) == 'J') {
+            if (direction == Direction.SOUTH) {
+                direction = Direction.WEST;
+                currPos = Pair.of(currPos.getLeft(), currPos.getRight() - 1);
+            } else if (direction == Direction.EAST) {
+                direction = Direction.NORTH;
+                currPos = Pair.of(currPos.getLeft() - 1, currPos.getRight());
+            } else {
+                throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
+            }
+        } else {
+            throw new IllegalStateException("Invalid move. Direction: " + direction + ", Position: " + currPos);
+        }
+        return currPos;
     }
 }
