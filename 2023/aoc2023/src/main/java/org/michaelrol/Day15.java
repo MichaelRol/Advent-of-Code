@@ -50,7 +50,7 @@ public class Day15 implements Day {
       if (op.endsWith("-")) {
         String label = op.substring(0, op.length() - 1);
         int boxNum = calculateHash(label);
-        boxes.get(boxNum).removeIf(lens -> lens.getLabel().equals(label));
+        boxes.get(boxNum).removeIf(lens -> lens.labelMatch(label));
       } else {
         int equalsIndex = op.indexOf("=");
         String label = op.substring(0, equalsIndex);
@@ -73,7 +73,7 @@ public class Day15 implements Day {
 
   private static int findLensWithLabel(List<Lens> box, String label) {
     for (int j = 0; j < box.size(); j++) {
-      if (box.get(j).getLabel().equals(label)) {
+      if (box.get(j).labelMatch(label)) {
         return j;
       }
     }
@@ -115,8 +115,8 @@ public class Day15 implements Day {
       this.focalLength = focalLength;
     }
 
-    private String getLabel() {
-      return label;
+    private boolean labelMatch(String otherLabel) {
+      return label.equals(otherLabel);
     }
 
     private int getFocalLength() {
