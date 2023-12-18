@@ -70,15 +70,15 @@ public class Day17 implements Day {
 
   @Override
   public long Part1() {
-    return calculateHeatLoss();
+    return calculateHeatLoss(3, 0);
   }
 
   @Override
   public long Part2() {
-    return 0;
+    return calculateHeatLoss(10, 4);
   }
 
-  private int calculateHeatLoss() {
+  private int calculateHeatLoss(int maxMoves, int minMoves) {
     Pair<Integer, Integer> goal = Pair.of(input.size() - 1, input.get(0).size() - 1);
     Set<Node> seen = new HashSet<>();
     PriorityQueue<NodeHeat> queue = new PriorityQueue<>(Comparator.comparingInt(node -> node.heatloss));
@@ -96,7 +96,7 @@ public class Day17 implements Day {
       }
 
       Set<Node> possibleNextNodes = current.direction.getNext().stream()
-          .filter(direction -> isValidNextMove(current, direction))
+          .filter(direction -> isValidNextMove(current, direction, maxMoves, minMoves))
           .map(direction -> getNextMove(current, direction))
           .filter(node -> !seen.contains(node))
           .collect(Collectors.toSet());
@@ -137,22 +137,23 @@ public class Day17 implements Day {
     throw new IllegalStateException("Could not find next move.");
   }
 
-  private boolean isValidNextMove(Node current, Direction direction) {
-    if (current.steps < 3 || current.direction != direction) {
-      if (direction == Direction.NORTH) {
-        return current.vertex.getLeft() - 1 >= 0;
-      }
-      if (direction == Direction.SOUTH) {
-        return current.vertex.getLeft() + 1 < input.size();
-      }
-      if (direction == Direction.EAST) {
-        return current.vertex.getRight() + 1 < input.get(0).size();
-      }
-      if (direction == Direction.WEST) {
-        return current.vertex.getRight() - 1 >= 0;
-      }
+  private boolean isValidNextMove(Node current, Direction direction, int maxMoves, int minMoves) {
+    if ((current.steps >= maxMoves && current.direction == direction) || current.steps < minMoves && current.direction != direction) {
+      return false;
     }
-    return false;
+    if (direction == Direction.NORTH) {
+      return current.vertex.getLeft() - 1 >= 0;
+    }
+    if (direction == Direction.SOUTH) {
+      return current.vertex.getLeft() + 1 < input.size();
+    }
+    if (direction == Direction.EAST) {
+      return current.vertex.getRight() + 1 < input.get(0).size();
+    }
+    if (direction == Direction.WEST) {
+      return current.vertex.getRight() - 1 >= 0;
+    }
+    throw new IllegalStateException("Could not validate next move.");
   }
 
   private static class NodeHeat {
@@ -188,7 +189,8 @@ public class Day17 implements Day {
       }
       Node node = (Node) o;
       return steps == node.steps &&
-          Objects.equals(vertex, node.vertex) &&
+          vertex.getRight().equals(node.vertex.getRight()) &&
+          vertex.getLeft().equals(node.vertex.getLeft()) &&
           direction == node.direction;
     }
 
