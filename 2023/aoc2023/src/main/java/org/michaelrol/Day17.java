@@ -12,13 +12,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.PriorityQueue;
-import java.util.stream.Stream;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -30,19 +32,18 @@ public class Day17 implements Day {
     SOUTH,
     WEST;
 
-    public Direction getOpposite() {
+    public Set<Direction> getNext() {
       if (this.equals(NORTH)) {
-        return SOUTH;
+        return Set.of(EAST, WEST, NORTH);
       }
       if (this.equals(SOUTH)) {
-        return NORTH;
+        return Set.of(EAST, WEST, SOUTH);
       }
-      ;
       if (this.equals(EAST)) {
-        return WEST;
+        return Set.of(NORTH, EAST, SOUTH);
       }
       if (this.equals(WEST)) {
-        return EAST;
+        return Set.of(WEST, NORTH, SOUTH);
       }
       throw new IllegalStateException("Could not find opposite direction.");
     }
@@ -69,22 +70,7 @@ public class Day17 implements Day {
 
   @Override
   public long Part1() {
-    List<List<Integer>> distances1 = dijkstra(Pair.of(0, 1), 4, Direction.EAST, 3);
-    //List<List<Integer>> distances2 = dijkstra(Pair.of(1, 0), 3, Direction.SOUTH, 3);
-    Pair<Integer, Integer> child = Pair.of(distances1.size() - 1, distances1.get(0).size() - 1);
-    while (parentMap.containsKey(child)) {
-      child = parentMap.get(child);
-      input.get(child.getLeft()).set(child.getRight(), 0);
-    }
-    for (List<Integer> row : input) {
-      System.out.println(row);
-    }
-    System.out.println("---------------------------");
-    for (List<Integer> row : distances1) {
-      System.out.println(row);
-    }
-    return distances1.get(distances1.size() - 1).get(distances1.get(0).size() - 1);
-    //return distances.get(1).get(3);
+    return calculateHeatLoss();
   }
 
   @Override
@@ -92,101 +78,123 @@ public class Day17 implements Day {
     return 0;
   }
 
-  private List<List<Integer>> dijkstra(
-      Pair<Integer, Integer> source,
-      int sourceWeight,
-      Direction sourceDirection,
-      int maxSteps) {
+  private int calculateHeatLoss() {
+    Pair<Integer, Integer> goal = Pair.of(input.size() - 1, input.get(0).size() - 1);
+    Set<Node> seen = new HashSet<>();
+    PriorityQueue<NodeHeat> queue = new PriorityQueue<>(Comparator.comparingInt(node -> node.heatloss));
 
-    List<List<Integer>> distance = new ArrayList<>();
-    for (List<Integer> line : input) {
-      distance.add(new ArrayList<>(Collections.nCopies(line.size(), Integer.MAX_VALUE)));
-    }
-    distance.get(source.getLeft()).set(source.getRight(), sourceWeight);
+    Node start = new Node(Pair.of(0, 0), Direction.EAST, 0);
+    queue.add(new NodeHeat(start, 0));
+    seen.add(start);
 
-    PriorityQueue<Node> minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
-    minHeap.add(new Node(source, sourceWeight, sourceDirection, 1));
-
-    while (!minHeap.isEmpty()) {
-      Node currentNode = minHeap.poll();
-
-      Pair<Integer, Integer> currentVertex = currentNode.vertex;
-      int currentDistance = currentNode.distance;
-      int currentSteps = currentNode.steps;
-
-      if (currentDistance > distance.get(currentVertex.getLeft()).get(currentVertex.getRight())) {
-        continue;
+    while (!queue.isEmpty()) {
+      NodeHeat nodeHeat = queue.poll();
+      Node current = nodeHeat.node;
+      int heatLoss = nodeHeat.heatloss;
+      if (current.vertex.getLeft().equals(goal.getLeft()) && current.vertex.getRight().equals(goal.getRight()) && current.steps >= 1) {
+        return heatLoss;
       }
 
-      for (Pair<Pair<Integer, Integer>, Direction> neighbor : findNeighbors(currentNode, maxSteps)) {
-        Pair<Integer, Integer> neighborVertex = neighbor.getLeft();
-        Direction neighborDirection = neighbor.getRight();
-        int newDistance = currentDistance + input.get(neighborVertex.getLeft()).get(neighborVertex.getRight());
-        int newSteps = 1;
-        if (neighborDirection == currentNode.direction) {
-          newSteps = currentSteps + 1;
-        }
+      Set<Node> possibleNextNodes = current.direction.getNext().stream()
+          .filter(direction -> isValidNextMove(current, direction))
+          .map(direction -> getNextMove(current, direction))
+          .filter(node -> !seen.contains(node))
+          .collect(Collectors.toSet());
 
-        if (newDistance < distance.get(neighborVertex.getLeft()).get(neighborVertex.getRight())) {
-          distance.get(neighborVertex.getLeft()).set(neighborVertex.getRight(), newDistance);
-          Node newNode = new Node(neighborVertex, newDistance, neighborDirection, newSteps);
-          minHeap.add(newNode);
-          parentMap.put(newNode.vertex, currentNode.vertex);
-        }
+      for (Node next : possibleNextNodes) {
+        queue.add(new NodeHeat(next, heatLoss + input.get(next.vertex.getLeft()).get(next.vertex.getRight())));
+        seen.add(next);
       }
     }
-
-    return distance;
+    throw new IllegalStateException("No path to target found.");
   }
 
-  private List<Pair<Pair<Integer, Integer>, Direction>> findNeighbors(Node currentNode, int maxSteps) {
-    Pair<Integer, Integer> currentVertex = currentNode.vertex;
-    List<Pair<Pair<Integer, Integer>, Direction>> collect = Stream.of(
-            Pair.of(currentVertex.getLeft(), currentVertex.getRight() - 1),
-            Pair.of(currentVertex.getLeft(), currentVertex.getRight() + 1),
-            Pair.of(currentVertex.getLeft() - 1, currentVertex.getRight()),
-            Pair.of(currentVertex.getLeft() + 1, currentVertex.getRight()))
-        .filter(vertex -> vertex.getLeft() >= 0)
-        .filter(vertex -> vertex.getRight() >= 0)
-        .filter(vertex -> vertex.getLeft() < input.size())
-        .filter(vertex -> vertex.getRight() < input.get(0).size())
-        .map(vertex -> Pair.of(vertex, lessThanMaxSteps(vertex, currentNode)))
-        .filter(vertexAndDirection -> currentNode.steps < maxSteps || currentNode.direction != vertexAndDirection.getRight())
-        .filter(vertexAndDirection ->
-            currentNode.direction == null || !currentNode.direction.getOpposite().equals(vertexAndDirection.getRight()))
-        .collect(toList());
-    return collect;
+  private Node getNextMove(Node current, Direction direction) {
+    if (direction == Direction.NORTH) {
+      return new Node(
+          Pair.of(current.vertex.getLeft() - 1, current.vertex.getRight()),
+          direction,
+          direction == current.direction ? current.steps + 1 : 1);
+    }
+    if (direction == Direction.SOUTH) {
+      return new Node(
+          Pair.of(current.vertex.getLeft() + 1, current.vertex.getRight()),
+          direction,
+          direction == current.direction ? current.steps + 1 : 1);
+    }
+    if (direction == Direction.EAST) {
+      return new Node(
+          Pair.of(current.vertex.getLeft(), current.vertex.getRight() + 1),
+          direction,
+          direction == current.direction ? current.steps + 1 : 1);
+    }
+    if (direction == Direction.WEST) {
+      return new Node(
+          Pair.of(current.vertex.getLeft(), current.vertex.getRight() - 1),
+          direction,
+          direction == current.direction ? current.steps + 1 : 1);
+    }
+    throw new IllegalStateException("Could not find next move.");
   }
 
-  private Direction lessThanMaxSteps(Pair<Integer, Integer> vertex, Node currentNode) {
-    if (currentNode.vertex.getLeft() > vertex.getLeft()) {
-      return Direction.NORTH;
+  private boolean isValidNextMove(Node current, Direction direction) {
+    if (current.steps < 3 || current.direction != direction) {
+      if (direction == Direction.NORTH) {
+        return current.vertex.getLeft() - 1 >= 0;
+      }
+      if (direction == Direction.SOUTH) {
+        return current.vertex.getLeft() + 1 < input.size();
+      }
+      if (direction == Direction.EAST) {
+        return current.vertex.getRight() + 1 < input.get(0).size();
+      }
+      if (direction == Direction.WEST) {
+        return current.vertex.getRight() - 1 >= 0;
+      }
     }
-    if (currentNode.vertex.getLeft() < vertex.getLeft()) {
-      return Direction.SOUTH;
+    return false;
+  }
+
+  private static class NodeHeat {
+
+    Node node;
+    int heatloss;
+
+    NodeHeat(Node node, int heatloss) {
+      this.node = node;
+      this.heatloss = heatloss;
     }
-    if (currentNode.vertex.getRight() < vertex.getRight()) {
-      return Direction.EAST;
-    }
-    if (currentNode.vertex.getRight() > vertex.getRight()) {
-      return Direction.WEST;
-    }
-    throw new IllegalStateException("Could not find next direction.");
   }
 
   private static class Node {
 
     Pair<Integer, Integer> vertex;
-    int distance;
     Direction direction;
     int steps;
 
-
-    Node(Pair<Integer, Integer> vertex, int distance, Direction direction, int steps) {
+    Node(Pair<Integer, Integer> vertex, Direction direction, int steps) {
       this.vertex = vertex;
-      this.distance = distance;
       this.direction = direction;
       this.steps = steps;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      Node node = (Node) o;
+      return steps == node.steps &&
+          Objects.equals(vertex, node.vertex) &&
+          direction == node.direction;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(vertex, direction, steps);
     }
   }
 }
