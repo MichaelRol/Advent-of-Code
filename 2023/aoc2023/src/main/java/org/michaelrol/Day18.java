@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,8 +22,6 @@ public class Day18 implements Day {
 
   private final List<DigPlan> inputPart1 = new ArrayList<>();
   private final List<DigPlan> inputPart2 = new ArrayList<>();
-  private Set<Pair<Integer, Integer>> bordersPart1 = new HashSet<>();
-  private Set<Pair<Integer, Integer>> bordersPart2 = new HashSet<>();
 
   public Day18(String inputPath) {
     ClassLoader classLoader = Day1.class.getClassLoader();
@@ -50,39 +49,69 @@ public class Day18 implements Day {
   @Override
   public long Part1() {
     Pair<Integer, Integer> currentPos = Pair.of(0, 0);
-    bordersPart1.add(currentPos);
+    Set<Pair<Integer, Integer>> borders = new HashSet<>();
+    borders.add(currentPos);
     for (DigPlan digPlan : inputPart1) {
       if (digPlan.direction == Direction.UP) {
         for (int i = 0; i < digPlan.length; i++) {
           currentPos = Pair.of(currentPos.getLeft() - 1, currentPos.getRight());
-          bordersPart1.add(currentPos);
+          borders.add(currentPos);
         }
       } else if (digPlan.direction == Direction.DOWN) {
         for (int i = 0; i < digPlan.length; i++) {
           currentPos = Pair.of(currentPos.getLeft() + 1, currentPos.getRight());
-          bordersPart1.add(currentPos);
+          borders.add(currentPos);
         }
       } else if (digPlan.direction == Direction.LEFT) {
         for (int i = 0; i < digPlan.length; i++) {
           currentPos = Pair.of(currentPos.getLeft(), currentPos.getRight() - 1);
-          bordersPart1.add(currentPos);
+          borders.add(currentPos);
         }
       } else if (digPlan.direction == Direction.RIGHT) {
         for (int i = 0; i < digPlan.length; i++) {
           currentPos = Pair.of(currentPos.getLeft(), currentPos.getRight() + 1);
-          bordersPart1.add(currentPos);
+          borders.add(currentPos);
         }
       }
     }
-    int startX = bordersPart1.stream().mapToInt(Pair::getLeft).min().getAsInt();
-    int startY = bordersPart1.stream().filter(pair -> pair.getLeft() == startX).mapToInt(Pair::getRight).min().getAsInt();
-    floodFill(startX + 1, startY + 1, bordersPart1);
-    return bordersPart1.size();
+    int startX = borders.stream().mapToInt(Pair::getLeft).min().getAsInt();
+    int startY = borders.stream().filter(pair -> pair.getLeft() == startX).mapToInt(Pair::getRight).min().getAsInt();
+    floodFill(startX + 1, startY + 1, borders);
+    return borders.size();
   }
 
   @Override
   public long Part2() {
-    return 0;
+    Pair<Integer, Integer> currentPos = Pair.of(0, 0);
+    List<Pair<Integer, Integer>> vertices = new ArrayList<>();
+    Collections.reverse(inputPart2);
+    int trenchLength = 0;
+    for (DigPlan digPlan : inputPart2) {
+      trenchLength += digPlan.length;
+      if (digPlan.direction == Direction.UP) {
+        currentPos = Pair.of(currentPos.getLeft() - digPlan.length, currentPos.getRight());
+        vertices.add(currentPos);
+      } else if (digPlan.direction == Direction.DOWN) {
+        currentPos = Pair.of(currentPos.getLeft() + digPlan.length, currentPos.getRight());
+        vertices.add(currentPos);
+      } else if (digPlan.direction == Direction.LEFT) {
+        currentPos = Pair.of(currentPos.getLeft(), currentPos.getRight() - digPlan.length);
+        vertices.add(currentPos);
+      } else if (digPlan.direction == Direction.RIGHT) {
+        currentPos = Pair.of(currentPos.getLeft(), currentPos.getRight() + digPlan.length);
+        vertices.add(currentPos);
+      }
+    }
+    return shoelaceTheorem(vertices, trenchLength);
+  }
+
+  private long shoelaceTheorem(List<Pair<Integer, Integer>> vertices, int trenchLength) {
+    long sum = 0;
+    for (int i = 0; i < vertices.size(); i++) {
+      sum += (long) vertices.get(i).getLeft() * vertices.get((i + 1) % vertices.size()).getRight();
+      sum -= (long) vertices.get((i + 1) % vertices.size()).getLeft() * vertices.get(i).getRight();
+    }
+    return (sum / 2) + (trenchLength / 2) + 1;
   }
 
   private void floodFill(int left, int right, Set<Pair<Integer, Integer>> borders) {
