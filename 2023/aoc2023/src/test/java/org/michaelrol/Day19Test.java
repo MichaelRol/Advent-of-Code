@@ -20,7 +20,7 @@ public class Day19Test {
   @Test
   void testPart2() {
     Day19 day19 = new Day19("test-input/test19-1.txt");
-    assertThat(day19.Part2()).isEqualTo(0);
+    assertThat(day19.Part2()).isEqualTo(167409079868000L);
   }
 
 }

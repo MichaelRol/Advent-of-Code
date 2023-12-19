@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Day19 implements Day {
 
@@ -68,7 +69,27 @@ public class Day19 implements Day {
   public long Part2() {
     long sum = 0;
     Map<String, Map<String, Integer>> pathsToA = new HashMap<>();
-    findPathsToA(pathsToA, "in");
+    List<Map<String, Map<String, Integer>>> results = findPathsToA(pathsToA, "in");
+    for (Map<String, Map<String, Integer>> result : results) {
+      List<Integer> maxsAndMins = new ArrayList<>(List.of(0, 4001, 0, 4001, 0, 4001, 0, 4001));
+      List<String> keys = new ArrayList<>(List.of("a", "x", "s", "m"));
+      for (int i = 0; i < keys.size(); i++) {
+        String key = keys.get(i);
+        if (result.containsKey(key)) {
+          if (result.get(key).containsKey(">")) {
+            maxsAndMins.set(i * 2, result.get(key).get(">"));
+          }
+          if (result.get(key).containsKey("<")) {
+            maxsAndMins.set(i * 2 + 1, result.get(key).get("<"));
+          }
+        }
+      }
+      long product = 1;
+      for (int i = 0; i < maxsAndMins.size(); i += 2) {
+        product *= (maxsAndMins.get(i + 1) - maxsAndMins.get(i)) - 1;
+      }
+      sum += product;
+    }
     return sum;
   }
 
@@ -77,35 +98,58 @@ public class Day19 implements Day {
       String curr) {
 
     List<Map<String, Map<String, Integer>>> paths = new ArrayList<>();
+    Map<String, Map<String, Integer>> applyFalse = deepCopyOuterMap(pathsToA);
     for (Rule rule : workflows.get(curr).rules) {
-      Map<String, Integer> comparisons = pathsToA.getOrDefault(rule.feature, new HashMap<>());
-      String comparator = rule.comparator;
-      int value = rule.value;
-      String ifTrue = rule.ifTrue;
-      if (comparator.equals(">")) {
-        Integer limit = comparisons.getOrDefault(">", 0);
-        if (value > limit) {
-          limit = value;
-        }
-        comparisons.put(">", limit);
-      } else if (comparator.equals("<")) {
-        Integer limit = comparisons.getOrDefault("<", Integer.MAX_VALUE);
-        if (value < limit) {
-          limit = value;
-        }
-        comparisons.put("<", limit);
-      }
-      if (ifTrue.equals("A")) {
-        paths.add(pathsToA);
-      } else if (!ifTrue.equals("R")) {
-        paths.addAll(findPathsToA(new HashMap<>(pathsToA), ifTrue));
+      Map<String, Map<String, Integer>> applyTrue = addRuleToPath(deepCopyOuterMap(applyFalse), rule, true);
+      applyFalse = addRuleToPath(deepCopyOuterMap(applyFalse), rule, false);
+      if (rule.ifTrue.equals("A")) {
+        paths.add(applyTrue);
+      } else if (!rule.ifTrue.equals("R")) {
+        paths.addAll(findPathsToA(deepCopyOuterMap(applyTrue), rule.ifTrue));
       }
     }
-
-
+    if (workflows.get(curr).otherwise.equals("A")) {
+      paths.add(deepCopyOuterMap(applyFalse));
+    } else if (!workflows.get(curr).otherwise.equals("R")) {
+      paths.addAll(findPathsToA(deepCopyOuterMap(applyFalse), workflows.get(curr).otherwise));
+    }
     return paths;
   }
 
+  private Map<String, Map<String, Integer>> addRuleToPath(
+      Map<String, Map<String, Integer>> pathsToA,
+      Rule rule,
+      boolean b) {
+
+    Map<String, Integer> comparisons = pathsToA.getOrDefault(rule.feature, new HashMap<>());
+    String comparator = rule.comparator;
+    int value = rule.value;
+    if ((comparator.equals(">") && b) || (comparator.equals("<") && !b)) {
+      Integer limit = comparisons.getOrDefault(">", 0);
+      if (value - (b ? 0 : 1) > limit) {
+        limit = value - (b ? 0 : 1);
+      }
+      comparisons.put(">", limit);
+    } else {
+      Integer limit = comparisons.getOrDefault("<", Integer.MAX_VALUE);
+      if (value + (b ? 0 : 1) < limit) {
+        limit = value + (b ? 0 : 1);
+      }
+      comparisons.put("<", limit);
+    }
+    pathsToA.put(rule.feature, comparisons);
+    return pathsToA;
+  }
+
+  private static Map<String, Map<String, Integer>> deepCopyOuterMap(Map<String, Map<String, Integer>> map) {
+    return map.entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> deepCopyInnerMap(e.getValue())));
+  }
+
+  private static Map<String, Integer> deepCopyInnerMap(Map<String, Integer> map) {
+    return map.entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+  }
 
   private static class Workflow {
 
