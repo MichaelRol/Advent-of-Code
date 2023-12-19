@@ -13,10 +13,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -50,7 +48,6 @@ public class Day17 implements Day {
   }
 
   private final List<List<Integer>> input = new ArrayList<>();
-  private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> parentMap = new HashMap<>();
 
   public Day17(String inputPath) {
     ClassLoader classLoader = Day1.class.getClassLoader();
