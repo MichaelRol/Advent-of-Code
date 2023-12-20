@@ -14,16 +14,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.NotImplementedException;
 
 public class Day20 implements Day {
 
-  private final Map<String, Module> input = new HashMap<>();
+  private final Map<String, Module> input1 = new HashMap<>();
+  private final Map<String, Module> input2 = new HashMap<>();
 
   private static final Map<Boolean, Long> pulses = new HashMap<>(Map.of(true, 0L, false, 0L));
-  private static Boolean rxLow = false;
+  private static long presses = 0;
+  private static long jgLoop = 0;
+  private static long kvLoop = 0;
+  private static long rzLoop = 0;
+  private static long mrLoop = 0;
+
 
   public Day20(String inputPath) {
     ClassLoader classLoader = Day1.class.getClassLoader();
@@ -33,13 +38,22 @@ public class Day20 implements Day {
       // Read lines and add them to the List
       String line;
       while ((line = reader.readLine()) != null) {
-        Module module = Module.parse(line);
-        input.put(module.getName(), module);
+        Module module1 = Module.parse(line);
+        input1.put(module1.getName(), module1);
+        Module module2 = Module.parse(line);
+        input2.put(module2.getName(), module2);
       }
-      for (String name : input.keySet()) {
-        for (String target : input.get(name).getTargets()) {
-          if (input.containsKey(target) && input.get(target) instanceof Conjunction) {
-            ((Conjunction) input.get(target)).inputMap.put(name, false);
+      for (String name : input1.keySet()) {
+        for (String target : input1.get(name).getTargets()) {
+          if (input1.containsKey(target) && input1.get(target) instanceof Conjunction) {
+            ((Conjunction) input1.get(target)).inputMap.put(name, false);
+          }
+        }
+      }
+      for (String name : input2.keySet()) {
+        for (String target : input2.get(name).getTargets()) {
+          if (input2.containsKey(target) && input2.get(target) instanceof Conjunction) {
+            ((Conjunction) input2.get(target)).inputMap.put(name, false);
           }
         }
       }
@@ -55,15 +69,7 @@ public class Day20 implements Day {
     for (int i = 0; i < 1000; i++) {
       Queue<Module> queue = new ArrayDeque<>();
       queue.add(button);
-      while (!queue.isEmpty()) {
-        Module module = queue.poll();
-        module.outputSignal(input);
-        queue.addAll(module.getTargets().stream()
-            .filter(input::containsKey)
-            .map(input::get)
-            .filter(Module::canPulse)
-            .collect(Collectors.toList()));
-      }
+      processSignals(queue, input1);
     }
     return pulses.get(true) * pulses.get(false);
   }
@@ -71,22 +77,28 @@ public class Day20 implements Day {
   @Override
   public long Part2() {
     Button button = new Button();
-    long presses = 0;
-    while (!rxLow) {
+    while (kvLoop == 0 || jgLoop == 0 || rzLoop == 0 || mrLoop == 0) {
       Queue<Module> queue = new ArrayDeque<>();
       queue.add(button);
       presses++;
-      while (!queue.isEmpty()) {
-        Module module = queue.poll();
-        module.outputSignal(input);
-        queue.addAll(module.getTargets().stream()
-            .filter(input::containsKey)
-            .map(input::get)
-            .filter(Module::canPulse)
-            .collect(Collectors.toList()));
+      processSignals(queue, input2);
+    }
+    return kvLoop * jgLoop * rzLoop * mrLoop;
+  }
+
+  private void processSignals(Queue<Module> queue, Map<String, Module> modules) {
+    while (!queue.isEmpty()) {
+      Module module = queue.poll();
+      module.outputSignal(modules);
+      for (String target : module.getTargets()) {
+        if (modules.containsKey(target)) {
+          Module targetModule = modules.get(target);
+          if (targetModule.canPulse()) {
+            queue.add(targetModule);
+          }
+        }
       }
     }
-    return presses;
   }
 
   private interface Module {
@@ -94,8 +106,6 @@ public class Day20 implements Day {
     public abstract void receiveInput(boolean pulse, String sender);
 
     public abstract void outputSignal(Map<String, Module> modules);
-
-    public abstract boolean getState();
 
     public abstract List<String> getTargets();
 
@@ -145,19 +155,11 @@ public class Day20 implements Day {
     @Override
     public void outputSignal(Map<String, Module> modules) {
       targets.forEach(target -> {
-        if (target.equals("rx") && !getState()) {
-          rxLow = true;
-        }
         if (modules.containsKey(target)) {
-          modules.get(target).receiveInput(getState(), getName());
+          modules.get(target).receiveInput(state, getName());
         }
-        pulses.put(getState(), pulses.get(getState()) + 1);
+        pulses.put(state, pulses.get(state) + 1);
       });
-    }
-
-    @Override
-    public boolean getState() {
-      return state;
     }
 
     @Override
@@ -187,6 +189,15 @@ public class Day20 implements Day {
       this.targets = targets;
     }
 
+    public boolean getState() {
+      for (Boolean value : inputMap.values()) {
+        if (!value) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     @Override
     public void receiveInput(boolean pulse, String sender) {
       inputMap.put(sender, pulse);
@@ -195,19 +206,28 @@ public class Day20 implements Day {
     @Override
     public void outputSignal(Map<String, Module> modules) {
       getTargets().forEach(target -> {
-        if (target.equals("rx") && !getState()) {
-          rxLow = true;
+        boolean state = getState();
+        if (state) {
+          switch (name) {
+            case "kv":
+              kvLoop = presses;
+              break;
+            case "jg":
+              jgLoop = presses;
+              break;
+            case "rz":
+              rzLoop = presses;
+              break;
+            case "mr":
+              mrLoop = presses;
+              break;
+          }
         }
         if (modules.containsKey(target)) {
-          modules.get(target).receiveInput(getState(), getName());
+          modules.get(target).receiveInput(state, getName());
         }
-        pulses.put(getState(), pulses.get(getState()) + 1);
+        pulses.put(state, pulses.get(state) + 1);
       });
-    }
-
-    @Override
-    public boolean getState() {
-      return !inputMap.values().stream().allMatch(b -> b);
     }
 
     @Override
@@ -252,11 +272,6 @@ public class Day20 implements Day {
     }
 
     @Override
-    public boolean getState() {
-      return state;
-    }
-
-    @Override
     public List<String> getTargets() {
       return targets;
     }
@@ -286,11 +301,6 @@ public class Day20 implements Day {
         modules.get(target).receiveInput(false, getName());
         pulses.put(false, pulses.get(false) + 1);
       });
-    }
-
-    @Override
-    public boolean getState() {
-      throw new NotImplementedException("Buttons do not have state.");
     }
 
     @Override

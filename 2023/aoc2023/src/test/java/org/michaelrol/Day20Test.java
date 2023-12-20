@@ -16,11 +16,4 @@ public class Day20Test {
     Day20 day20 = new Day20("test-input/test20-1.txt");
     assertThat(day20.Part1()).isEqualTo(11687500);
   }
-
-  @Test
-  void testPart2() {
-    Day20 day20 = new Day20("test-input/test20-1.txt");
-    assertThat(day20.Part2()).isEqualTo(0);
-  }
-
 }
