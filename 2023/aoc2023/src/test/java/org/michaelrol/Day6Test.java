@@ -1,8 +1,4 @@
-/*
- * Copyright (C) 2023 - present by OpenGamma Inc. and the OpenGamma group of companies
- *
- * Please see distribution for license.
- */
+
 package org.michaelrol;
 
 import static org.assertj.core.api.Assertions.assertThat;
