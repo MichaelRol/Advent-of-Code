@@ -38,7 +38,6 @@ public class Day16 implements Day {
     }
   }
 
-
   @Override
   public long Part1() {
     List<List<Character>> newEnergy = getNewBoard();
