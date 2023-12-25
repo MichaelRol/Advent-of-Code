@@ -1,8 +1,3 @@
-/*
- * Copyright (C) 2023 - present by OpenGamma Inc. and the OpenGamma group of companies
- *
- * Please see distribution for license.
- */
 package org.michaelrol;
 
 import java.io.BufferedReader;
@@ -38,6 +33,11 @@ public class Day24 implements Day {
   @Override
   public long Part1() {
     return runPart1(200000000000000L, 400000000000000L);
+  }
+
+  @Override
+  public long Part2() {
+    return 0;
   }
 
   @VisibleForTesting
@@ -101,11 +101,6 @@ public class Day24 implements Day {
     double x = ((m1 * hail1.x) - hail1.y + hail2.y - (m2 * hail2.x)) / (m1 - m2);
     double y = m1 * (x - hail1.x) + hail1.y;
     return Pair.of(x, y);
-  }
-
-  @Override
-  public long Part2() {
-    return 0;
   }
 
   private static class Hail {
