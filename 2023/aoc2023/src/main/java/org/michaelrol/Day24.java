@@ -37,6 +37,65 @@ public class Day24 implements Day {
 
   @Override
   public long Part2() {
+    for (int vx = -500; vx < 500; vx++) {
+      for (int vy = -500; vy < 500; vy++) {
+        List<Hail> updatedHail = new ArrayList<>();
+        for (Hail hail : input) {
+          updatedHail.add(hail.adjustVelocity(vx, vy, 0));
+        }
+        List<Pair<Double, Double>> intersections = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+          for (int j = i + 1; j < 5; j++) {
+            Pair<Double, Double> intersection = findIntersection(updatedHail.get(i), updatedHail.get(j));
+            if (intersection != null && !intersection.getRight().isNaN() && !intersection.getLeft().isNaN()) {
+              intersections.add(intersection);
+            }
+          }
+        }
+        boolean allSame = true;
+        for (Pair<Double, Double> intersection : intersections) {
+          if (Math.abs(intersection.getLeft() - intersections.get(0).getLeft()) > 1d ||
+              Math.abs(intersection.getRight() - intersections.get(0).getRight()) > 1d) {
+
+            allSame = false;
+            break;
+          }
+        }
+        if (allSame) {
+          for (int vz = -500; vz < 500; vz++) {
+            List<Hail> updatedHailAgain = new ArrayList<>();
+            for (Hail hail : updatedHail) {
+              updatedHailAgain.add(hail.adjustVelocity(0, 0, vz));
+            }
+            List<Pair<Double, Double>> intersectionsAgain = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+              for (int j = i + 1; j < 5; j++) {
+                Pair<Double, Double> intersection = findIntersectionZx(
+                    updatedHailAgain.get(i),
+                    updatedHailAgain.get(j));
+                if (intersection != null && !intersection.getRight().isNaN() && !intersection.getLeft().isNaN()) {
+                  intersectionsAgain.add(intersection);
+                }
+              }
+            }
+            boolean allSameAgain = true;
+            for (Pair<Double, Double> intersection : intersectionsAgain) {
+              if (Math.abs(intersection.getLeft() - intersectionsAgain.get(0).getLeft()) > 1d ||
+                  Math.abs(intersection.getRight() - intersectionsAgain.get(0).getRight()) > 1d) {
+
+                allSameAgain = false;
+                break;
+              }
+            }
+            if (allSameAgain) {
+              return (long) (intersections.get(0).getLeft() +
+                  intersections.get(0).getRight() +
+                  intersectionsAgain.get(0).getRight());
+            }
+          }
+        }
+      }
+    }
     return 0;
   }
 
@@ -60,6 +119,32 @@ public class Day24 implements Day {
       }
     }
     return count;
+  }
+
+  private Pair<Double, Double> findIntersection(Hail hail1, Hail hail2) {
+    double m1 = (double) hail1.vY / hail1.vX;
+    double m2 = (double) hail2.vY / hail2.vX;
+
+    if (m1 == m2) {
+      return null;
+    }
+
+    double x = ((m1 * hail1.x) - hail1.y + hail2.y - (m2 * hail2.x)) / (m1 - m2);
+    double y = m1 * (x - hail1.x) + hail1.y;
+    return Pair.of(x, y);
+  }
+
+  private Pair<Double, Double> findIntersectionZx(Hail hail1, Hail hail2) {
+    double m1 = (double) hail1.vZ / hail1.vX;
+    double m2 = (double) hail2.vZ / hail2.vX;
+
+    if (m1 == m2) {
+      return null;
+    }
+
+    double x = ((m1 * hail1.x) - hail1.z + hail2.z - (m2 * hail2.x)) / (m1 - m2);
+    double z = m1 * (x - hail1.x) + hail1.z;
+    return Pair.of(x, z);
   }
 
   private boolean isInFuture(Pair<Double, Double> intersection, Hail hail1, Hail hail2) {
@@ -88,19 +173,6 @@ public class Day24 implements Day {
       return false;
     }
     return true;
-  }
-
-  private Pair<Double, Double> findIntersection(Hail hail1, Hail hail2) {
-    double m1 = (double) hail1.vY / hail1.vX;
-    double m2 = (double) hail2.vY / hail2.vX;
-
-    if (m1 == m2) {
-      return null;
-    }
-
-    double x = ((m1 * hail1.x) - hail1.y + hail2.y - (m2 * hail2.x)) / (m1 - m2);
-    double y = m1 * (x - hail1.x) + hail1.y;
-    return Pair.of(x, y);
   }
 
   private static class Hail {
@@ -133,6 +205,10 @@ public class Day24 implements Day {
       this.vX = vX;
       this.vY = vY;
       this.vZ = vZ;
+    }
+
+    public Hail adjustVelocity(long dx, long dy, long dz) {
+      return new Hail(x, y, z, vX - dx, vY - dy, vZ - dz);
     }
   }
 }

@@ -64,7 +64,7 @@ public class Day22 implements Day {
 
   @Override
   public long Part1() {
-    Map<Triple<Integer, Integer, Integer>, Integer> blockMap = produceBlockMap();
+    Map<Triple<Integer, Integer, Integer>, Integer> blockMap = produceBlockMap(); //TODO: use tree
     Map<Integer, Set<Integer>> supportMap = new HashMap<>();
     for (List<Triple<Integer, Integer, Integer>> triples : input) {
       List<Triple<Integer, Integer, Integer>> triplesCopy = new ArrayList<>(triples);

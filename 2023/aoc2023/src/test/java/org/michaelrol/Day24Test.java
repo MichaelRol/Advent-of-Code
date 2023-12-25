@@ -15,7 +15,7 @@ public class Day24Test {
   @Test
   void testPart2() {
     Day24 day24 = new Day24("test-input/test24-1.txt");
-    assertThat(day24.Part2()).isEqualTo(0);
+    assertThat(day24.Part2()).isEqualTo(47);
   }
 
 }
