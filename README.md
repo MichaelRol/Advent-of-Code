@@ -24,7 +24,7 @@ $ ts-node run [Day number] [Part number]
 or
 $ ts-node run [Day number]
 to run both parts of a single day
-ts-node run
+$ ts-node run
 to run all problems
 can also replace "run" with "test" to run the test cases
 ```
