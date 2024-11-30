@@ -1,7 +1,9 @@
 # Advent of Code
 A repository for holding my solutions to the Advent of Code challenges. More info: [https://adventofcode.com/](https://adventofcode.com/)
 
-Each year is written in a different programming language and all solutions are designed to complete within 15 seconds on relatively basic hardware. 
+Each year is written in a different programming language, and all solutions are designed to be completed within 15 seconds on relatively basic hardware. 
+
+2024 is written in Typescript. I have written a fair amount of Typescript this year, but I plan to use this opportunity to become more idiomatic. 
 
 2023 is written in Java. I have decided to take a year off from abusing myself. 
 
@@ -14,6 +16,18 @@ Each year is written in a different programming language and all solutions are d
 2019 is written in Java.
 
 ## Running Challenges
+
+2024 challenges can be run using
+
+```console
+$ ts-node run [Day number] [Part number]
+or
+$ ts-node run [Day number]
+to run both parts of a single day
+ts-node run
+to run all problems
+can also replace "run" with "test" to run the test cases
+```
 
 2022 challenges can be run using
 
