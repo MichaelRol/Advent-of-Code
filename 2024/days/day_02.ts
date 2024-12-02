@@ -26,61 +26,21 @@ function verifyRowWithTolerance(row: number[]): boolean {
     const diffs: number[] = calcDiffs(row);
     if (checkDiffs(diffs)) return true;
     const sign = Math.sign(diffs.map(num => Math.sign(num!)).reduce((a, b) => a + b));
-    var badIndex = -1;
-    for (var i = 1; i < row.length - 1; i++) {
-        if (badIndex === i) {
-            continue;
-        }
-        const beforeIndex = badIndex === i - 1 ? i - 2 : i - 1;
-        const beforeCheck = verifyDiff(row[i] - row[beforeIndex], sign);
-        const afterCheck = verifyDiff(row[i + 1] - row[i], sign);
-        if ((!beforeCheck || !afterCheck) && badIndex !== -1) {
-            return false;
-        }
-        if (!beforeCheck && !afterCheck) {
-            const skipMiddle = verifyDiff(row[i + 1] - row[i - 1], sign);
-            if (skipMiddle) {
-                badIndex = i;
-            } else {
-                return false;
-            }
-        } else if (!beforeCheck) {
-            if (i === 1) {
-                const checkSelected = verifyDiff(row[i + 1] - row[i - 1], sign);
-                if (checkSelected) {
-                    badIndex = 1;
-                } else {
-                    badIndex = 0;
-                }
-                continue;
-            }
-            const checkSelected = verifyDiff(row[i + 1] - row[i - 1], sign);
-            const checkPrevious = verifyDiff(row[i] - row[i - 2], sign);
-            if (!checkPrevious && !checkSelected) {
-                return false;
-            }
-            if (!checkPrevious && checkSelected) {
-                badIndex = i;
-            } else {
-                badIndex = i - 1;
-            }
-        } else if (!afterCheck) {
-            if (i + 1 === row.length - 1) {
-                continue;
-            }
-            const checkSelected = verifyDiff(row[i + 1] - row[i - 1], sign);
-            const checkNext = verifyDiff(row[i + 2] - row[i], sign);
-            if (!checkNext && !checkSelected) {
-                return false;
-            }
-            if (checkNext && !checkSelected) {
-                badIndex = i + 1;
-            } else {
-                badIndex = i;
-            }
-        }
+    const checks = diffs.map(diff => verifyDiff(diff, sign));
+    var badDiffs = [];
+    for (var i = 0; i < diffs.length; i++) {
+        if (!checks[i]) badDiffs.push(i);
     }
-    return true;
+    if (badDiffs.length > 2) return false;
+    if (badDiffs.length === 2) {
+        if (badDiffs[1] - badDiffs[0] !== 1) return false;
+        return verifyDiff(row[badDiffs[1] + 1] - row[badDiffs[0]], sign);
+    }
+    if (badDiffs[0] === diffs.length - 1 || badDiffs[0] === 0) return true;
+    return (
+        verifyDiff(row[badDiffs[0] + 1] - row[badDiffs[0] - 1], sign) ||
+        verifyDiff(row[badDiffs[0] + 2] - row[badDiffs[0]], sign)
+    );
 }
 
 function verifyDiff(diff: number, sign: number) {
