@@ -2,7 +2,7 @@ import { readChars } from "../utils/input";
 
 export function part1(input: string) {
     const levels: number[][] = readChars(input, " ", parseInt);
-    return levels.filter((row: number[]) => checkDiffs(calcDiffs(row))).length;
+    return levels.filter((row: number[]) => checkDiffs(calcDiffs(row)) !== 0).length;
 }
 
 export function part2(input: string) {
@@ -19,13 +19,15 @@ function calcDiffs(row: number[]) {
 }
 
 function checkDiffs(diffs: number[]) {
-    return diffs.every(diff => diff <= 3 && diff >= 1) || diffs.every(diff => diff >= -3 && diff <= -1);
+    if (diffs.every(diff => diff <= 3 && diff >= 1)) return 1;
+    if (diffs.every(diff => diff >= -3 && diff <= -1)) return -1;
+    return 0;
 }
 
 function verifyRowWithTolerance(row: number[]): boolean {
     const diffs: number[] = calcDiffs(row);
-    if (checkDiffs(diffs)) return true;
-    const sign = Math.sign(diffs.map(num => Math.sign(num!)).reduce((a, b) => a + b));
+    const sign = checkDiffs(diffs)
+    if (sign !== 0) return true;
     const checks = diffs.map(diff => verifyDiff(diff, sign));
     var badDiffs = [];
     for (var i = 0; i < diffs.length; i++) {
