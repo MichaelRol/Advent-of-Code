@@ -9,6 +9,10 @@ export function readChars<T>(input: string, delimiter = "", postProcessor: (x: s
         .map(line => line.split(delimiter).map(x => postProcessor(x)));
 }
 
+export function splitSections(input: string, delimiter = "\n\n"): string[] {
+    return input.split(delimiter);
+}
+
 function identity(x: any) {
     return x;
 }
