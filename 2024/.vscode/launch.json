@@ -8,8 +8,8 @@
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/ts-node",
         "runtimeArgs": [
           "--transpile-only",
-          "test",
-          "5",
+          "run",
+          "6",
           "2"
         ],
         "cwd": "${workspaceRoot}",
