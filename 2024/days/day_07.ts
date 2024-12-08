@@ -4,7 +4,10 @@ export function part1(rawInput: string) {
     const eqs = readChars(rawInput, ": ", x => x).map((line: string[]) => {
         return {
             target: parseInt(line[0]),
-            nums: line[1].split(" ").map(num => parseInt(num)).reverse()
+            nums: line[1]
+                .split(" ")
+                .map(num => parseInt(num))
+                .reverse()
         };
     });
     let count = 0;
@@ -18,7 +21,10 @@ export function part2(rawInput: string) {
     const eqs = readChars(rawInput, ": ", x => x).map((line: string[]) => {
         return {
             target: parseInt(line[0]),
-            nums: line[1].split(" ").map(num => parseInt(num)).reverse()
+            nums: line[1]
+                .split(" ")
+                .map(num => parseInt(num))
+                .reverse()
         };
     });
     let count = 0;
@@ -46,8 +52,12 @@ function calc2(target: number, nums: number[]): boolean {
         else return false;
     }
     const scale = nums[0].toString().length;
-    if (target % (10 ** scale) === nums[0]) {
-        return calc2(target / nums[0], nums.slice(1)) || calc2(target - nums[0], nums.slice(1)) || calc2(Math.floor(target / (10 ** scale)), nums.slice(1));
+    if (target % 10 ** scale === nums[0]) {
+        return (
+            calc2(target / nums[0], nums.slice(1)) ||
+            calc2(target - nums[0], nums.slice(1)) ||
+            calc2(Math.floor(target / 10 ** scale), nums.slice(1))
+        );
     }
     if (target % nums[0] === 0) {
         return calc2(target / nums[0], nums.slice(1)) || calc2(target - nums[0], nums.slice(1));
