@@ -4,26 +4,8 @@ import { readChars } from "../utils/input";
 export function part1(rawInput: string) {
     const map: string[][] = readChars(rawInput);
     const start: [number, number] = findStart(map);
-    const guard: Guard = new Guard(Direction.NORTH, start);
     map[start[0]][start[1]] = "X";
-    let count = 1;
-    while (
-        typeof map[guard.next()[0]] !== "undefined" &&
-        typeof map[guard.next()[0]][guard.next()[1]] !== "undefined"
-    ) {
-        const nextCoords: [number, number] = guard.next();
-        const next: string = map[nextCoords[0]][nextCoords[1]];
-        if (next === "#") {
-            guard.turn();
-        } else if (next === ".") {
-            map[nextCoords[0]][nextCoords[1]] = "X";
-            count++;
-            guard.move();
-        } else if (next === "X") {
-            guard.move();
-        }
-    }
-    return count;
+    return findPath(map, start).length + 1;
 }
 
 export async function part2(rawInput: string) {
