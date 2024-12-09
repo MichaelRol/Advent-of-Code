@@ -20,7 +20,7 @@ export function part1(rawInput: string) {
             let gapSize = parseInt(rawInput.at(i)!);
             while (gapSize > 0) {
                 count += lastCellNum * memIndex;
-                memIndex++
+                memIndex++;
                 gapSize--;
                 lastCellCount--;
                 if (lastCellCount == 0) {
@@ -35,44 +35,48 @@ export function part1(rawInput: string) {
 }
 
 export function part2(rawInput: string) {
-    const length = rawInput.length;
+    const nums: number[] = rawInput.split("").map(num => parseInt(num));
+    const length = nums.length;
     let lastInputIndex = (length - 1) % 2 === 0 ? length - 1 : length - 2;
-    let lastCellCount = parseInt(rawInput.at(lastInputIndex)!);
-    const alreadyMoved: number[] = [];
+    let lastCellCount = nums.at(lastInputIndex)!;
+    let toMove: number[] = [];
+    for (let x = lastInputIndex; x > 0; x -= 2) {
+        toMove.push(x);
+    }
     let count = 0;
     let memIndex = 0;
-    for (let i = 0; i < rawInput.length; i++) {
-        if (alreadyMoved.includes(i)) {
-            memIndex += parseInt(rawInput.at(i)!)
-            continue;
-        }
-        if (i > lastInputIndex) {
+    for (let i = 0; i < nums.length; i++) {
+        if (i > toMove[0]) {
             break;
         }
         if (i % 2 === 0) {
-            const numOfCells = lastInputIndex === i ? lastCellCount : parseInt(rawInput.at(i)!);
+            if (!toMove.includes(i)) {
+                memIndex += nums.at(i)!;
+                continue;
+            }
+            const numOfCells = lastInputIndex === i ? lastCellCount : nums.at(i)!;
             const cellNum = i / 2;
             for (let j = 0; j < numOfCells; j++) {
                 count += memIndex * cellNum;
                 memIndex++;
             }
         } else {
-            let gapSize = parseInt(rawInput.at(i)!);
-            let x = lastInputIndex;
-            for (; x > i; x -= 2) {
-                if (alreadyMoved.includes(x)) continue;
-                const numOfCells = parseInt(rawInput.at(x)!);
+            let gapSize = nums.at(i)!;
+            const moved: number[] = [];
+            for (let x = 0; x < toMove.length; x++) {
+                const numOfCells = nums.at(toMove.at(x)!)!;
                 if (numOfCells <= gapSize) {
-                    const cellNum = x / 2;
+                    const cellNum = toMove.at(x)! / 2;
                     for (let j = 0; j < numOfCells; j++) {
                         count += memIndex * cellNum;
                         memIndex++;
                         gapSize--;
                     }
-                    alreadyMoved.push(x);
+                    moved.push(toMove.at(x)!);
                     if (gapSize === 0) break;
                 }
             }
+            toMove = toMove.filter(num => !moved.includes(num) && num > i);
             memIndex += gapSize;
         }
     }

@@ -57,8 +57,7 @@ export function part2(rawInput: string) {
             }
         }
     }
-    const antinodesInRange = antinodes
-        .concat(Array.from(nodes.values()).flat());
+    const antinodesInRange = antinodes.concat(Array.from(nodes.values()).flat());
     const set = new Set(antinodesInRange.map(pair => JSON.stringify(pair)));
     return set.size;
 }
