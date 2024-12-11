@@ -9,21 +9,25 @@ export function part2(rawInput: string) {
 }
 
 function blink(stones: number[], repetitions: number): number {
+    let stonesMap: Map<number, number> = new Map();
+    for (const stone of stones) {
+        stonesMap.set(stone, (stonesMap.get(stone) || 0) + 1);
+    }
     for (let i = 0; i < repetitions; i++) {
-        const newStones: number[] = [];
-        for (const stone of stones) {
-            if (stone === 0) newStones.push(1);
+        const newStonesMap: Map<number, number> = new Map();
+        for (const stone of stonesMap.keys()) {
+            if (stone === 0) newStonesMap.set(1, (newStonesMap.get(1) || 0) + stonesMap.get(stone)!);
             else if (stone.toString().length % 2 === 0) {
                 const stringStone = stone.toString();
                 const firstStone = parseInt(stringStone.slice(0, stringStone.length / 2));
                 const secondStone = parseInt(stringStone.slice(stringStone.length / 2));
-                newStones.push(firstStone);
-                newStones.push(secondStone)
+                newStonesMap.set(firstStone, (newStonesMap.get(firstStone) || 0) + stonesMap.get(stone)!);
+                newStonesMap.set(secondStone, (newStonesMap.get(secondStone) || 0) + stonesMap.get(stone)!);
             } else {
-                newStones.push(stone * 2024);
+                newStonesMap.set(stone * 2024, (newStonesMap.get(stone * 2024) || 0) + stonesMap.get(stone)!);
             }
         }
-        stones = newStones;
+        stonesMap = newStonesMap;
     }
-    return stones.length;
+    return Array.from(stonesMap.values()).reduce((a, b) => a + b);
 }
