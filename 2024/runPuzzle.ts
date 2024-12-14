@@ -1,6 +1,6 @@
 import { getInput, getPuzzlePath, getTestInput } from "./utils/files";
 
-const TOTAL_PUZZLES = 12;
+const TOTAL_PUZZLES = 14;
 
 export async function runPuzzle(test = false) {
     const args = process.argv.slice(2);
