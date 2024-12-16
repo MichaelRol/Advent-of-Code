@@ -170,8 +170,14 @@ export function part2(rawInput: string) {
                 if (map[pos[0] - 1][pos[1]] === "#") {
                     break;
                 } else if (map[pos[0] - 1][pos[1]] === "[") {
-                    const boxes: [[number, number], [number, number]][] | null =
-                        findBoxes([[pos[0] - 1, pos[1]], [pos[0] - 1, pos[1] + 1]], -1, map);
+                    const boxes: [[number, number], [number, number]][] | null = findBoxes(
+                        [
+                            [pos[0] - 1, pos[1]],
+                            [pos[0] - 1, pos[1] + 1]
+                        ],
+                        -1,
+                        map
+                    );
                     if (!boxes) {
                         break;
                     }
@@ -184,8 +190,14 @@ export function part2(rawInput: string) {
                         map[box[1][0] - 1][box[1][1]] = "]";
                     }
                 } else if (map[pos[0] - 1][pos[1]] === "]") {
-                    const boxes: [[number, number], [number, number]][] | null =
-                        findBoxes([[pos[0] - 1, pos[1] - 1], [pos[0] - 1, pos[1]]], -1, map);
+                    const boxes: [[number, number], [number, number]][] | null = findBoxes(
+                        [
+                            [pos[0] - 1, pos[1] - 1],
+                            [pos[0] - 1, pos[1]]
+                        ],
+                        -1,
+                        map
+                    );
                     if (!boxes) {
                         break;
                     }
@@ -207,8 +219,14 @@ export function part2(rawInput: string) {
                 if (map[pos[0] + 1][pos[1]] === "#") {
                     break;
                 } else if (map[pos[0] + 1][pos[1]] === "[") {
-                    const boxes: [[number, number], [number, number]][] | null =
-                        findBoxes([[pos[0] + 1, pos[1]], [pos[0] + 1, pos[1] + 1]], 1, map);
+                    const boxes: [[number, number], [number, number]][] | null = findBoxes(
+                        [
+                            [pos[0] + 1, pos[1]],
+                            [pos[0] + 1, pos[1] + 1]
+                        ],
+                        1,
+                        map
+                    );
                     if (!boxes) {
                         break;
                     }
@@ -221,8 +239,14 @@ export function part2(rawInput: string) {
                         map[box[1][0] + 1][box[1][1]] = "]";
                     }
                 } else if (map[pos[0] + 1][pos[1]] === "]") {
-                    const boxes: [[number, number], [number, number]][] | null =
-                        findBoxes([[pos[0] + 1, pos[1] - 1], [pos[0] + 1, pos[1]]], 1, map);
+                    const boxes: [[number, number], [number, number]][] | null = findBoxes(
+                        [
+                            [pos[0] + 1, pos[1] - 1],
+                            [pos[0] + 1, pos[1]]
+                        ],
+                        1,
+                        map
+                    );
                     if (!boxes) {
                         break;
                     }
@@ -300,11 +324,10 @@ function doubleMapWidth(map: string[][]): string[][] {
 function findBoxes(
     box: [[number, number], [number, number]],
     direction: number,
-    map: string[][]):
-    [[number, number], [number, number]][] | null {
-
+    map: string[][]
+): [[number, number], [number, number]][] | null {
     const left = box[0];
-    const right = box[1]
+    const right = box[1];
     const leftCell = map[left[0] + direction][left[1]];
     const rightCell = map[right[0] + direction][right[1]];
 
@@ -313,21 +336,42 @@ function findBoxes(
     }
     const boxes: [[number, number], [number, number]][] = [box];
     if (leftCell === "[" && rightCell === "]") {
-        const newBoxes = findBoxes([[left[0] + direction, left[1]], [right[0] + direction, right[1]]], direction, map);
+        const newBoxes = findBoxes(
+            [
+                [left[0] + direction, left[1]],
+                [right[0] + direction, right[1]]
+            ],
+            direction,
+            map
+        );
         if (newBoxes === null) {
             return null;
         }
         boxes.push(...newBoxes);
     }
     if (leftCell == "]") {
-        const newBoxes = findBoxes([[left[0] + direction, left[1] - 1], [left[0] + direction, left[1]]], direction, map);
+        const newBoxes = findBoxes(
+            [
+                [left[0] + direction, left[1] - 1],
+                [left[0] + direction, left[1]]
+            ],
+            direction,
+            map
+        );
         if (newBoxes === null) {
             return null;
         }
         boxes.push(...newBoxes);
     }
     if (rightCell == "[") {
-        const newBoxes = findBoxes([[right[0] + direction, right[1]], [right[0] + direction, right[1] + 1]], direction, map);
+        const newBoxes = findBoxes(
+            [
+                [right[0] + direction, right[1]],
+                [right[0] + direction, right[1] + 1]
+            ],
+            direction,
+            map
+        );
         if (newBoxes === null) {
             return null;
         }
@@ -335,4 +379,3 @@ function findBoxes(
     }
     return boxes;
 }
-
