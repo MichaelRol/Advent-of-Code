@@ -1,9 +1,13 @@
+import _ from "lodash";
 import { readLines } from "../utils/input";
 
 export function part1(rawInput: string) {
-    const bytes: number[][] = readLines(rawInput)
-        .map(line => line.split(",")
-            .map(num => parseInt(num)).reverse());
+    const bytes: number[][] = readLines(rawInput).map(line =>
+        line
+            .split(",")
+            .map(num => parseInt(num))
+            .reverse()
+    );
 
     const size = bytes.length < 1024 ? 7 : 71;
     const numOfBytes = bytes.length < 1024 ? 12 : 1024;
@@ -12,24 +16,48 @@ export function part1(rawInput: string) {
 }
 
 export function part2(rawInput: string) {
-    const bytes: number[][] = readLines(rawInput)
-        .map(line => line.split(",")
-            .map(num => parseInt(num)).reverse());
+    const bytes: number[][] = readLines(rawInput).map(line =>
+        line
+            .split(",")
+            .map(num => parseInt(num))
+            .reverse()
+    );
 
     const size = bytes.length < 1024 ? 7 : 71;
     let low = 1;
     let high = bytes.length;
     while (high - low > 1) {
         const mid = Math.trunc((high + low) / 2);
-        const vertices = populateVertices(bytes.slice(0, mid), size);
-        try {
-            dijkstras(vertices, [size - 1, size - 1]);
+        if (floodFill(bytes.slice(0, mid), size)) {
             low = mid;
-        } catch (e) {
+        } else {
             high = mid;
         }
     }
     return `${bytes[low][1]},${bytes[low][0]}`;
+}
+
+function floodFill(antiMap: number[][], size: number) {
+    const toCheck: [number, number][] = [[0, 0]];
+    const antiMapStrings = antiMap.map(pos => JSON.stringify(pos));
+    while (toCheck.length !== 0) {
+        const pos: [number, number] = toCheck.pop()!;
+        antiMapStrings.push(JSON.stringify(pos));
+        if (_.isEqual(pos, [size - 1, size - 1])) return true;
+        if (!antiMapStrings.includes(JSON.stringify([pos[0] - 1, pos[1]])) && pos[0] - 1 >= 0) {
+            toCheck.push([pos[0] - 1, pos[1]]);
+        }
+        if (!antiMapStrings.includes(JSON.stringify([pos[0] + 1, pos[1]])) && pos[0] + 1 < size) {
+            toCheck.push([pos[0] + 1, pos[1]]);
+        }
+        if (!antiMapStrings.includes(JSON.stringify([pos[0], pos[1] - 1])) && pos[1] - 1 >= 0) {
+            toCheck.push([pos[0], pos[1] - 1]);
+        }
+        if (!antiMapStrings.includes(JSON.stringify([pos[0], pos[1] + 1])) && pos[1] + 1 < size) {
+            toCheck.push([pos[0], pos[1] + 1]);
+        }
+    }
+    return false;
 }
 
 function populateVertices(antiMap: number[][], size: number) {
