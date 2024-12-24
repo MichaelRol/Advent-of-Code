@@ -33,26 +33,32 @@ export function part1(rawInput: string) {
     for (const cheat of possibleCheats) {
         const cheatPos: [number, number] = JSON.parse(cheat);
         const neighbors: [number, number][] = [];
-        if (road.includes(JSON.stringify([cheatPos[0] - 1, cheatPos[1]]))) neighbors.push([cheatPos[0] - 1, cheatPos[1]]);
-        if (road.includes(JSON.stringify([cheatPos[0] + 1, cheatPos[1]]))) neighbors.push([cheatPos[0] + 1, cheatPos[1]]);
-        if (road.includes(JSON.stringify([cheatPos[0], cheatPos[1] - 1]))) neighbors.push([cheatPos[0], cheatPos[1] - 1]);
-        if (road.includes(JSON.stringify([cheatPos[0], cheatPos[1] + 1]))) neighbors.push([cheatPos[0], cheatPos[1] + 1]);
+        if (road.includes(JSON.stringify([cheatPos[0] - 1, cheatPos[1]])))
+            neighbors.push([cheatPos[0] - 1, cheatPos[1]]);
+        if (road.includes(JSON.stringify([cheatPos[0] + 1, cheatPos[1]])))
+            neighbors.push([cheatPos[0] + 1, cheatPos[1]]);
+        if (road.includes(JSON.stringify([cheatPos[0], cheatPos[1] - 1])))
+            neighbors.push([cheatPos[0], cheatPos[1] - 1]);
+        if (road.includes(JSON.stringify([cheatPos[0], cheatPos[1] + 1])))
+            neighbors.push([cheatPos[0], cheatPos[1] + 1]);
 
         const cheatMap: Map<string, [number, number][]> = _.cloneDeep(vertices);
         cheatMap.set(cheat, []);
         neighbors.forEach(neighbor => {
             cheatMap.get(JSON.stringify(neighbor))?.push(cheatPos);
             cheatMap.get(cheat)!.push(neighbor);
-        })
+        });
 
         let min = Number.MAX_VALUE;
         for (const neighbor of neighbors) {
             const distTo = dists.get(JSON.stringify(neighbor))!;
-            const cheatDists: Map<string, number> = new Map(Array.from(cheatMap.entries()).map(entry => [entry[0], Number.MAX_VALUE]));
+            const cheatDists: Map<string, number> = new Map(
+                Array.from(cheatMap.entries()).map(entry => [entry[0], Number.MAX_VALUE])
+            );
             bfs(cheatMap, neighbor, cheatDists, new Map());
             const distFrom = cheatDists.get(JSON.stringify(end))!;
             if (distTo + distFrom < min) {
-                min = distTo + distFrom
+                min = distTo + distFrom;
             }
         }
         if (baseDist - min >= (vertices.size < 100 ? 1 : 100)) count++;
@@ -60,7 +66,12 @@ export function part1(rawInput: string) {
     return count;
 }
 
-function bfs(vertices: Map<string, [number, number][]>, start: [number, number], dists: Map<string, number>, prevs: Map<string, string>) {
+function bfs(
+    vertices: Map<string, [number, number][]>,
+    start: [number, number],
+    dists: Map<string, number>,
+    prevs: Map<string, string>
+) {
     const toVisit = [start];
     dists.set(JSON.stringify(start), 0);
     while (toVisit.length !== 0) {
@@ -70,7 +81,7 @@ function bfs(vertices: Map<string, [number, number][]>, start: [number, number],
         for (const v of neighbors) {
             if (dists.get(JSON.stringify(v)) === Number.MAX_VALUE) {
                 const alt = dists.get(uKey)! + 1;
-                dists.set(JSON.stringify(v), alt)
+                dists.set(JSON.stringify(v), alt);
                 prevs.set(JSON.stringify(v), uKey);
                 toVisit.push(v);
             }
