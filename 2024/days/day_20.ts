@@ -1,69 +1,74 @@
-import _ from "lodash";
 import { readChars } from "../utils/input";
 
 export function part1(rawInput: string) {
     let vertices: Map<string, [number, number][]> = new Map();
-    let dists: Map<string, number> = new Map();
+    let distsForward: Map<string, number> = new Map();
     let prevs: Map<string, string> = new Map();
     let end: [number, number] | undefined;
     let start: [number, number] | undefined;
-    ({ start, end } = populateVertices(readChars(rawInput), vertices, dists));
-    bfs(vertices, start!, dists, prevs);
+    ({ start, end } = populateVertices(readChars(rawInput), vertices, distsForward));
+    bfs(vertices, start!, distsForward, prevs);
+
+    let distsBackwards: Map<string, number> = new Map();
+    vertices.forEach((v, k) => distsBackwards.set(k, Number.MAX_VALUE));
+    bfs(vertices, end!, distsBackwards, new Map());
+
     const road: string[] = [];
     let backwards: string | undefined = JSON.stringify(end);
     while (backwards) {
         road.push(backwards);
         backwards = prevs.get(backwards);
     }
-    const baseDist = dists.get(JSON.stringify(end))!;
-    const possibleCheats: Set<string> = new Set();
+    const baseDist = distsForward.get(JSON.stringify(end))!;
+    const possibleCheats: Map<string, string> = new Map();
     for (const point of road) {
         const pos = JSON.parse(point);
         if (!vertices.has(JSON.stringify([pos[0] - 1, pos[1]])) && vertices.has(JSON.stringify([pos[0] - 2, pos[1]])))
-            possibleCheats.add(JSON.stringify([pos[0] - 1, pos[1]]));
+            possibleCheats.set(JSON.stringify([pos[0] - 1, pos[1]]), "N");
         if (!vertices.has(JSON.stringify([pos[0] + 1, pos[1]])) && vertices.has(JSON.stringify([pos[0] + 2, pos[1]])))
-            possibleCheats.add(JSON.stringify([pos[0] + 1, pos[1]]));
+            possibleCheats.set(JSON.stringify([pos[0] + 1, pos[1]]), "S");
         if (!vertices.has(JSON.stringify([pos[0], pos[1] - 1])) && vertices.has(JSON.stringify([pos[0], pos[1] - 2])))
-            possibleCheats.add(JSON.stringify([pos[0], pos[1] - 1]));
+            possibleCheats.set(JSON.stringify([pos[0], pos[1] - 1]), "W");
         if (!vertices.has(JSON.stringify([pos[0], pos[1] + 1])) && vertices.has(JSON.stringify([pos[0], pos[1] + 2])))
-            possibleCheats.add(JSON.stringify([pos[0], pos[1] + 1]));
+            possibleCheats.set(JSON.stringify([pos[0], pos[1] + 1]), "E");
     }
 
     let count = 0;
     for (const cheat of possibleCheats) {
-        const cheatPos: [number, number] = JSON.parse(cheat);
-        const neighbors: [number, number][] = [];
-        if (road.includes(JSON.stringify([cheatPos[0] - 1, cheatPos[1]])))
-            neighbors.push([cheatPos[0] - 1, cheatPos[1]]);
-        if (road.includes(JSON.stringify([cheatPos[0] + 1, cheatPos[1]])))
-            neighbors.push([cheatPos[0] + 1, cheatPos[1]]);
-        if (road.includes(JSON.stringify([cheatPos[0], cheatPos[1] - 1])))
-            neighbors.push([cheatPos[0], cheatPos[1] - 1]);
-        if (road.includes(JSON.stringify([cheatPos[0], cheatPos[1] + 1])))
-            neighbors.push([cheatPos[0], cheatPos[1] + 1]);
-
-        const cheatMap: Map<string, [number, number][]> = _.cloneDeep(vertices);
-        cheatMap.set(cheat, []);
-        neighbors.forEach(neighbor => {
-            cheatMap.get(JSON.stringify(neighbor))?.push(cheatPos);
-            cheatMap.get(cheat)!.push(neighbor);
-        });
-
-        let min = Number.MAX_VALUE;
-        for (const neighbor of neighbors) {
-            const distTo = dists.get(JSON.stringify(neighbor))!;
-            const cheatDists: Map<string, number> = new Map(
-                Array.from(cheatMap.entries()).map(entry => [entry[0], Number.MAX_VALUE])
-            );
-            bfs(cheatMap, neighbor, cheatDists, new Map());
-            const distFrom = cheatDists.get(JSON.stringify(end))!;
-            if (distTo + distFrom < min) {
-                min = distTo + distFrom;
-            }
-        }
-        if (baseDist - min >= (vertices.size < 100 ? 1 : 100)) count++;
+        const cheatPos: [number, number] = JSON.parse(cheat[0]);
+        const startAndEnd: [[number, number], [number, number]] = getCheatStartAndEnd(cheatPos, cheat[1]);
+        const distTo = distsForward.get(JSON.stringify(startAndEnd[0]))!;
+        const distFrom = distsBackwards.get(JSON.stringify(startAndEnd[1]))!;
+        if (baseDist - (distFrom + distTo + 2) >= (vertices.size < 100 ? 1 : 100)) count++;
     }
     return count;
+}
+
+function getCheatStartAndEnd(pos: [number, number], direction: string): [[number, number], [number, number]] {
+    switch (direction) {
+        case "N":
+            return [
+                [pos[0] + 1, pos[1]],
+                [pos[0] - 1, pos[1]]
+            ];
+        case "S":
+            return [
+                [pos[0] - 1, pos[1]],
+                [pos[0] + 1, pos[1]]
+            ];
+        case "W":
+            return [
+                [pos[0], pos[1] + 1],
+                [pos[0], pos[1] - 1]
+            ];
+        case "E":
+            return [
+                [pos[0], pos[1] - 1],
+                [pos[0], pos[1] + 1]
+            ];
+        default:
+            throw "Unknown direction";
+    }
 }
 
 function bfs(
@@ -104,7 +109,6 @@ function populateVertices(map: string[][], vertices: Map<string, [number, number
                 if (map[i][j - 1] !== "#") neighbors.push([i, j - 1]);
                 if (map[i][j + 1] !== "#") neighbors.push([i, j + 1]);
                 if (map[i][j] === "S") {
-                    dists.set(JSON.stringify([i, j]), 0);
                     start = [i, j];
                 } else {
                     dists.set(JSON.stringify([i, j]), Number.MAX_VALUE);
