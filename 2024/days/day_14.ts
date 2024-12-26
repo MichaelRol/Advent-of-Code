@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import { readLines } from "../utils/input";
+import { mod } from "../utils/maths";
 
 export function part1(rawInput: string) {
     const robots = readLines(rawInput).map(parseRow);
@@ -45,8 +46,4 @@ function parseRow(row: string): [number, number, number, number] {
     const regex = /p=(\d*),(\d*) v=(-?\d*),(-?\d*)/;
     let [, x, y, vx, vy] = regex.exec(row) || [];
     return [+x, +y, +vx, +vy];
-}
-
-function mod(a: number, b: number) {
-    return ((a % b) + b) % b;
 }

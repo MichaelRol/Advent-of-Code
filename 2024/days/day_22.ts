@@ -68,7 +68,3 @@ function mutate(secret: number) {
     secret = mod((secret << 11) ^ secret, 16777216);
     return secret;
 }
-
-function formatMs(num: number) {
-    return Math.round((num + Number.EPSILON) * 10000) / 10000;
-}

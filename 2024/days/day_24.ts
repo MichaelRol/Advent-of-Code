@@ -1,36 +1,54 @@
 import _ from "lodash";
 
 export function part1(rawInput: string) {
-    const rawOutputs = rawInput.split("\n\n")[0].split("\n").map(row => row.split(": "));
+    const rawOutputs = rawInput
+        .split("\n\n")[0]
+        .split("\n")
+        .map(row => row.split(": "));
     const outputs: Map<string, number> = new Map();
     for (const output of rawOutputs) {
         outputs.set(output[0], parseInt(output[1]));
     }
-    const gates: Gate[] = rawInput.split("\n\n")[1].split("\n").map(row => row.split(" ")).map(values => {
-        return {
-            in_a: values[0],
-            in_b: values[2],
-            gate: verifyGate(values[1]),
-            out: values[4]
-        }
-    });
+    const gates: Gate[] = rawInput
+        .split("\n\n")[1]
+        .split("\n")
+        .map(row => row.split(" "))
+        .map(values => {
+            return {
+                in_a: values[0],
+                in_b: values[2],
+                gate: verifyGate(values[1]),
+                out: values[4]
+            };
+        });
 
     run(gates, outputs);
 
-    const zs = Array.from(outputs.keys()).filter(key => key.startsWith("z")).sort();
-    return parseInt(zs.map(z => String(outputs.get(z)!)).reverse().join(""), 2);
+    const zs = Array.from(outputs.keys())
+        .filter(key => key.startsWith("z"))
+        .sort();
+    return parseInt(
+        zs
+            .map(z => String(outputs.get(z)!))
+            .reverse()
+            .join(""),
+        2
+    );
 }
 
 export function part2(rawInput: string) {
-
-    const gates: Gate[] = rawInput.split("\n\n")[1].split("\n").map(row => row.split(" ")).map(values => {
-        return {
-            in_a: values[0],
-            in_b: values[2],
-            gate: verifyGate(values[1]),
-            out: values[4]
-        }
-    });
+    const gates: Gate[] = rawInput
+        .split("\n\n")[1]
+        .split("\n")
+        .map(row => row.split(" "))
+        .map(values => {
+            return {
+                in_a: values[0],
+                in_b: values[2],
+                gate: verifyGate(values[1]),
+                out: values[4]
+            };
+        });
 
     for (let i = 1; i < 2 ** 44; i++) {
         const outputs: Map<string, number> = new Map();
@@ -43,17 +61,35 @@ export function part2(rawInput: string) {
         }
         run([...gates], outputs);
 
-        const zs = Array.from(outputs.keys()).filter(key => key.startsWith("z")).sort();
-        const output = parseInt(zs.map(z => String(outputs.get(z)!)).reverse().join(""), 2);
-        const xs = Array.from(outputs.keys()).filter(key => key.startsWith("x")).sort();
-        const x = xs.map(x => String(outputs.get(x)!)).reverse().join("");
-        const ys = Array.from(outputs.keys()).filter(key => key.startsWith("y")).sort();
-        const y = ys.map(y => String(outputs.get(y)!)).reverse().join("");
+        const zs = Array.from(outputs.keys())
+            .filter(key => key.startsWith("z"))
+            .sort();
+        const output = parseInt(
+            zs
+                .map(z => String(outputs.get(z)!))
+                .reverse()
+                .join(""),
+            2
+        );
+        const xs = Array.from(outputs.keys())
+            .filter(key => key.startsWith("x"))
+            .sort();
+        const x = xs
+            .map(x => String(outputs.get(x)!))
+            .reverse()
+            .join("");
+        const ys = Array.from(outputs.keys())
+            .filter(key => key.startsWith("y"))
+            .sort();
+        const y = ys
+            .map(y => String(outputs.get(y)!))
+            .reverse()
+            .join("");
 
-        const correct = (parseInt(x, 2) + parseInt(y, 2));
+        const correct = parseInt(x, 2) + parseInt(y, 2);
 
         if (!_.isEqual(output, correct)) {
-            console.log(i.toString(2))
+            console.log(i.toString(2));
             console.log(output.toString(2));
             console.log(correct.toString(2));
             break;
@@ -61,7 +97,6 @@ export function part2(rawInput: string) {
     }
 
     console.log("");
-
 }
 
 function run(gates: Gate[], outputs: Map<string, number>) {
@@ -86,11 +121,11 @@ function run(gates: Gate[], outputs: Map<string, number>) {
 }
 
 type Gate = {
-    in_a: string,
-    in_b: string,
-    gate: "AND" | "XOR" | "OR",
-    out: string
-}
+    in_a: string;
+    in_b: string;
+    gate: "AND" | "XOR" | "OR";
+    out: string;
+};
 
 function verifyGate(value: string): "AND" | "XOR" | "OR" {
     if (value === "AND" || value === "XOR" || value === "OR") {
