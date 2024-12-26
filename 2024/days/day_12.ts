@@ -130,19 +130,23 @@ function checkForEdge(
 ) {
     if (nodes.find(node => _.isEqual(node, [x, y]))) {
         if (!inRegion) {
+            const belowOrRight = nodes.find(node => _.isEqual(node, direction ? [x + 1, y - 1] : [x - 1, y + 1]));
+            const aboveOrLeft = nodes.find(node => _.isEqual(node, direction ? [x - 1, y - 1] : [x - 1, y - 1]));
             if (!xs.includes(direction ? y : x)) {
                 edges++;
             }
-            newXs.push(direction ? y : x);
+            if (!(belowOrRight && aboveOrLeft)) newXs.push(direction ? y : x);
             // edges++;
             inRegion = true;
         }
     } else {
         if (inRegion) {
+            const belowOrRight = nodes.find(node => _.isEqual(node, direction ? [x + 1, y] : [x, y + 1]));
+            const aboveOrLeft = nodes.find(node => _.isEqual(node, direction ? [x - 1, y] : [x, y - 1]));
             if (!xs.includes(direction ? y : x)) {
                 edges++;
             }
-            newXs.push(direction ? y : x);
+            if (!(belowOrRight && aboveOrLeft)) newXs.push(direction ? y : x);
             inRegion = false;
         }
     }
