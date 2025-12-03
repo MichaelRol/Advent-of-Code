@@ -10,12 +10,12 @@ public class Day1Test {
   @Test
   void testPart1() {
     Day1 day1 = new Day1("test-input/test1-1.txt");
-    assertThat(day1.Part1()).isEqualTo(142);
+    assertThat(day1.Part1()).isEqualTo(3);
   }
 
   @Test
   void testPart2() {
-    Day1 day1 = new Day1("test-input/test1-2.txt");
-    assertThat(day1.Part2()).isEqualTo(281);
+    Day1 day1 = new Day1("test-input/test1-1.txt");
+    assertThat(day1.Part2()).isEqualTo(6);
   }
 }
