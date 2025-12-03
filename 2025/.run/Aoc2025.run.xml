@@ -4,7 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="org.michaelrol.Aoc2025" />
     <module name="aoc2025" />
-    <option name="PROGRAM_PARAMETERS" value="$Prompt$ $Prompt$" />
+    <option name="PROGRAM_PARAMETERS" value="$Prompt$" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.michaelrol.*" />

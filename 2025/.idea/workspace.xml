@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e8099118-c63b-4e15-86a2-fff1074998a0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../2023/aoc2023/.run/Aoc2023.run.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.run/Aoc2025.run.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aoc2025/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/aoc2025/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Day1.java" beforeDir="false" afterPath="$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Day1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aoc2025/src/test/java/org/michaelrol/Day1Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/aoc2025/src/test/java/org/michaelrol/Day1Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Day2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aoc2025/src/main/resources/inputs/input2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aoc2025/src/test/java/org/michaelrol/Day2Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aoc2025/src/test/resources/test-input/test2-1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.run/Aoc2025.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.run/Aoc2025.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Aoc2025.java" beforeDir="false" afterPath="$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Aoc2025.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,9 +43,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;Application.Aoc2025.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Aoc2025.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.Day1Test.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.Day1Test.testPart1.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.Day1Test.testPart2.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Day2Test.testPart1.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Day2Test.testPart2.executor&quot;: &quot;Debug&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -67,8 +72,11 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.michaelrol" />
+    </key>
   </component>
-  <component name="RunManager" selected="JUnit.Day1Test">
+  <component name="RunManager" selected="Application.Aoc2025">
     <configuration name="Day1Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="aoc2025" />
       <extension name="coverage">
@@ -116,14 +124,50 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Day2Test.testPart1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="aoc2025" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.michaelrol.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.michaelrol" />
+      <option name="MAIN_CLASS_NAME" value="org.michaelrol.Day2Test" />
+      <option name="METHOD_NAME" value="testPart1" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Day2Test.testPart2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="aoc2025" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.michaelrol.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.michaelrol" />
+      <option name="MAIN_CLASS_NAME" value="org.michaelrol.Day2Test" />
+      <option name="METHOD_NAME" value="testPart2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Aoc2025" />
+      <item itemvalue="JUnit.Day2Test.testPart2" />
       <item itemvalue="JUnit.Day1Test" />
       <item itemvalue="JUnit.Day1Test.testPart2" />
+      <item itemvalue="JUnit.Day2Test.testPart1" />
       <item itemvalue="JUnit.Day1Test.testPart1" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.Day2Test.testPart2" />
+        <item itemvalue="JUnit.Day2Test.testPart1" />
         <item itemvalue="JUnit.Day1Test" />
         <item itemvalue="JUnit.Day1Test.testPart2" />
         <item itemvalue="JUnit.Day1Test.testPart1" />
@@ -145,7 +189,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1764783339940</updated>
-      <workItem from="1764783341543" duration="5389000" />
+      <workItem from="1764783341543" duration="8857000" />
     </task>
     <servers />
   </component>
@@ -156,14 +200,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Day1.java</url>
-          <line>43</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Day1.java</url>
-          <line>50</line>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/aoc2025/src/main/java/org/michaelrol/Day2.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
