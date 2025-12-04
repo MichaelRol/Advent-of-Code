@@ -6,7 +6,8 @@ public class Aoc2025 {
 
   private static final List<Integer> VALID_DAYS = List.of(
       1,
-      2);
+      2,
+      3);
 
   public static void main(String[] args) {
     if (args.length > 2) {
