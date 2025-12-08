@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +51,20 @@ public class Day7 implements Day {
 
   @Override
   public long Part2() {
-    return 0;
+    HashMap<Integer, Long> beams = new HashMap<>();
+    beams.put(input.getFirst().indexOf("S"), 1L);
+    List<String> lines = input.subList(1, input.size());
+    for (String line : lines) {
+      for (Integer beam : Set.copyOf(beams.keySet())) {
+        if (line.charAt(beam) == '^') {
+          long beanCount = beams.get(beam);
+          beams.remove(beam);
+          beams.put(beam + 1, beanCount + beams.getOrDefault(beam + 1, 0L));
+          beams.put(beam - 1, beanCount + beams.getOrDefault(beam - 1, 0L));
+        }
+      }
+    }
+    return beams.values().stream().mapToLong(i -> i).sum();
   }
 
 }
