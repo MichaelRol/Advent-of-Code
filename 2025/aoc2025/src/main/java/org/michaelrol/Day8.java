@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+// TODO: Try with graph
 public class Day8 implements Day {
 
   private final List<int[]> input = new ArrayList<>();
@@ -47,7 +49,7 @@ public class Day8 implements Day {
     List<Pair<int[], int[]>> closestPairs = allPairs.stream()
         .sorted(Comparator.comparingDouble(pair -> findDistance(pair.getLeft(), pair.getRight())))
         .limit(test ? 10 : 1000)
-        .collect(Collectors.toList());
+        .collect(Collectors.toCollection(LinkedList::new));
 
     Set<Set<int[]>> circuits = new HashSet<>();
     while (!closestPairs.isEmpty()) {
@@ -72,7 +74,7 @@ public class Day8 implements Day {
     Set<Pair<int[], int[]>> allPairs = findAllPairs();
     List<Pair<int[], int[]>> closestPairs = allPairs.stream()
         .sorted(Comparator.comparingDouble(pair -> findDistance(pair.getLeft(), pair.getRight())))
-        .collect(Collectors.toList());
+        .collect(Collectors.toCollection(LinkedList::new));
 
     Pair<int[], int[]> search = closestPairs.getFirst();
     Set<int[]> starters = new HashSet<>();
