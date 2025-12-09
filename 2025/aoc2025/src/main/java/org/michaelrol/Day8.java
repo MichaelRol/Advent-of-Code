@@ -18,8 +18,14 @@ import org.apache.commons.lang3.tuple.Pair;
 public class Day8 implements Day {
 
   private final List<int[]> input = new ArrayList<>();
+  private final boolean test;
 
   public Day8(String inputPath) {
+    this(inputPath, false);
+  }
+
+  public Day8(String inputPath, boolean test) {
+    this.test = test;
     ClassLoader classLoader = Day8.class.getClassLoader();
     try (InputStream inputStream = classLoader.getResourceAsStream(inputPath)) {
       // Use BufferedReader to read the content of the file
@@ -40,7 +46,7 @@ public class Day8 implements Day {
     Set<Pair<int[], int[]>> allPairs = findAllPairs();
     List<Pair<int[], int[]>> closestPairs = allPairs.stream()
         .sorted(Comparator.comparingDouble(pair -> findDistance(pair.getLeft(), pair.getRight())))
-        .limit(1000)
+        .limit(test ? 10 : 1000)
         .collect(Collectors.toList());
 
     Set<Set<int[]>> circuits = new HashSet<>();

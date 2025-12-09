@@ -9,7 +9,7 @@ public class Day8Test {
 
   @Test
   void testPart1() {
-    Day day = new Day8("test-input/test8-1.txt");
+    Day day = new Day8("test-input/test8-1.txt", true);
     assertThat(day.Part1()).isEqualTo(40);
   }
 
