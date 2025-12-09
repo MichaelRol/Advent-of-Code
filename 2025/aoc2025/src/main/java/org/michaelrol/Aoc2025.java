@@ -11,7 +11,8 @@ public class Aoc2025 {
       4,
       5,
       6,
-      7);
+      7,
+      8);
 
   public static void main(String[] args) {
     if (args.length > 2) {
