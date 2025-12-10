@@ -1,19 +1,14 @@
 package org.michaelrol;
 
-import java.awt.Polygon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.function.BiFunction;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -21,7 +16,7 @@ import com.google.common.collect.Sets;
 
 public class Day9 implements Day {
 
-  private final List<Pair<Integer, Integer>> input = new ArrayList<>();
+  private final List<Coordinate> input = new ArrayList<>();
 
   public Day9(String inputPath) {
     ClassLoader classLoader = Day9.class.getClassLoader();
@@ -32,7 +27,7 @@ public class Day9 implements Day {
       String line;
       while ((line = reader.readLine()) != null) {
         String[] split = line.split(",");
-        input.add(Pair.of(Integer.parseInt(split[0]), Integer.parseInt(split[1])));
+        input.add(new Coordinate(Integer.parseInt(split[0]), Integer.parseInt(split[1])));
       }
     } catch (IOException ex) {
       System.out.println("File with path: " + inputPath + " could not be read.");
@@ -43,96 +38,69 @@ public class Day9 implements Day {
   @Override
   public long Part1() {
     return Lists.cartesianProduct(ImmutableList.of(input, input)).stream()
-        .mapToLong(corners -> calcArea(corners.getFirst(), corners.getLast()))
-        .max()
+        .map(corners -> new Box(corners.getFirst(), corners.getLast()).area)
+        .max(Comparator.naturalOrder())
         .orElseThrow();
   }
 
+
   @Override
   public long Part2() {
-    Set<Long> tileBorders = Sets.newHashSet();
+    Set<Box> tileBorders = Sets.newHashSet();
     for (int i = 0; i < input.size(); i++) {
-      Pair<Integer, Integer> point = input.get(i);
-      Pair<Integer, Integer> next = input.get((i + 1) % input.size());
-      if (point.getLeft().equals(next.getLeft())) {
-        int startY = Math.min(point.getRight(), next.getRight());
-        int endY = Math.max(point.getRight(), next.getRight());
-        for (int y = startY; y <= endY; y++) {
-          tileBorders.add(point.getLeft() * 100000L + y);
-        }
-      } else {
-        int startX = Math.min(point.getLeft(), next.getLeft());
-        int endX = Math.max(point.getLeft(), next.getLeft());
-        for (int x = startX; x <= endX; x++) {
-          tileBorders.add(x * 100000L + point.getRight());
-        }
+      for (int j = i + 1; j < input.size(); j++) {
+        tileBorders.add(new Box(input.get(i), input.get(j)));
       }
     }
-    List<List<Pair<Integer, Integer>>> allCorners = Lists.cartesianProduct(ImmutableList.of(input, input)).stream()
-        .sorted(Comparator.comparingLong(corners -> calcArea(
-            ((List<Pair<Integer, Integer>>) corners).getFirst(),
-            ((List<Pair<Integer, Integer>>) corners).getLast())).reversed())
-        .toList();
-    int[] xs = input.stream().mapToInt(Pair::getLeft).toArray();
-    int[] ys = input.stream().mapToInt(Pair::getRight).toArray();
-    Polygon polygon = new Polygon(xs, ys, xs.length);
-    BiFunction<Integer, Integer, Boolean> memoizedTileCheck =
-        memoize((x, y) -> polygon.contains(x, y) || isOnPolygonBorder(x * 100000L + y, tileBorders));
-    int count = 1;
-    for (List<Pair<Integer, Integer>> corners : allCorners) {
-      if (count % 10000 == 0) {
-        System.out.println(count + "/" + allCorners.size());
-      }
-      count++;
-      if (testBorders(corners.getFirst(), corners.getLast(), memoizedTileCheck)) {
-        return calcArea(corners.getFirst(), corners.getLast());
+    Set<Coordinate> edges = getEdges(input);
+    List<Box> sorted = tileBorders.stream().sorted(Comparator.comparingLong(Box::area).reversed()).toList();
+    for (Box box : sorted) {
+      if (enclosed(box, edges)) {
+        return box.area();
       }
     }
-
     return 0;
   }
 
-  public static BiFunction<Integer, Integer, Boolean> memoize(BiFunction<Integer, Integer, Boolean> function) {
-    Map<Long, Boolean> cache = new HashMap<>();
-    return (x, y) -> {
-      Boolean oldValue = cache.get(x * 100000L + y);
-      if (oldValue != null) {
-        return oldValue;
-      }
-      boolean valid = function.apply(x, y);
-      cache.put(x * 100000L + y, valid);
-      return valid;
-    };
-  }
-
-  private boolean testBorders(
-      Pair<Integer, Integer> first,
-      Pair<Integer, Integer> last,
-      BiFunction<Integer, Integer, Boolean> test) {
-
-    int startX = Math.min(first.getLeft(), last.getLeft());
-    int endX = Math.max(first.getLeft(), last.getLeft());
-    int startY = Math.min(first.getRight(), last.getRight());
-    int endY = Math.max(first.getRight(), last.getRight());
-    for (int x = startX; x <= endX; x++) {
-      if (!test.apply(x, startY) || !test.apply(x, endY)) {
-        return false;
-      }
-    }
-    for (int y = startY; y <= endY; y++) {
-      if (!test.apply(startX, y) || !test.apply(endX, y)) {
+  private boolean enclosed(Box shape, Set<Coordinate> tileEdges) {
+    int minX = Math.min(shape.a().x(), shape.b().x());
+    int maxX = Math.max(shape.a().x(), shape.b().x());
+    int minxY = Math.min(shape.a().y(), shape.b().y());
+    int maxY = Math.max(shape.a().y(), shape.b().y());
+    for (Coordinate coordinate : tileEdges) {
+      if (coordinate.x() > minX && coordinate.x() < maxX && coordinate.y() > minxY && coordinate.y() < maxY) {
         return false;
       }
     }
     return true;
   }
 
-  private boolean isOnPolygonBorder(Long point, Set<Long> tileBorders) {
-    return tileBorders.contains(point);
+  private Set<Coordinate> getEdges(List<Coordinate> corners) {
+    Set<Coordinate> edges = new HashSet<>();
+    for (int i = 0; i < corners.size(); i++) {
+      Coordinate a = corners.get(i);
+      Coordinate b = corners.get((i + 1) % corners.size());
+      if (a.x() == b.x()) {
+        for (int j = Math.min(a.y(), b.y()); j <= Math.max(a.y(), b.y()); j++) {
+          edges.add(new Coordinate(a.x(), j));
+        }
+      } else {
+        for (int j = Math.min(a.x(), b.x()); j <= Math.max(a.x(), b.x()); j++) {
+          edges.add(new Coordinate(j, a.y()));
+        }
+      }
+    }
+    return edges;
   }
 
-  private static long calcArea(Pair<Integer, Integer> a, Pair<Integer, Integer> b) {
-    return (long) (Math.abs((a.getLeft() - b.getLeft())) + 1) * (Math.abs((a.getRight() - b.getRight())) + 1);
+  private record Box(Coordinate a, Coordinate b, long area) {
+
+    Box(Coordinate a, Coordinate b) {
+      this(a, b, (Math.abs(b.x() - a.x()) + 1L) * (Math.abs(b.y() - a.y()) + 1L));
+    }
   }
 
+  private record Coordinate(int x, int y) {
+
+  }
 }
