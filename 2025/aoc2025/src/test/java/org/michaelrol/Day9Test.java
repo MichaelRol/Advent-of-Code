@@ -16,6 +16,6 @@ public class Day9Test {
   @Test
   void testPart2() {
     Day day = new Day9("test-input/test9-1.txt");
-    assertThat(day.Part2()).isEqualTo(25272);
+    assertThat(day.Part2()).isEqualTo(24);
   }
 }
