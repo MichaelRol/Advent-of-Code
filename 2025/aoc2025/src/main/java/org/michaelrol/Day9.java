@@ -1,13 +1,17 @@
 package org.michaelrol;
 
+import java.awt.Polygon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -44,7 +48,6 @@ public class Day9 implements Day {
         .orElseThrow();
   }
 
-  // Rather than checking each point using ray cast, can we just scan along the edges of the box
   @Override
   public long Part2() {
     Set<Long> tileBorders = Sets.newHashSet();
@@ -70,8 +73,18 @@ public class Day9 implements Day {
             ((List<Pair<Integer, Integer>>) corners).getFirst(),
             ((List<Pair<Integer, Integer>>) corners).getLast())).reversed())
         .toList();
+    int[] xs = input.stream().mapToInt(Pair::getLeft).toArray();
+    int[] ys = input.stream().mapToInt(Pair::getRight).toArray();
+    Polygon polygon = new Polygon(xs, ys, xs.length);
+    BiFunction<Integer, Integer, Boolean> memoizedTileCheck =
+        memoize((x, y) -> polygon.contains(x, y) || isOnPolygonBorder(x * 100000L + y, tileBorders));
+    int count = 1;
     for (List<Pair<Integer, Integer>> corners : allCorners) {
-      if (isBoxInBorders(findBorders(corners.getFirst(), corners.getLast()), tileBorders)) {
+      if (count % 10000 == 0) {
+        System.out.println(count + "/" + allCorners.size());
+      }
+      count++;
+      if (testBorders(corners.getFirst(), corners.getLast(), memoizedTileCheck)) {
         return calcArea(corners.getFirst(), corners.getLast());
       }
     }
@@ -79,68 +92,43 @@ public class Day9 implements Day {
     return 0;
   }
 
-  private boolean isBoxInBorders(Set<Long> boxBorders, Set<Long> tileBorders) {
-    int maxX = Integer.MIN_VALUE;
-    int minX = Integer.MAX_VALUE;
-    int maxY = Integer.MIN_VALUE;
-    int minY = Integer.MAX_VALUE;
-
-    for (Long point : boxBorders) {
-      int x = Math.toIntExact(point / 100000L);
-      int y = Math.toIntExact(point % 100000L);
-      maxX = Math.max(maxX, x);
-      minX = Math.min(minX, x);
-      maxY = Math.max(maxY, y);
-      minY = Math.min(minY, y);
-    }
-
-    for (int x = minX; x <= maxX; x++) {
-      boolean inTiles = false;
-      boolean inBox = false;
-      boolean wasLastATileBorder = false;
-      boolean wasLastABoxBorder = false;
-      for (int y = minY; y <= maxY; y++) {
-        long key = x * 100000L + y;
-        boolean isTileBorder = tileBorders.contains(key);
-        boolean isBoxBorder = boxBorders.contains(key);
-
-        if (wasLastATileBorder && !isTileBorder) {
-          inTiles = !inTiles;
-        }
-
-        if (wasLastABoxBorder && !isBoxBorder) {
-          inBox = !inBox;
-        }
-
-        wasLastABoxBorder = isBoxBorder;
-        wasLastATileBorder = isTileBorder;
-
-        if (inBox && !inTiles) {
-          return false;
-        }
+  public static BiFunction<Integer, Integer, Boolean> memoize(BiFunction<Integer, Integer, Boolean> function) {
+    Map<Long, Boolean> cache = new HashMap<>();
+    return (x, y) -> {
+      Boolean oldValue = cache.get(x * 100000L + y);
+      if (oldValue != null) {
+        return oldValue;
       }
-    }
-    return true;
+      boolean valid = function.apply(x, y);
+      cache.put(x * 100000L + y, valid);
+      return valid;
+    };
   }
 
-  private Set<Long> findBorders(
+  private boolean testBorders(
       Pair<Integer, Integer> first,
-      Pair<Integer, Integer> last) {
+      Pair<Integer, Integer> last,
+      BiFunction<Integer, Integer, Boolean> test) {
 
-    Set<Long> borders = Sets.newHashSet();
     int startX = Math.min(first.getLeft(), last.getLeft());
     int endX = Math.max(first.getLeft(), last.getLeft());
     int startY = Math.min(first.getRight(), last.getRight());
     int endY = Math.max(first.getRight(), last.getRight());
     for (int x = startX; x <= endX; x++) {
-      borders.add(x * 100000L + startY);
-      borders.add(x * 100000L + endY);
+      if (!test.apply(x, startY) || !test.apply(x, endY)) {
+        return false;
+      }
     }
     for (int y = startY; y <= endY; y++) {
-      borders.add(startX * 100000L + y);
-      borders.add(endX * 100000L + y);
+      if (!test.apply(startX, y) || !test.apply(endX, y)) {
+        return false;
+      }
     }
-    return borders;
+    return true;
+  }
+
+  private boolean isOnPolygonBorder(Long point, Set<Long> tileBorders) {
+    return tileBorders.contains(point);
   }
 
   private static long calcArea(Pair<Integer, Integer> a, Pair<Integer, Integer> b) {
